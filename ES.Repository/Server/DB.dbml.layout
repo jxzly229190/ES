@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 8.5" name="DB">
+  <DataContextMoniker Name="/DBDataContext" />
+  <nestedChildShapes>
+    <classShape Id="8753eec7-73e2-4ecf-ae92-805bf76ac478" absoluteBounds="0.75, 0.75, 2, 3.1170068359375005">
+      <DataClassMoniker Name="/DBDataContext/Client" />
+      <nestedChildShapes>
+        <elementListCompartment Id="027279aa-729c-49bc-95ed-8d36de3f12b1" absoluteBounds="0.765, 1.21, 1.9700000000000002, 2.5570068359375" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="bfe96ece-be56-45c0-919c-0f6d3bdd54e9" absoluteBounds="3.75, 0.75, 2, 2.1554996744791666">
+      <DataClassMoniker Name="/DBDataContext/TranLog" />
+      <nestedChildShapes>
+        <elementListCompartment Id="a8725dc7-8e0c-460b-95ba-e62a63bbbbad" absoluteBounds="3.765, 1.21, 1.9700000000000002, 1.5954996744791665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="973fcca8-a232-492c-9637-22d4c4933528" absoluteBounds="3.75, 3.75, 2, 2.9247054036458326">
+      <DataClassMoniker Name="/DBDataContext/MidTransfer" />
+      <nestedChildShapes>
+        <elementListCompartment Id="52db8cbf-7804-49ba-85b7-0e92a2730e78" absoluteBounds="3.765, 4.21, 1.9700000000000002, 2.364705403645833" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+    <classShape Id="263221ac-a7e2-4722-8ee8-313a6a9bfa5b" absoluteBounds="6.75, 0.75, 2, 4.2708154296875">
+      <DataClassMoniker Name="/DBDataContext/TranConfig" />
+      <nestedChildShapes>
+        <elementListCompartment Id="97d81bc3-db0e-446d-ab21-9fdb29fbd814" absoluteBounds="6.765, 1.21, 1.9700000000000002, 3.7108154296875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+      </nestedChildShapes>
+    </classShape>
+  </nestedChildShapes>
+</ordesignerObjectsDiagram>

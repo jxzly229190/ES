@@ -16,5 +16,14 @@ namespace ES.Client
         {
             InitializeComponent();
         }
+
+        private void Main_Load(object sender, EventArgs e)
+        {
+            var server = new TransferService.TransferSoapClient();
+
+            var result=server.HelloWorld();
+
+            lblResult.Text = result;
+        }
     }
 }

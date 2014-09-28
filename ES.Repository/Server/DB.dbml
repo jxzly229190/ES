@@ -1,0 +1,67 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="ES.Server" Class="DBDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=EM-ZHANGLIANYIN\sqlexpress;Initial Catalog=ES.Server;Integrated Security=True" SettingsObjectName="ES.Repository.Properties.Settings" SettingsPropertyName="ES_ServerConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.Client" Member="Clients">
+    <Type Name="Client">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="GUID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="Code" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Type" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Address" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
+      <Column Name="Timestamp" Type="System.Data.Linq.Binary" DbType="rowversion NOT NULL" CanBeNull="false" IsVersion="true" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="CreatedBy" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="CreatedTime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="ModifiedBy" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="ModifiedTime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.TranLog" Member="TranLogs">
+    <Type Name="TranLog">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="TranName" Type="System.String" DbType="NVarChar(32)" CanBeNull="true" />
+      <Column Name="Source" Type="System.String" DbType="VarChar(32)" CanBeNull="true" />
+      <Column Name="Target" Type="System.String" DbType="VarChar(32)" CanBeNull="true" />
+      <Column Name="Request" Type="System.String" DbType="Text NOT NULL" CanBeNull="false" UpdateCheck="Never" />
+      <Column Name="Response" Type="System.String" DbType="Text" CanBeNull="true" UpdateCheck="Never" />
+      <Column Name="TranTime" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+    </Type>
+  </Table>
+  <Table Name="dbo.MidTransfer" Member="MidTransfers">
+    <Type Name="MidTransfer">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Guid" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="ConfigGuid" Type="System.Data.Linq.Binary" DbType="Binary(64) NOT NULL" CanBeNull="false" />
+      <Column Name="ConfigName" Type="System.String" DbType="NVarChar(64)" CanBeNull="true" />
+      <Column Name="Target" Type="System.String" DbType="VarChar(64) NOT NULL" CanBeNull="false" />
+      <Column Name="Source" Type="System.String" DbType="VarChar(64)" CanBeNull="true" />
+      <Column Name="HeaderSql" Type="System.String" DbType="Text" CanBeNull="true" />
+      <Column Name="DetailSql" Type="System.String" DbType="Text NOT NULL" CanBeNull="false" />
+      <Column Name="FooterSql" Type="System.String" DbType="Text" CanBeNull="true" />
+      <Column Name="TranTime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="Timestamp" Type="System.Data.Linq.Binary" DbType="rowversion NOT NULL" CanBeNull="false" IsVersion="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.TranConfig" Member="TranConfigs">
+    <Type Name="TranConfig">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Guid" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
+      <Column Name="Name" Type="System.String" DbType="NVarChar(64) NOT NULL" CanBeNull="false" />
+      <Column Name="Code" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="Sort" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="MaxCount" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="LastStamp" Type="System.Data.Linq.Binary" DbType="Binary(16)" CanBeNull="true" />
+      <Column Name="Direct" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="HeaderSql" Type="System.String" DbType="Text" CanBeNull="true" />
+      <Column Name="DetailSql" Type="System.String" DbType="Text NOT NULL" CanBeNull="false" />
+      <Column Name="FooterSql" Type="System.String" DbType="Text" CanBeNull="true" />
+      <Column Name="Remark" Type="System.String" DbType="Text NOT NULL" CanBeNull="false" />
+      <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
+      <Column Name="Timestamp" Type="System.Data.Linq.Binary" DbType="rowversion NOT NULL" CanBeNull="false" IsVersion="true" />
+      <Column Name="CreatedTime" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
+      <Column Name="CreatedBy" Type="System.String" DbType="VarChar(64)" CanBeNull="true" />
+      <Column Name="ModifiedTime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
+      <Column Name="ModifiedBy" Type="System.String" DbType="VarChar(64)" CanBeNull="true" />
+    </Type>
+  </Table>
+</Database>
