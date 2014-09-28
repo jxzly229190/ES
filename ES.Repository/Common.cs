@@ -6,10 +6,13 @@ using System.Threading.Tasks;
 
 namespace ES.Repository
 {
-    class Program
-    {
-        static void Main(string[] args)
-        {
-        }
-    }
+	public class Common
+	{
+		public const string PublicKey = "123456";
+
+		public static string MD5(string str)
+		{
+			return "";
+		}
+	}
 }

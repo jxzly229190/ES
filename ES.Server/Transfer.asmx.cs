@@ -28,9 +28,19 @@ namespace ES.Server
             return "Hello World";
         }
 
+		/// <summary>
+		/// 从服务器获取数据
+		/// </summary>
+		/// <param name="clientCode">客户端代号</param>
+		/// <param name="varifyCode">验证码</param>
+		/// <param name="lastTimeStamp">上一次更新数据时间戳</param>
+		/// <param name="rowCount">行数</param>
+		/// <param name="configGuid">配置标识</param>
+		/// <param name="paras">其他参数</param>
+		/// <returns></returns>
         public ResponseData Get(string clientCode, string varifyCode, string lastTimeStamp, int rowCount, string configGuid, IDictionary<string,string> paras)
         {
-            var client = db.Clients.Where(c => c.Status == 0 && c.Code == clientCode).FirstOrDefault();
+            var client = db.Client.Where(c => c.Status == 0 && c.Code == clientCode).FirstOrDefault();
 
             if (client == null)
             {
@@ -42,7 +52,7 @@ namespace ES.Server
                 return new ResponseData() { State = 2, Message = "非法请求" };
             }
 
-            var config = db.TranConfigs.Where(c => c.Status == 0 && c.Guid.ToString() == configGuid).FirstOrDefault();
+            var config = db.TranConfig.Where(c => c.Status == 0 && c.Guid.ToString() == configGuid).FirstOrDefault();
 
             if (config == null)
             {
@@ -75,6 +85,15 @@ namespace ES.Server
 
             return response;
         }
+		
+		/// <summary>
+		/// 获取传输配置
+		/// </summary>
+		/// <returns></returns>
+		public IList<TranConfig> GetTranConfigs()
+		{
+			return db.TranConfig.Where(t=>t.Status==0).ToList();
+		}
 
         private bool VarifyClient(string clientGuid, string varifyCode)
         {

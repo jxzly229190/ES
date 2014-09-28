@@ -25,5 +25,10 @@ namespace ES.Client
 
             lblResult.Text = result;
         }
+
+		private void GetDataFromServer()
+		{
+			
+		}
     }
 }
