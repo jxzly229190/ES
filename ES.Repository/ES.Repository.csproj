@@ -5,7 +5,7 @@
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
     <ProjectGuid>{67D59DFE-BDAE-483C-B7CC-9717C9793B30}</ProjectGuid>
-    <OutputType>Exe</OutputType>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>ES.Repository</RootNamespace>
     <AssemblyName>ES.Repository</AssemblyName>
@@ -31,6 +31,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <StartupObject />
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -49,12 +52,14 @@
     </Compile>
     <Compile Include="Common.cs" />
     <Compile Include="Model\ResponseData.cs" />
-    <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Properties\Settings.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTimeSharedInput>True</DesignTimeSharedInput>
       <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
+    <Compile Include="Server\DB.cs">
+      <DependentUpon>DB.dbml</DependentUpon>
     </Compile>
     <Compile Include="Server\DB.designer.cs">
       <AutoGen>True</AutoGen>
@@ -69,6 +74,9 @@
       <LastGenOutput>DB.designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
+    <None Include="Client\DB.dbml.layout">
+      <DependentUpon>DB.dbml</DependentUpon>
+    </None>
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -78,21 +86,14 @@
       <LastGenOutput>DB.designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
     </None>
-  </ItemGroup>
-  <ItemGroup>
-    <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Client\DB.dbml.layout">
-      <DependentUpon>DB.dbml</DependentUpon>
-    </None>
-  </ItemGroup>
-  <ItemGroup />
-  <ItemGroup>
     <None Include="Server\DB.dbml.layout">
       <DependentUpon>DB.dbml</DependentUpon>
     </None>
   </ItemGroup>
+  <ItemGroup>
+    <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
+  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
