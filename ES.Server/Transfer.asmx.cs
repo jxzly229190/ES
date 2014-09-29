@@ -28,6 +28,7 @@ namespace ES.Server
             return "Hello World";
         }
 
+        [WebMethod]
         public ResponseData Get(string clientCode, string varifyCode, string lastTimeStamp, int rowCount, string configGuid, IDictionary<string,string> paras)
         {
             var client = db.Clients.Where(c => c.Status == 0 && c.Code == clientCode).FirstOrDefault();
