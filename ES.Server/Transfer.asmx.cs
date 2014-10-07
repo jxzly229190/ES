@@ -91,9 +91,10 @@ namespace ES.Server
 		/// 获取传输配置
 		/// </summary>
 		/// <returns></returns>
-		public IList<TranConfig> GetTranConfigs()
-		{
-			return db.TranConfig.Where(t=>t.Status==0).ToList();
+		[WebMethod]
+		public IEnumerable<TranConfig> GetTranConfigs(System.Data.Linq.Binary timestamp)
+		{			
+			return db.ExecuteQuery<TranConfig>("Select * from tranconfig where status=0 and timestamp>{0}",timestamp);
 		}
 
         private bool VarifyClient(string clientGuid, string varifyCode)
