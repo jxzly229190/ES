@@ -10,23 +10,23 @@ using System.Web.Services;
 
 namespace ES.Server
 {
-    /// <summary>
-    /// Summary description for Transfer
-    /// </summary>
-    [WebService(Namespace = "http://tempuri.org/")]
-    [WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
-    [System.ComponentModel.ToolboxItem(false)]
-    // To allow this Web Service to be called from script, using ASP.NET AJAX, uncomment the following line. 
-    // [System.Web.Script.Services.ScriptService]
-    public class Transfer : System.Web.Services.WebService
-    {
-        DBDataContext db = new ES.Repository.Server.DBDataContext();
-        
-        [WebMethod]
-        public string HelloWorld()
-        {
-            return "Hello World";
-        }
+	/// <summary>
+	/// Summary description for Transfer
+	/// </summary>
+	[WebService(Namespace = "http://tempuri.org/")]
+	[WebServiceBinding(ConformsTo = WsiProfiles.BasicProfile1_1)]
+	[System.ComponentModel.ToolboxItem(false)]
+	// To allow this Web Service to be called from script, using ASP.NET AJAX, uncomment the following line. 
+	// [System.Web.Script.Services.ScriptService]
+	public class Transfer : System.Web.Services.WebService
+	{
+		DBDataContext db = new ES.Repository.Server.DBDataContext();
+
+		[WebMethod]
+		public string HelloWorld()
+		{
+			return "Hello World";
+		}
 
 		/// <summary>
 		/// 从服务器获取数据
@@ -38,70 +38,119 @@ namespace ES.Server
 		/// <param name="configGuid">配置标识</param>
 		/// <param name="paras">其他参数</param>
 		/// <returns></returns>
-        [WebMethod]
-        public ResponseData Get(string clientCode, string varifyCode, string lastTimeStamp, int rowCount, string configGuid, IDictionary<string,string> paras)
-        {
-            var client = db.Client.Where(c => c.Status == 0 && c.Code == clientCode).FirstOrDefault();
+		[WebMethod]
+		public ResponseData Get(string clientCode, string varifyCode, string lastTimeStamp, int rowCount, string configGuid, IDictionary<string, string> paras)
+		{
+			var client = db.Client.Where(c => c.Status == 0 && c.Code == clientCode).FirstOrDefault();
 
-            if (client == null)
-            {
-                return new ResponseData() { State = 1, Message = "客户端不存在" };
-            }
+			if (client == null)
+			{
+				return new ResponseData() { State = 1, Message = "客户端不存在" };
+			}
 
-            if (!VarifyClient(client.GUID.ToString(), varifyCode))
-            {
-                return new ResponseData() { State = 2, Message = "非法请求" };
-            }
+			if (!VarifyClient(client.GUID.ToString(), varifyCode))
+			{
+				return new ResponseData() { State = 2, Message = "非法请求" };
+			}
 
-            var config = db.TranConfig.Where(c => c.Status == 0 && c.Guid.ToString() == configGuid).FirstOrDefault();
+			var config = db.TranConfig.Where(c => c.Status == 0 && c.Guid.ToString() == configGuid).FirstOrDefault();
 
-            if (config == null)
-            {
-                return new ResponseData() { State = 3, Message = "没有找到相应的配置" };
-            }
+			if (config == null)
+			{
+				return new ResponseData() { State = 3, Message = "没有找到相应的配置" };
+			}
 
-            var detailSql = config.DetailSql.Replace("$timestamp$", lastTimeStamp).Replace("$rowCount$", rowCount.ToString());
+			var detailSql = config.DetailSql.Replace("$timestamp$", lastTimeStamp).Replace("$rowCount$", rowCount.ToString());
 
-            if (paras != null && paras.Count > 0)
-            {
-                foreach (var item in paras)
-                {
-                    detailSql = detailSql.Replace("$" + item.Key + "$", item.Value);
-                }
-            }
+			if (paras != null && paras.Count > 0)
+			{
+				foreach (var item in paras)
+				{
+					detailSql = detailSql.Replace("$" + item.Key + "$", item.Value);
+				}
+			}
 
-            var result = db.ExecuteQuery<string>(detailSql);
+			try
+			{
+				var result = db.ExecuteQuery<string>(detailSql);
 
-            string sql="";
+				string sql = "";
 
-            if (result != null && result.Count()>0)
-            {
-                foreach (var res in result)
-                {
-                    sql += res + ";";
-                }
-            }
+				if (result != null && result.Count() > 0)
+				{
+					foreach (var res in result)
+					{
+						sql += res + ";";
+					}
+				}
 
-            var response = new ResponseData() { State = 0, HeaderSql=config.HeaderSql, DetailSql=sql, FooterSql=config.FooterSql };
+				var response = new ResponseData() { State = 0, data = new SqlData() { HeaderSql = config.HeaderSql, DetailSql = sql, FooterSql = config.FooterSql } };
 
-            return response;
-        }
+				return response;
+			}
+			catch (Exception ex)
+			{
+				return new ResponseData() { State = 100, Message = ex.Message };
+			}		
+		}
+
+		[WebMethod]
+		public ResponseData Post(string clientCode, string varifyCode, SqlData data)
+		{
+			var client = db.Client.Where(c => c.Status == 0 && c.Code == clientCode).FirstOrDefault();
+
+			if (client == null)
+			{
+				return new ResponseData() { State = 1, Message = "客户端不存在" };
+			}
+
+			if (!VarifyClient(client.GUID.ToString(), varifyCode))
+			{
+				return new ResponseData() { State = 2, Message = "非法请求" };
+			}
+
+			var sql=data.HeaderSql+";"+data.DetailSql+";"+data.FooterSql;
+
+			try
+			{
+				db.ExecuteCommand(sql);
+				return new ResponseData() { State = 0, Message = "执行成功" };
+			}
+			catch (Exception ex)
+			{
+				return new ResponseData() { State = 100, Message = ex.Message};
+			}
+		}
 
 		/// <summary>
 		/// 获取传输配置
 		/// </summary>
 		/// <returns></returns>
 		[WebMethod]
-		public IEnumerable<TranConfig> GetTranConfigs(System.Data.Linq.Binary timestamp)
-		{			
-			return db.ExecuteQuery<TranConfig>("Select * from tranconfig where status=0 and timestamp>{0}",timestamp);
+		public ResponseData GetTranConfigs(string clientCode, string varifyCode, System.Data.Linq.Binary timestamp)
+		{
+			var client = db.Client.Where(c => c.Status == 0 && c.Code == clientCode).FirstOrDefault();
+
+			if (client == null)
+			{
+				return new ResponseData() { State = 1, Message = "客户端不存在" };
+			}
+
+			if (!VarifyClient(client.GUID.ToString(), varifyCode))
+			{
+				return new ResponseData() { State = 2, Message = "非法请求" };
+			}
+
+			var tranconfigs = db.ExecuteQuery<TranConfig>("Select * from tranconfig where status=0 and timestamp>{0}", timestamp);
+				
+			return new ResponseData(){ State=0, data=tranconfigs};			
 		}
 
-        private bool VarifyClient(string clientGuid, string varifyCode)
-        {
-            var md5Pulickey = Common.MD5(Common.PublicKey);
+		private bool VarifyClient(string clientGuid, string varifyCode)
+		{
+			var md5Pulickey = Common.MD5(Common.PublicKey);
 
-            return varifyCode.Equals(Common.MD5(md5Pulickey + clientGuid), StringComparison.OrdinalIgnoreCase);
-        }
-    }
+			return varifyCode.Equals(Common.MD5(md5Pulickey + clientGuid), StringComparison.OrdinalIgnoreCase);
+		}
+	}
 }

@@ -12,14 +12,19 @@ namespace ES.Repository.Model
 
         public string Message { get; set; }
 
-        public string HeaderSql { get; set; }
-
-        public string DetailSql { get; set; }
-
-        public string FooterSql { get; set; }
-
-        public int RowCount { get; set; }
-
-        public string MaxTimeStamp { get; set; }
+		public object data { get;set;}        
     }
+
+	public class SqlData
+	{
+		public string HeaderSql { get; set; }
+
+		public string DetailSql { get; set; }
+
+		public string FooterSql { get; set; }
+
+		public int RowCount { get; set; }
+
+		public string MaxTimeStamp { get; set; }
+	}
 }
