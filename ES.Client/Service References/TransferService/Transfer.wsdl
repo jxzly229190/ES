@@ -12,6 +12,78 @@
           </s:sequence>
         </s:complexType>
       </s:element>
+      <s:element name="Get">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="clientCode" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="varifyCode" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="lastTimeStamp" type="s:string" />
+            <s:element minOccurs="1" maxOccurs="1" name="rowCount" type="s:int" />
+            <s:element minOccurs="0" maxOccurs="1" name="configGuid" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="paras" type="tns:ArrayOfAnyType" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="ArrayOfAnyType">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="unbounded" name="anyType" nillable="true" />
+        </s:sequence>
+      </s:complexType>
+      <s:complexType name="ResponseData">
+        <s:sequence>
+          <s:element minOccurs="1" maxOccurs="1" name="State" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="Message" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="data" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="GetResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetResult" type="tns:ResponseData" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="Post">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="clientCode" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="varifyCode" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="data" type="tns:SqlData" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:complexType name="SqlData">
+        <s:sequence>
+          <s:element minOccurs="0" maxOccurs="1" name="HeaderSql" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="DetailSql" type="s:string" />
+          <s:element minOccurs="0" maxOccurs="1" name="FooterSql" type="s:string" />
+          <s:element minOccurs="1" maxOccurs="1" name="RowCount" type="s:int" />
+          <s:element minOccurs="0" maxOccurs="1" name="MaxTimeStamp" type="s:string" />
+        </s:sequence>
+      </s:complexType>
+      <s:element name="PostResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="PostResult" type="tns:ResponseData" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetTranConfigs">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="clientCode" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="varifyCode" type="s:string" />
+            <s:element minOccurs="0" maxOccurs="1" name="timestamp" type="s:string" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element name="GetTranConfigsResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element minOccurs="0" maxOccurs="1" name="GetTranConfigsResult" type="tns:ResponseData" />
+          </s:sequence>
+        </s:complexType>
+      </s:element>
     </s:schema>
   </wsdl:types>
   <wsdl:message name="HelloWorldSoapIn">
@@ -20,10 +92,40 @@
   <wsdl:message name="HelloWorldSoapOut">
     <wsdl:part name="parameters" element="tns:HelloWorldResponse" />
   </wsdl:message>
+  <wsdl:message name="GetSoapIn">
+    <wsdl:part name="parameters" element="tns:Get" />
+  </wsdl:message>
+  <wsdl:message name="GetSoapOut">
+    <wsdl:part name="parameters" element="tns:GetResponse" />
+  </wsdl:message>
+  <wsdl:message name="PostSoapIn">
+    <wsdl:part name="parameters" element="tns:Post" />
+  </wsdl:message>
+  <wsdl:message name="PostSoapOut">
+    <wsdl:part name="parameters" element="tns:PostResponse" />
+  </wsdl:message>
+  <wsdl:message name="GetTranConfigsSoapIn">
+    <wsdl:part name="parameters" element="tns:GetTranConfigs" />
+  </wsdl:message>
+  <wsdl:message name="GetTranConfigsSoapOut">
+    <wsdl:part name="parameters" element="tns:GetTranConfigsResponse" />
+  </wsdl:message>
   <wsdl:portType name="TransferSoap">
     <wsdl:operation name="HelloWorld">
       <wsdl:input message="tns:HelloWorldSoapIn" />
       <wsdl:output message="tns:HelloWorldSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Get">
+      <wsdl:input message="tns:GetSoapIn" />
+      <wsdl:output message="tns:GetSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="Post">
+      <wsdl:input message="tns:PostSoapIn" />
+      <wsdl:output message="tns:PostSoapOut" />
+    </wsdl:operation>
+    <wsdl:operation name="GetTranConfigs">
+      <wsdl:input message="tns:GetTranConfigsSoapIn" />
+      <wsdl:output message="tns:GetTranConfigsSoapOut" />
     </wsdl:operation>
   </wsdl:portType>
   <wsdl:binding name="TransferSoap" type="tns:TransferSoap">
@@ -37,11 +139,65 @@
         <soap:body use="literal" />
       </wsdl:output>
     </wsdl:operation>
+    <wsdl:operation name="Get">
+      <soap:operation soapAction="http://tempuri.org/Get" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Post">
+      <soap:operation soapAction="http://tempuri.org/Post" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTranConfigs">
+      <soap:operation soapAction="http://tempuri.org/GetTranConfigs" style="document" />
+      <wsdl:input>
+        <soap:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
   </wsdl:binding>
   <wsdl:binding name="TransferSoap12" type="tns:TransferSoap">
     <soap12:binding transport="http://schemas.xmlsoap.org/soap/http" />
     <wsdl:operation name="HelloWorld">
       <soap12:operation soapAction="http://tempuri.org/HelloWorld" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Get">
+      <soap12:operation soapAction="http://tempuri.org/Get" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="Post">
+      <soap12:operation soapAction="http://tempuri.org/Post" style="document" />
+      <wsdl:input>
+        <soap12:body use="literal" />
+      </wsdl:input>
+      <wsdl:output>
+        <soap12:body use="literal" />
+      </wsdl:output>
+    </wsdl:operation>
+    <wsdl:operation name="GetTranConfigs">
+      <soap12:operation soapAction="http://tempuri.org/GetTranConfigs" style="document" />
       <wsdl:input>
         <soap12:body use="literal" />
       </wsdl:input>

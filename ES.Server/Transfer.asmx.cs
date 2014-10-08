@@ -39,9 +39,9 @@ namespace ES.Server
 		/// <param name="paras">其他参数</param>
 		/// <returns></returns>
 		[WebMethod]
-		public ResponseData Get(string clientCode, string varifyCode, string lastTimeStamp, int rowCount, string configGuid, IDictionary<string, string> paras)
+        public ResponseData Get(string clientCode, string varifyCode, string lastTimeStamp, int rowCount, string configGuid, params object[] paras)
 		{
-			var client = db.Client.Where(c => c.Status == 0 && c.Code == clientCode).FirstOrDefault();
+			var client = db.Clients.Where(c => c.Status == 0 && c.Code == clientCode).FirstOrDefault();
 
 			if (client == null)
 			{
@@ -53,7 +53,7 @@ namespace ES.Server
 				return new ResponseData() { State = 2, Message = "非法请求" };
 			}
 
-			var config = db.TranConfig.Where(c => c.Status == 0 && c.Guid.ToString() == configGuid).FirstOrDefault();
+			var config = db.TranConfigs.Where(c => c.Status == 0 && c.Guid.ToString() == configGuid).FirstOrDefault();
 
 			if (config == null)
 			{
@@ -62,13 +62,15 @@ namespace ES.Server
 
 			var detailSql = config.DetailSql.Replace("$timestamp$", lastTimeStamp).Replace("$rowCount$", rowCount.ToString());
 
-			if (paras != null && paras.Count > 0)
-			{
-				foreach (var item in paras)
-				{
-					detailSql = detailSql.Replace("$" + item.Key + "$", item.Value);
-				}
-			}
+            if (paras != null && paras.Length > 0)
+            {
+                //foreach (var item in paras)
+                //{
+                //    detailSql = detailSql.Replace("$" + item.Key + "$", item.Value);
+                //}
+
+                detailSql = string.Format(detailSql, paras);
+            }
 
 			try
 			{
@@ -97,7 +99,7 @@ namespace ES.Server
 		[WebMethod]
 		public ResponseData Post(string clientCode, string varifyCode, SqlData data)
 		{
-			var client = db.Client.Where(c => c.Status == 0 && c.Code == clientCode).FirstOrDefault();
+			var client = db.Clients.Where(c => c.Status == 0 && c.Code == clientCode).FirstOrDefault();
 
 			if (client == null)
 			{
@@ -127,23 +129,25 @@ namespace ES.Server
 		/// </summary>
 		/// <returns></returns>
 		[WebMethod]
-		public ResponseData GetTranConfigs(string clientCode, string varifyCode, System.Data.Linq.Binary timestamp)
+		public List<TranConfig> GetTranConfigs(string clientCode, string varifyCode, string timestamp)
 		{
-			var client = db.Client.Where(c => c.Status == 0 && c.Code == clientCode).FirstOrDefault();
+			var client = db.Clients.Where(c => c.Status == 0 && c.Code == clientCode).FirstOrDefault();
 
-			if (client == null)
-			{
-				return new ResponseData() { State = 1, Message = "客户端不存在" };
-			}
+            //if (client == null)
+            //{
+            //    return new ResponseData() { State = 1, Message = "客户端不存在" };
+            //}
 
-			if (!VarifyClient(client.GUID.ToString(), varifyCode))
-			{
-				return new ResponseData() { State = 2, Message = "非法请求" };
-			}
+            //if (!VarifyClient(client.GUID.ToString(), varifyCode))
+            //{
+            //    return new ResponseData() { State = 2, Message = "非法请求" };
+            //}
 
-			var tranconfigs = db.ExecuteQuery<TranConfig>("Select * from tranconfig where status=0 and timestamp>{0}", timestamp);
+			//var tranconfigs = db.ExecuteQuery<TranConfig>("Select * from tranconfig where status=0 and timestamp>Convert(timestamp,'{0}')",timestamp).ToList();
+            var tranconfigs = db.ExecuteQuery<TranConfig>("Select * from tranconfig where status=0").ToList();
 				
-			return new ResponseData(){ State=0, data=tranconfigs};			
+			//return new ResponseData(){ State=0, data=tranconfigs};
+            return tranconfigs;
 		}
 
 		private bool VarifyClient(string clientGuid, string varifyCode)
