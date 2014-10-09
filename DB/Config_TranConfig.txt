@@ -1,0 +1,29 @@
+头部：
+if object_id('tempdb..#temp_client') is not null drop table #temp_client;
+select top 0 [Guid]
+      ,[Name]
+      ,[Code]
+      ,[Sort]
+      ,[MaxCount]
+      ,[Direct]
+      ,[HeaderSql]
+      ,[DetailSql]
+      ,[FooterSql]
+      ,[Remark]
+      ,[Status]
+      ,[CreatedTime]
+      ,[CreatedBy]
+      ,[ModifiedTime]
+      ,[ModifiedBy] into #temp_client from client(nolock)
+
+Sql体：
+
+select top $rowCount$ 'insert #temp_client select '+ dbo.bims_f_var_to_string(Guid)+','+dbo.bims_f_var_to_string(Name)+','+dbo.bims_f_var_to_string(Code)  +','+dbo.bims_f_var_to_string(Sort)+','+dbo.bims_f_var_to_string(MaxCount)+','+dbo.bims_f_var_to_string(Direct) +','+dbo.bims_f_var_to_string(HeaderSql)+','+dbo.bims_f_var_to_string(DetailSql)+','+dbo.bims_f_var_to_string(FooterSql)+','+dbo.bims_f_var_to_string(Remark)+','+dbo.bims_f_var_to_string(Status)+','+dbo.bims_f_var_to_string(CreatedTime)+','+dbo.bims_f_var_to_string(CreatedBy)+','+dbo.bims_f_var_to_string(ModifiedTime)+','+dbo.bims_f_var_to_string(ModifiedBy) from client where stamp > cast(cast($lastStamp$ as bigint) as timestamp)
+
+Sql脚：
+Update b set b.name = a.name,b.code = a.code ,b.sort = a.sort ,b.MaxCount = a.MaxCount,b.Direct = a.Direct ,b.HeaderSql = a.HeaderSql,b.DetailSql = a.DetailSql,b.FooterSql = a.FooterSql,b.remark = a.remark,b.Status = a.Status,b.CreatedBy = a.CreatedBy,b.CreatedTime = a.CreatedTime ,b.ModifiedBy = a.ModifiedBy,b.ModifiedTime = a.ModifiedTime from #temp_client a,Client b  where a.Guid = b.Guid;
+if @@error <> 0 begin raiserror 20001 '更新配置出错'  rollback return end;
+
+
+insert into Client([Guid]      ,[Name]      ,[Code]      ,[Sort]      ,[MaxCount]      ,[Direct]      ,[HeaderSql]      ,[DetailSql]      ,[FooterSql]      ,[Remark]      ,[Status]      ,[CreatedTime]      ,[CreatedBy]      ,[ModifiedTime])  select[Guid]      ,[Name]      ,[Code]      ,[Sort]      ,[MaxCount]      ,[Direct]      ,[HeaderSql]      ,[DetailSql]      ,[FooterSql]      ,[Remark]      ,[Status]      ,[CreatedTime]      ,[CreatedBy]      ,[ModifiedTime]  from #temp_client a   where a.Guid<>b.Guid;
+ if @@error <> 0 begin raiserror 20002 '插入配置出错'  rollback return end
