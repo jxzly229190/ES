@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using ES.Repository;
+using ES.Client.TransferService;
 
 namespace ES.Client
 {
@@ -43,9 +44,9 @@ namespace ES.Client
             string clientCode,clientGuid;
             clientGuid=QueryCurrentClientGUID(out clientCode);
 
-            var timestamp = db.Clients.OrderByDescending(c => c.Timestamp).FirstOrDefault();
+			var timestamp = db.ExecuteQuery<long?>("Select max(cast(Timestamp as bigint)) From TranConfig Where [GUID]={0}", clientGuid).FirstOrDefault();
 
-            var result = server.GetTranConfigs(clientCode, Common.MD5(md5Pulickey + clientGuid), timestamp==null?"":timestamp.Timestamp.ToString());
+            var result = server.GetTranConfigs(clientCode, Common.MD5(md5Pulickey + clientGuid), timestamp??0);
 
             if (result == null)
             {
@@ -57,13 +58,27 @@ namespace ES.Client
                 throw new Exception("返回值异常,错误信息：" + result.Message);
             }
 
-            var configs = result.data;
+            var sqlData = result.data as SqlData;
+
+			if (sqlData == null)
+			{
+				throw new Exception("转换出错");
+			}
+
+			try
+			{
+				db.ExecuteCommand(sqlData.HeaderSql + ";" + sqlData.DetailSql + ";" + sqlData.FooterSql);
+			}
+			catch (Exception ex)
+			{				
+				throw ex;
+			}			
         }
 
         private string QueryCurrentClientGUID(out string clientCode)
         {
             //return null;
-            var client = db.Clients.Where(c => c.Status == 0 && c.IsCurrent == true).FirstOrDefault();
+            var client = db.Client.Where(c => c.Status == 0 && c.IsCurrent == true).FirstOrDefault();
 
             if (client == null)
             {

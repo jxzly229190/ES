@@ -1,4 +1,4 @@
-头部：
+﻿头部：
 if object_id('tempdb..#temp_client') is not null drop table #temp_client;
 select top 0 [Guid]
       ,[Name]
@@ -26,4 +26,4 @@ if @@error <> 0 begin raiserror 20001 '更新配置出错'  rollback return end;
 
 
 insert into Client([Guid]      ,[Name]      ,[Code]      ,[Sort]      ,[MaxCount]      ,[Direct]      ,[HeaderSql]      ,[DetailSql]      ,[FooterSql]      ,[Remark]      ,[Status]      ,[CreatedTime]      ,[CreatedBy]      ,[ModifiedTime])  select[Guid]      ,[Name]      ,[Code]      ,[Sort]      ,[MaxCount]      ,[Direct]      ,[HeaderSql]      ,[DetailSql]      ,[FooterSql]      ,[Remark]      ,[Status]      ,[CreatedTime]      ,[CreatedBy]      ,[ModifiedTime]  from #temp_client a   where a.Guid<>b.Guid;
- if @@error <> 0 begin raiserror 20002 '插入配置出错'  rollback return end
+ if @@error <> 0 begin raiserror 20002 '更新配置出错'  rollback return end

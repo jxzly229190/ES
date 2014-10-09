@@ -7,6 +7,7 @@ using System.Data.Linq;
 using System.Linq;
 using System.Web;
 using System.Web.Services;
+using System.Xml.Serialization;
 
 namespace ES.Server
 {
@@ -18,6 +19,8 @@ namespace ES.Server
 	[System.ComponentModel.ToolboxItem(false)]
 	// To allow this Web Service to be called from script, using ASP.NET AJAX, uncomment the following line. 
 	// [System.Web.Script.Services.ScriptService]
+	[XmlInclude(typeof(ResponseData))]
+	[XmlInclude(typeof(SqlData))]
 	public class Transfer : System.Web.Services.WebService
 	{
 		DBDataContext db = new ES.Repository.Server.DBDataContext();
@@ -39,9 +42,9 @@ namespace ES.Server
 		/// <param name="paras">其他参数</param>
 		/// <returns></returns>
 		[WebMethod]
-        public ResponseData Get(string clientCode, string varifyCode, string lastTimeStamp, int rowCount, string configGuid, params object[] paras)
+        public ResponseData Get(string clientCode, string varifyCode, long lastTimeStamp, int rowCount, string configGuid, params object[] paras)
 		{
-			var client = db.Clients.Where(c => c.Status == 0 && c.Code == clientCode).FirstOrDefault();
+			var client = db.Client.Where(c => c.Status == 0 && c.Code == clientCode).FirstOrDefault();
 
 			if (client == null)
 			{
@@ -53,22 +56,17 @@ namespace ES.Server
 				return new ResponseData() { State = 2, Message = "非法请求" };
 			}
 
-			var config = db.TranConfigs.Where(c => c.Status == 0 && c.Guid.ToString() == configGuid).FirstOrDefault();
+			var config = db.TranConfig.Where(c => c.Status == 0 && c.Guid.ToString() == configGuid).FirstOrDefault();
 
 			if (config == null)
 			{
 				return new ResponseData() { State = 3, Message = "没有找到相应的配置" };
 			}
 
-			var detailSql = config.DetailSql.Replace("$timestamp$", lastTimeStamp).Replace("$rowCount$", rowCount.ToString());
+			var detailSql = config.DetailSql.Replace("$lastStamp$", lastTimeStamp.ToString()).Replace("$rowCount$", rowCount.ToString());
 
             if (paras != null && paras.Length > 0)
             {
-                //foreach (var item in paras)
-                //{
-                //    detailSql = detailSql.Replace("$" + item.Key + "$", item.Value);
-                //}
-
                 detailSql = string.Format(detailSql, paras);
             }
 
@@ -78,7 +76,7 @@ namespace ES.Server
 
 				string sql = "";
 
-				if (result != null && result.Count() > 0)
+				if (result != null)
 				{
 					foreach (var res in result)
 					{
@@ -99,7 +97,7 @@ namespace ES.Server
 		[WebMethod]
 		public ResponseData Post(string clientCode, string varifyCode, SqlData data)
 		{
-			var client = db.Clients.Where(c => c.Status == 0 && c.Code == clientCode).FirstOrDefault();
+			var client = db.Client.Where(c => c.Status == 0 && c.Code == clientCode).FirstOrDefault();
 
 			if (client == null)
 			{
@@ -129,25 +127,33 @@ namespace ES.Server
 		/// </summary>
 		/// <returns></returns>
 		[WebMethod]
-		public List<TranConfig> GetTranConfigs(string clientCode, string varifyCode, string timestamp)
+		public ResponseData GetTranConfigs(string clientCode, string varifyCode, long timestamp)
 		{
-			var client = db.Clients.Where(c => c.Status == 0 && c.Code == clientCode).FirstOrDefault();
+			var client = db.Client.Where(c => c.Status == 0 && c.Code == clientCode).FirstOrDefault();
 
-            //if (client == null)
-            //{
-            //    return new ResponseData() { State = 1, Message = "客户端不存在" };
-            //}
+			if (client == null)
+			{
+				return new ResponseData() { State = 1, Message = "客户端不存在" };
+			}
 
-            //if (!VarifyClient(client.GUID.ToString(), varifyCode))
-            //{
-            //    return new ResponseData() { State = 2, Message = "非法请求" };
-            //}
+			if (!VarifyClient(client.GUID.ToString(), varifyCode))
+			{
+				return new ResponseData() { State = 2, Message = "非法请求" };
+			}
 
 			//var tranconfigs = db.ExecuteQuery<TranConfig>("Select * from tranconfig where status=0 and timestamp>Convert(timestamp,'{0}')",timestamp).ToList();
-            var tranconfigs = db.ExecuteQuery<TranConfig>("Select * from tranconfig where status=0").ToList();
+            //var tranconfigs = db.ExecuteQuery<TranConfig>("Select * from tranconfig where status=0").ToList();
+
+			var tranConfig=db.TranConfig.Where(t=>t.Code=="PZSJ"&&t.Status==0).FirstOrDefault();
+
+			if (tranConfig == null)
+			{
+				return new ResponseData() { State = 3, Message="配置不存在" };
+			}
+
+			return this.Get(clientCode, varifyCode, timestamp, tranConfig.MaxCount, tranConfig.Guid.ToString());
 				
-			//return new ResponseData(){ State=0, data=tranconfigs};
-            return tranconfigs;
+			//return new ResponseData(){ State=0};
 		}
 
 		private bool VarifyClient(string clientGuid, string varifyCode)

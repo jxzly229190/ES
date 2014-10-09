@@ -3,16 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml.Serialization;
 
 namespace ES.Repository.Model
 {
+	[XmlInclude(typeof(ResponseData))]
     public class ResponseData
     {
         public int State { get; set; }
 
         public string Message { get; set; }
 
-		public object data { get;set;}        
+		public object data { get;set;} 
     }
 
 	public class SqlData
