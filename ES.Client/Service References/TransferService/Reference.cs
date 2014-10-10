@@ -22,6 +22,129 @@ namespace ES.Client.TransferService {
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="SqlData", Namespace="http://tempuri.org/")]
+    [System.SerializableAttribute()]
+    public partial class SqlData : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string ConfigGuidField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string HeaderSqlField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string DetailSqlField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string FooterSqlField;
+        
+        private int RowCountField;
+        
+        private long MaxTimeStampField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false)]
+        public string ConfigGuid {
+            get {
+                return this.ConfigGuidField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.ConfigGuidField, value) != true)) {
+                    this.ConfigGuidField = value;
+                    this.RaisePropertyChanged("ConfigGuid");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false)]
+        public string HeaderSql {
+            get {
+                return this.HeaderSqlField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.HeaderSqlField, value) != true)) {
+                    this.HeaderSqlField = value;
+                    this.RaisePropertyChanged("HeaderSql");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=2)]
+        public string DetailSql {
+            get {
+                return this.DetailSqlField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.DetailSqlField, value) != true)) {
+                    this.DetailSqlField = value;
+                    this.RaisePropertyChanged("DetailSql");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=3)]
+        public string FooterSql {
+            get {
+                return this.FooterSqlField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.FooterSqlField, value) != true)) {
+                    this.FooterSqlField = value;
+                    this.RaisePropertyChanged("FooterSql");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true, Order=4)]
+        public int RowCount {
+            get {
+                return this.RowCountField;
+            }
+            set {
+                if ((this.RowCountField.Equals(value) != true)) {
+                    this.RowCountField = value;
+                    this.RaisePropertyChanged("RowCount");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true, Order=5)]
+        public long MaxTimeStamp {
+            get {
+                return this.MaxTimeStampField;
+            }
+            set {
+                if ((this.MaxTimeStampField.Equals(value) != true)) {
+                    this.MaxTimeStampField = value;
+                    this.RaisePropertyChanged("MaxTimeStamp");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
     [System.Runtime.Serialization.DataContractAttribute(Name="ResponseData", Namespace="http://tempuri.org/")]
     [System.SerializableAttribute()]
     [System.Runtime.Serialization.KnownTypeAttribute(typeof(ES.Client.TransferService.ArrayOfAnyType))]
@@ -98,114 +221,6 @@ namespace ES.Client.TransferService {
         }
     }
     
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="SqlData", Namespace="http://tempuri.org/")]
-    [System.SerializableAttribute()]
-    public partial class SqlData : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
-        [System.NonSerializedAttribute()]
-        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string HeaderSqlField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string DetailSqlField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string FooterSqlField;
-        
-        private int RowCountField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string MaxTimeStampField;
-        
-        [global::System.ComponentModel.BrowsableAttribute(false)]
-        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
-            get {
-                return this.extensionDataField;
-            }
-            set {
-                this.extensionDataField = value;
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false)]
-        public string HeaderSql {
-            get {
-                return this.HeaderSqlField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.HeaderSqlField, value) != true)) {
-                    this.HeaderSqlField = value;
-                    this.RaisePropertyChanged("HeaderSql");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=1)]
-        public string DetailSql {
-            get {
-                return this.DetailSqlField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.DetailSqlField, value) != true)) {
-                    this.DetailSqlField = value;
-                    this.RaisePropertyChanged("DetailSql");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=2)]
-        public string FooterSql {
-            get {
-                return this.FooterSqlField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.FooterSqlField, value) != true)) {
-                    this.FooterSqlField = value;
-                    this.RaisePropertyChanged("FooterSql");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true, Order=3)]
-        public int RowCount {
-            get {
-                return this.RowCountField;
-            }
-            set {
-                if ((this.RowCountField.Equals(value) != true)) {
-                    this.RowCountField = value;
-                    this.RaisePropertyChanged("RowCount");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=4)]
-        public string MaxTimeStamp {
-            get {
-                return this.MaxTimeStampField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.MaxTimeStampField, value) != true)) {
-                    this.MaxTimeStampField = value;
-                    this.RaisePropertyChanged("MaxTimeStamp");
-                }
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
-            }
-        }
-    }
-    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
     [System.ServiceModel.ServiceContractAttribute(ConfigurationName="TransferService.TransferSoap")]
     public interface TransferSoap {
@@ -220,8 +235,8 @@ namespace ES.Client.TransferService {
         // CODEGEN: 命名空间 http://tempuri.org/ 的元素名称 clientCode 以后生成的消息协定未标记为 nillable
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/Get", ReplyAction="*")]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(ES.Client.TransferService.ArrayOfAnyType))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(ES.Client.TransferService.ResponseData))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(ES.Client.TransferService.SqlData))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(ES.Client.TransferService.ResponseData))]
         ES.Client.TransferService.GetResponse Get(ES.Client.TransferService.GetRequest request);
         
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/Get", ReplyAction="*")]

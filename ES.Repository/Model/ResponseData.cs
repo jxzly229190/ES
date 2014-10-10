@@ -19,6 +19,8 @@ namespace ES.Repository.Model
 
 	public class SqlData
 	{
+		public string ConfigGuid { get;set;}
+
 		public string HeaderSql { get; set; }
 
 		public string DetailSql { get; set; }
@@ -27,6 +29,11 @@ namespace ES.Repository.Model
 
 		public int RowCount { get; set; }
 
-		public string MaxTimeStamp { get; set; }
+		public long MaxTimeStamp { get; set; }
+	}
+
+	public class QueryResult {
+		public string sql { get;set;}
+		public long stamp { get;set;} 
 	}
 }

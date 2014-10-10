@@ -42,7 +42,7 @@ namespace ES.Server
 		/// <param name="paras">其他参数</param>
 		/// <returns></returns>
 		[WebMethod]
-        public ResponseData Get(string clientCode, string varifyCode, long lastTimeStamp, int rowCount, string configGuid, params object[] paras)
+		public ResponseData Get(string clientCode, string varifyCode, long lastTimeStamp, int rowCount, string configGuid, params object[] paras)
 		{
 			var client = db.Client.Where(c => c.Status == 0 && c.Code == clientCode).FirstOrDefault();
 
@@ -65,14 +65,16 @@ namespace ES.Server
 
 			var detailSql = config.DetailSql.Replace("$lastStamp$", lastTimeStamp.ToString()).Replace("$rowCount$", rowCount.ToString());
 
-            if (paras != null && paras.Length > 0)
-            {
-                detailSql = string.Format(detailSql, paras);
-            }
+			if (paras != null && paras.Length > 0)
+			{
+				detailSql = string.Format(detailSql, paras);
+			}
+
+			detailSql = detailSql.Replace("from", " as sql,cast(timestamp as bigint) as stamp from");
 
 			try
 			{
-				var result = db.ExecuteQuery<string>(detailSql);
+				var result = db.ExecuteQuery<QueryResult>(detailSql).OrderByDescending(d => d.stamp).ToList();
 
 				string sql = "";
 
@@ -80,18 +82,22 @@ namespace ES.Server
 				{
 					foreach (var res in result)
 					{
-						sql += res + ";";
+						sql += res.sql + ";";
 					}
-				}
+				}			
 
-				var response = new ResponseData() { State = 0, data = new SqlData() { HeaderSql = config.HeaderSql, DetailSql = sql, FooterSql = config.FooterSql } };
+				var response = new ResponseData()
+				{
+					State = 0,
+					data = new SqlData() { HeaderSql = config.HeaderSql, DetailSql = sql, FooterSql = config.FooterSql, MaxTimeStamp = result.Count==0?0:result.First().stamp, RowCount = result.Count(), ConfigGuid=config.Guid.ToString() }
+				};
 
 				return response;
 			}
 			catch (Exception ex)
 			{
 				return new ResponseData() { State = 100, Message = ex.Message };
-			}		
+			}
 		}
 
 		[WebMethod]
@@ -109,7 +115,7 @@ namespace ES.Server
 				return new ResponseData() { State = 2, Message = "非法请求" };
 			}
 
-			var sql=data.HeaderSql+";"+data.DetailSql+";"+data.FooterSql;
+			var sql = data.HeaderSql + ";" + data.DetailSql + ";" + data.FooterSql;
 
 			try
 			{
@@ -118,7 +124,7 @@ namespace ES.Server
 			}
 			catch (Exception ex)
 			{
-				return new ResponseData() { State = 100, Message = ex.Message};
+				return new ResponseData() { State = 100, Message = ex.Message };
 			}
 		}
 
@@ -141,19 +147,14 @@ namespace ES.Server
 				return new ResponseData() { State = 2, Message = "非法请求" };
 			}
 
-			//var tranconfigs = db.ExecuteQuery<TranConfig>("Select * from tranconfig where status=0 and timestamp>Convert(timestamp,'{0}')",timestamp).ToList();
-            //var tranconfigs = db.ExecuteQuery<TranConfig>("Select * from tranconfig where status=0").ToList();
-
-			var tranConfig=db.TranConfig.Where(t=>t.Code=="PZSJ"&&t.Status==0).FirstOrDefault();
+			var tranConfig = db.TranConfig.Where(t => t.Code == "PZSJ" && t.Status == 0).FirstOrDefault();
 
 			if (tranConfig == null)
 			{
-				return new ResponseData() { State = 3, Message="配置不存在" };
+				return new ResponseData() { State = 3, Message = "配置不存在" };
 			}
 
 			return this.Get(clientCode, varifyCode, timestamp, tranConfig.MaxCount, tranConfig.Guid.ToString());
-				
-			//return new ResponseData(){ State=0};
 		}
 
 		private bool VarifyClient(string clientGuid, string varifyCode)
