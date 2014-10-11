@@ -1,0 +1,8 @@
+Header:
+if object_id('tempdb..#temp_User') is not null drop table #temp_User;select top 0 [GUID]      ,[Name]     ,[Address],[Remark]      ,[State]      ,[CreatedTime]  into #temp_User from [User](nolock);
+
+Detail:
+select top $rowCount$ 'insert #temp_User([GUID],[Name],[Address],[Remark],[State],[CreatedTime]) select '+dbo.bims_f_var_to_string(Guid)+','+dbo.bims_f_var_to_string(Name)+','+dbo.bims_f_var_to_string(Address)+','+dbo.bims_f_var_to_string(Remark)+','+dbo.bims_f_var_to_string(State)+','+dbo.bims_f_var_to_string(CreatedTime) from [User] where [timestamp] > cast(cast($lastStamp$ as bigint) as timestamp) Order by [TimeStamp];
+
+Footer:
+Update b set b.name = a.name,b.Address = a.Address ,b.State = a.State,b.Remark = a.Remark,b.CreatedTime = a.CreatedTime from #temp_User a,[User] b  where a.Guid = b.Guid;if @@error <> 0 begin raiserror 20001 '更新配置出错';  rollback return end;insert into [User]([GUID],[Name],[Address],[Remark],[State],[CreatedTime]) select [GUID],[Name],[Address],[Remark],[State],[CreatedTime] from #temp_User a   where a.Guid not in (Select [GUID] From [User]);if @@error <> 0 begin raiserror 20002 '更新配置出错';rollback return end;

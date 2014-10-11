@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="ES.Client" Class="DBDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="AppSettings" ConnectionString="Data Source=.;Initial Catalog=ES.Client;Integrated Security=True" SettingsObjectName="ES.Repository.Properties.Settings" SettingsPropertyName="ES_ClientConnectionString1" Provider="System.Data.SqlClient" />
-  <Table Name="dbo.Client" Member="Client">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=.\SqlExpress;Initial Catalog=ES.Client;Integrated Security=True" SettingsObjectName="ES.Repository.Properties.Settings" SettingsPropertyName="ES_ClientConnectionString2" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.Client" Member="Clients">
     <Type Name="Client">
       <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="GUID" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
@@ -17,7 +17,7 @@
       <Column Name="ModifiedTime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
     </Type>
   </Table>
-  <Table Name="dbo.TranLog" Member="TranLog">
+  <Table Name="dbo.TranLog" Member="TranLogs">
     <Type Name="TranLog">
       <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="TranName" Type="System.String" DbType="NVarChar(32)" CanBeNull="true" />
@@ -28,7 +28,7 @@
       <Column Name="TranTime" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
     </Type>
   </Table>
-  <Table Name="dbo.TranConfig" Member="TranConfig">
+  <Table Name="dbo.TranConfig" Member="TranConfigs">
     <Type Name="TranConfig">
       <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="Guid" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />

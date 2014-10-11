@@ -44,7 +44,7 @@ namespace ES.Server
 		[WebMethod]
 		public ResponseData Get(string clientCode, string varifyCode, long lastTimeStamp, int rowCount, string configGuid, params object[] paras)
 		{
-			var client = db.Client.Where(c => c.Status == 0 && c.Code == clientCode).FirstOrDefault();
+			var client = db.Clients.Where(c => c.Status == 0 && c.Code == clientCode).FirstOrDefault();
 
 			if (client == null)
 			{
@@ -56,7 +56,7 @@ namespace ES.Server
 				return new ResponseData() { State = 2, Message = "非法请求" };
 			}
 
-			var config = db.TranConfig.Where(c => c.Status == 0 && c.Guid.ToString() == configGuid).FirstOrDefault();
+			var config = db.TranConfigs.Where(c => c.Status == 0 && c.Guid.ToString() == configGuid).FirstOrDefault();
 
 			if (config == null)
 			{
@@ -74,22 +74,28 @@ namespace ES.Server
 
 			try
 			{
-				var result = db.ExecuteQuery<QueryResult>(detailSql).OrderByDescending(d => d.stamp).ToList();
+				var result = db.ExecuteQuery<QueryResult>(detailSql).ToList();
 
 				string sql = "";
 
-				if (result != null)
-				{
-					foreach (var res in result)
-					{
-						sql += res.sql + ";";
-					}
-				}			
+                if (result != null&&result.Count()>0)
+                {
+                    foreach (var res in result)
+                    {
+                        sql += res.sql + ";";
+                    }
+                }
+                else {
+                    return new ResponseData() { State = 0, Message = "没有数据了" };
+                }
 
+                //获取最大时间戳
+                var maxItem = result.OrderByDescending(d => d.stamp).FirstOrDefault();
+                
 				var response = new ResponseData()
 				{
 					State = 0,
-					data = new SqlData() { HeaderSql = config.HeaderSql, DetailSql = sql, FooterSql = config.FooterSql, MaxTimeStamp = result.Count==0?0:result.First().stamp, RowCount = result.Count(), ConfigGuid=config.Guid.ToString() }
+					data = new SqlData() { HeaderSql = config.HeaderSql, DetailSql = sql, FooterSql = config.FooterSql, MaxTimeStamp = maxItem==null?0:maxItem.stamp, RowCount = result.Count(), ConfigGuid=config.Guid.ToString() }
 				};
 
 				return response;
@@ -103,7 +109,7 @@ namespace ES.Server
 		[WebMethod]
 		public ResponseData Post(string clientCode, string varifyCode, SqlData data)
 		{
-			var client = db.Client.Where(c => c.Status == 0 && c.Code == clientCode).FirstOrDefault();
+			var client = db.Clients.Where(c => c.Status == 0 && c.Code == clientCode).FirstOrDefault();
 
 			if (client == null)
 			{
@@ -135,7 +141,7 @@ namespace ES.Server
 		[WebMethod]
 		public ResponseData GetTranConfigs(string clientCode, string varifyCode, long timestamp)
 		{
-			var client = db.Client.Where(c => c.Status == 0 && c.Code == clientCode).FirstOrDefault();
+			var client = db.Clients.Where(c => c.Status == 0 && c.Code == clientCode).FirstOrDefault();
 
 			if (client == null)
 			{
@@ -147,7 +153,7 @@ namespace ES.Server
 				return new ResponseData() { State = 2, Message = "非法请求" };
 			}
 
-			var tranConfig = db.TranConfig.Where(t => t.Code == "PZSJ" && t.Status == 0).FirstOrDefault();
+			var tranConfig = db.TranConfigs.Where(t => t.Code == "PZSJ" && t.Status == 0).FirstOrDefault();
 
 			if (tranConfig == null)
 			{
