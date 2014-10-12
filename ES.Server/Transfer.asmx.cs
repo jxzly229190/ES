@@ -44,7 +44,7 @@ namespace ES.Server
 		[WebMethod]
 		public ResponseData Get(string clientCode, string varifyCode, long lastTimeStamp, int rowCount, string configGuid, params object[] paras)
 		{
-			var client = db.Clients.Where(c => c.Status == 0 && c.Code == clientCode).FirstOrDefault();
+			var client = db.Client.Where(c => c.Status == 0 && c.Code == clientCode).FirstOrDefault();
 
 			if (client == null)
 			{
@@ -56,7 +56,7 @@ namespace ES.Server
 				return new ResponseData() { State = 2, Message = "非法请求" };
 			}
 
-			var config = db.TranConfigs.Where(c => c.Status == 0 && c.Guid.ToString() == configGuid).FirstOrDefault();
+			var config = db.TranConfig.Where(c => c.Status == 0 && c.Guid.ToString() == configGuid).FirstOrDefault();
 
 			if (config == null)
 			{
@@ -109,7 +109,7 @@ namespace ES.Server
 		[WebMethod]
 		public ResponseData Post(string clientCode, string varifyCode, SqlData data)
 		{
-			var client = db.Clients.Where(c => c.Status == 0 && c.Code == clientCode).FirstOrDefault();
+			var client = db.Client.Where(c => c.Status == 0 && c.Code == clientCode).FirstOrDefault();
 
 			if (client == null)
 			{
@@ -141,7 +141,7 @@ namespace ES.Server
 		[WebMethod]
 		public ResponseData GetTranConfigs(string clientCode, string varifyCode, long timestamp)
 		{
-			var client = db.Clients.Where(c => c.Status == 0 && c.Code == clientCode).FirstOrDefault();
+			var client = db.Client.Where(c => c.Status == 0 && c.Code == clientCode).FirstOrDefault();
 
 			if (client == null)
 			{
@@ -153,7 +153,7 @@ namespace ES.Server
 				return new ResponseData() { State = 2, Message = "非法请求" };
 			}
 
-			var tranConfig = db.TranConfigs.Where(t => t.Code == "PZSJ" && t.Status == 0).FirstOrDefault();
+			var tranConfig = db.TranConfig.Where(t => t.Code == "PZSJ" && t.Status == 0).FirstOrDefault();
 
 			if (tranConfig == null)
 			{
