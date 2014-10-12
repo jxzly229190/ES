@@ -5,6 +5,7 @@ using System.Windows.Forms;
 using ES.Repository;
 using ES.Client.TransferService;
 using ES.Repository.Client;
+using System.Threading;
 
 namespace ES.Client
 {
@@ -15,6 +16,7 @@ namespace ES.Client
 			InitializeComponent();
 
 			UpdateConfigs();
+			dgv_log.ReadOnly = true;
 		}
 
 		TransferService.TransferSoapClient server = new TransferService.TransferSoapClient();
@@ -22,28 +24,60 @@ namespace ES.Client
 
 		private void Main_Load(object sender, EventArgs e)
 		{
+			dgv_log.DataSource = db.TranLog.OrderByDescending(p => p.ID).Take(200).ToList();
+			tl_pName.Text = "传输状态：";
+
 			var result = server.HelloWorld();
-			SyncData();
+			Thread t = new Thread(new ParameterizedThreadStart(SyncData), 0);
+			t.IsBackground = true;
+			t.Start(this);
 		}
 
-		private void SyncData()
+		public void ShowTranferName(string name)
+		{
+			tl_tName.Text = name;
+		}
+
+		public void ReloadLog()
+		{
+			dgv_log.DataSource = db.TranLog.OrderByDescending(p => p.ID).Take(200).ToList();
+		}
+
+		private void SyncData(object form)
 		{
 			var md5Pulickey = Common.MD5(Common.PublicKey);
 			string clientCode, clientGuid;
-			clientGuid = QueryCurrentClientGUID(out clientCode);			
+			clientGuid = QueryCurrentClientGUID(out clientCode);
+			var formObj = form as Main;
 
 			var configs = db.TranConfig.Where(c => c.Code != "PZSJ" && c.Status == 0 && c.Sort >= 0).ToList();
 
-			if (configs != null) {
-				foreach (var config in configs) {
-					if (config.Direct == 0) {
+			if (configs != null)
+			{
+				foreach (var config in configs)
+				{
+					if (config.Direct == 0)
+					{
+						if (formObj != null)
+						{
+							formObj.ShowTranferName("获取" + config.Name);
+						}
 						Get(md5Pulickey, clientCode, clientGuid, config);
 					}
 					else
-					{						
+					{
+						if (formObj != null)
+						{
+							formObj.ShowTranferName("推送" + config.Name);
+						}
 						Post(md5Pulickey, clientCode, clientGuid, config);
 					}
 				}
+			}
+
+			if (formObj != null)
+			{
+				formObj.ShowTranferName("数据更新完成");
 			}
 		}
 
@@ -81,13 +115,13 @@ namespace ES.Client
 					Post(md5Pulickey, clientCode, clientGuid, config);
 				}
 			}
-		} 
+		}
 		#endregion
 
 		private void Get(string md5Pulickey, string clientCode, string clientGuid, TranConfig config)
 		{
 			SqlData sqlData = null;
-			TranLog log=null;
+			TranLog log = null;
 			do
 			{
 				var result = server.Get(clientCode, Common.MD5(md5Pulickey + clientGuid), Convert.ToInt64(config.LastStamp), config.MaxCount, config.Guid.ToString(), null);
@@ -122,7 +156,8 @@ namespace ES.Client
 						ConfigName = config.Name,
 						Count = 0,
 						Direct = 0,
-						Result = "没有获取到数据",
+						Result = "没有返回数据",
+						Remark = "已经是最新数据",
 						Sort = config.Sort,
 						Stamp = config.LastStamp,
 						TranTime = DateTime.Now
@@ -173,7 +208,7 @@ namespace ES.Client
 					Header = sqlData.HeaderSql,
 					Detail = sqlData.DetailSql,
 					Footer = sqlData.FooterSql,
-					TranTime=DateTime.Now				
+					TranTime = DateTime.Now
 				};
 
 				db.TranLog.InsertOnSubmit(log);
@@ -186,7 +221,7 @@ namespace ES.Client
 		{
 			List<ES.Repository.Model.QueryResult> results = null;
 			long lastStamp;
-			string sql="";
+			string sql = "";
 			lastStamp = Convert.ToInt64(config.LastStamp);
 
 			do
@@ -250,7 +285,7 @@ namespace ES.Client
 			var md5Pulickey = Common.MD5(Common.PublicKey);
 			string clientCode, clientGuid;
 			clientGuid = QueryCurrentClientGUID(out clientCode);
-			TranLog log=null;
+			TranLog log = null;
 
 			var config = db.TranConfig.Where(c => c.Code == "PZSJ" && c.Status == 0).FirstOrDefault();
 
@@ -266,8 +301,8 @@ namespace ES.Client
 					Direct = 0,
 					Result = "返回数据出错",
 					Sort = -1,
-					Stamp=config==null?0:config.LastStamp,
-					TranTime=DateTime.Now
+					Stamp = config == null ? 0 : config.LastStamp,
+					TranTime = DateTime.Now
 				};
 
 				db.TranLog.InsertOnSubmit(log);
@@ -285,7 +320,7 @@ namespace ES.Client
 					ConfigName = "传输配置数据",
 					Direct = 0,
 					Result = "服务器发生错误",
-					Remark=result.Message,
+					Remark = result.Message,
 					Sort = -1,
 					Stamp = config == null ? 0 : config.LastStamp,
 					TranTime = DateTime.Now
@@ -297,9 +332,9 @@ namespace ES.Client
 				throw new Exception("返回值异常,错误信息：" + result.Message);
 			}
 
-            //判断是否获取到数据
-            if (result.data == null)
-            {
+			//判断是否获取到数据
+			if (result.data == null)
+			{
 				log = new TranLog()
 				{
 					Client = clientCode,
@@ -307,7 +342,7 @@ namespace ES.Client
 					ConfigName = "传输配置数据",
 					Direct = 0,
 					Result = "没有返回数据",
-					Remark = result.Message,
+					Remark = "已经是最新数据",
 					Sort = -1,
 					Stamp = config == null ? 0 : config.LastStamp,
 					TranTime = DateTime.Now
@@ -316,9 +351,9 @@ namespace ES.Client
 				db.TranLog.InsertOnSubmit(log);
 				db.SubmitChanges();
 
-                //没有获取到数据,直接返回
-                return;
-            }
+				//没有获取到数据,直接返回
+				return;
+			}
 
 			if (config == null)
 			{
@@ -340,12 +375,12 @@ namespace ES.Client
 				ConfigCode = "PZSJ",
 				ConfigName = "传输配置数据",
 				Direct = 0,
-				Count=sqlData.RowCount,
+				Count = sqlData.RowCount,
 				Result = "更新数据成功",
 				Sort = -1,
 				Stamp = sqlData.MaxTimeStamp,
-				Header=sqlData.HeaderSql,
-				Detail=sqlData.DetailSql,
+				Header = sqlData.HeaderSql,
+				Detail = sqlData.DetailSql,
 				Footer = sqlData.FooterSql,
 				TranTime = DateTime.Now
 			};
@@ -378,6 +413,17 @@ namespace ES.Client
 			clientCode = client.Code;
 
 			return client.GUID.ToString();
+		}
+
+		private void toolStripStatusLabel2_Click(object sender, EventArgs e)
+		{
+
+		}
+
+		private void q退出ToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			if (MessageBox.Show("您确定退出吗？", "提示", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
+				this.Close();
 		}
 	}
 }
