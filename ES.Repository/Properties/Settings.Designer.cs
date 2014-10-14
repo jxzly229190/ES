@@ -36,8 +36,8 @@ namespace ES.Repository.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=.;Initial Catalog=ES.Server;Persist Security Info=True;User ID=sa;Pas" +
-            "sword=sa")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=EM-ZHANGLIANYIN\\sqlexpress;Initial Catalog=ES.Server;Integrated Secur" +
+            "ity=True")]
         public string ES_ServerConnectionString {
             get {
                 return ((string)(this["ES_ServerConnectionString"]));
@@ -58,7 +58,7 @@ namespace ES.Repository.Properties {
         [global::System.Configuration.ApplicationScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.SpecialSettingAttribute(global::System.Configuration.SpecialSetting.ConnectionString)]
-        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=.;Initial Catalog=ES.Client;Integrated Security=True")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Data Source=.\\SqlExpress;Initial Catalog=ES.Client;Integrated Security=True")]
         public string ES_ClientConnectionString1 {
             get {
                 return ((string)(this["ES_ClientConnectionString1"]));

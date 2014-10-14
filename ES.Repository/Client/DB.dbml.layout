@@ -2,22 +2,22 @@
 <ordesignerObjectsDiagram dslVersion="1.0.0.0" absoluteBounds="0, 0, 11, 8.5" name="DB">
   <DataContextMoniker Name="/DBDataContext" />
   <nestedChildShapes>
-    <classShape Id="606a22a0-eee6-42f1-99da-6608e58e4507" absoluteBounds="0.75, 0.75, 2, 3.2907230631510416">
+    <classShape Id="1bd6701f-506a-431b-8057-88877bf2795d" absoluteBounds="0.75, 0.75, 2, 3.3093082682291666">
       <DataClassMoniker Name="/DBDataContext/Client" />
       <nestedChildShapes>
-        <elementListCompartment Id="d00ba89f-5e7c-49ed-a664-e8f464027b2f" absoluteBounds="0.765, 1.21, 1.9700000000000002, 2.7307230631510415" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="cf3c7a7e-8ab6-4409-b49e-67c426e87dd6" absoluteBounds="0.765, 1.21, 1.9700000000000002, 2.7493082682291665" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="b779a2cf-7751-412b-9337-916dcc39f0e0" absoluteBounds="3.75, 3.75, 2, 4.2458215332031237">
+    <classShape Id="be45a099-aa2c-4972-9b68-cb371068b9d2" absoluteBounds="3.75, 0.75, 2, 4.2708154296875">
       <DataClassMoniker Name="/DBDataContext/TranConfig" />
       <nestedChildShapes>
-        <elementListCompartment Id="5153106e-8b09-4755-948c-82fe0de32e84" absoluteBounds="3.765, 4.21, 1.9700000000000002, 3.685821533203125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="f6e4f7d3-0de8-4684-b128-a0b9a1d14f52" absoluteBounds="3.765, 1.21, 1.9700000000000002, 3.7108154296875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
-    <classShape Id="a0405641-3426-478b-b422-60ee7d255c43" absoluteBounds="5.75, 1.875, 2, 3.6727624511718746">
+    <classShape Id="ddba7a68-e262-4f65-b9e6-e0a4a307a7ed" absoluteBounds="6, 1.25, 2, 3.6939111328124996">
       <DataClassMoniker Name="/DBDataContext/TranLog" />
       <nestedChildShapes>
-        <elementListCompartment Id="98f972db-73d5-4bd1-989f-ab1950d9ced8" absoluteBounds="5.765, 2.335, 1.9700000000000002, 3.112762451171875" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
+        <elementListCompartment Id="4b691fd0-036d-484c-939f-933a725e645f" absoluteBounds="6.015, 1.71, 1.9700000000000002, 3.1339111328125" name="DataPropertiesCompartment" titleTextColor="Black" itemTextColor="Black" />
       </nestedChildShapes>
     </classShape>
   </nestedChildShapes>
