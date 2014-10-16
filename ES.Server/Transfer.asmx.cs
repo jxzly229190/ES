@@ -1,6 +1,5 @@
 ﻿using ES.Repository;
 using ES.Repository.Model;
-using ES.Repository.Server;
 using System;
 using System.Collections.Generic;
 using System.Data.Linq;
@@ -23,7 +22,7 @@ namespace ES.Server
 	[XmlInclude(typeof(SqlData))]
 	public class Transfer : System.Web.Services.WebService
 	{
-		DBDataContext db = new ES.Repository.Server.DBDataContext();
+		dbDataContext db = new dbDataContext();
 
 		[WebMethod]
 		public string HelloWorld()

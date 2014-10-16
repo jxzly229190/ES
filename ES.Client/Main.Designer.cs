@@ -35,10 +35,6 @@
 			this.总部服务配置ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.q退出ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.dgv_log = new System.Windows.Forms.DataGridView();
-			this.tranLogBindingSource = new System.Windows.Forms.BindingSource(this.components);
-			this.ss_main = new System.Windows.Forms.StatusStrip();
-			this.tl_pName = new System.Windows.Forms.ToolStripStatusLabel();
-			this.tl_tName = new System.Windows.Forms.ToolStripStatusLabel();
 			this.iDDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.configNameDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.configCodeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -54,6 +50,13 @@
 			this.resultDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.remarkDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
 			this.tranTimeDataGridViewTextBoxColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+			this.tranLogBindingSource = new System.Windows.Forms.BindingSource(this.components);
+			this.ss_main = new System.Windows.Forms.StatusStrip();
+			this.tl_pName = new System.Windows.Forms.ToolStripStatusLabel();
+			this.tl_tName = new System.Windows.Forms.ToolStripStatusLabel();
+			this.操作ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.开始传输ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+			this.停止传输ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
 			this.ms_main.SuspendLayout();
 			((System.ComponentModel.ISupportInitialize)(this.dgv_log)).BeginInit();
 			((System.ComponentModel.ISupportInitialize)(this.tranLogBindingSource)).BeginInit();
@@ -64,6 +67,7 @@
 			// 
 			this.ms_main.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.设置ToolStripMenuItem,
+            this.操作ToolStripMenuItem,
             this.q退出ToolStripMenuItem});
 			this.ms_main.Location = new System.Drawing.Point(0, 0);
 			this.ms_main.Name = "ms_main";
@@ -83,13 +87,13 @@
 			// 客户端注册ToolStripMenuItem
 			// 
 			this.客户端注册ToolStripMenuItem.Name = "客户端注册ToolStripMenuItem";
-			this.客户端注册ToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+			this.客户端注册ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.客户端注册ToolStripMenuItem.Text = "客户端注册";
 			// 
 			// 总部服务配置ToolStripMenuItem
 			// 
 			this.总部服务配置ToolStripMenuItem.Name = "总部服务配置ToolStripMenuItem";
-			this.总部服务配置ToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
+			this.总部服务配置ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
 			this.总部服务配置ToolStripMenuItem.Text = "总部服务配置";
 			// 
 			// q退出ToolStripMenuItem
@@ -126,34 +130,6 @@
 			this.dgv_log.RowTemplate.Height = 23;
 			this.dgv_log.Size = new System.Drawing.Size(719, 434);
 			this.dgv_log.TabIndex = 1;
-			// 
-			// tranLogBindingSource
-			// 
-			this.tranLogBindingSource.DataSource = typeof(ES.Repository.Client.TranLog);
-			// 
-			// ss_main
-			// 
-			this.ss_main.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.tl_pName,
-            this.tl_tName});
-			this.ss_main.Location = new System.Drawing.Point(0, 437);
-			this.ss_main.Name = "ss_main";
-			this.ss_main.Size = new System.Drawing.Size(719, 22);
-			this.ss_main.TabIndex = 2;
-			this.ss_main.Text = "statusStrip1";
-			// 
-			// tl_pName
-			// 
-			this.tl_pName.Name = "tl_pName";
-			this.tl_pName.Size = new System.Drawing.Size(63, 17);
-			this.tl_pName.Text = "tl_pName";
-			// 
-			// tl_tName
-			// 
-			this.tl_tName.Name = "tl_tName";
-			this.tl_tName.Size = new System.Drawing.Size(59, 17);
-			this.tl_tName.Text = "tl_tName";
-			this.tl_tName.Click += new System.EventHandler(this.toolStripStatusLabel2_Click);
 			// 
 			// iDDataGridViewTextBoxColumn
 			// 
@@ -248,6 +224,57 @@
 			this.tranTimeDataGridViewTextBoxColumn.HeaderText = "传输时间";
 			this.tranTimeDataGridViewTextBoxColumn.Name = "tranTimeDataGridViewTextBoxColumn";
 			// 
+			// tranLogBindingSource
+			// 
+			this.tranLogBindingSource.DataSource = typeof(ES.Client.TranLog);
+			// 
+			// ss_main
+			// 
+			this.ss_main.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.tl_pName,
+            this.tl_tName});
+			this.ss_main.Location = new System.Drawing.Point(0, 437);
+			this.ss_main.Name = "ss_main";
+			this.ss_main.Size = new System.Drawing.Size(719, 22);
+			this.ss_main.TabIndex = 2;
+			this.ss_main.Text = "statusStrip1";
+			// 
+			// tl_pName
+			// 
+			this.tl_pName.Name = "tl_pName";
+			this.tl_pName.Size = new System.Drawing.Size(63, 17);
+			this.tl_pName.Text = "tl_pName";
+			// 
+			// tl_tName
+			// 
+			this.tl_tName.Name = "tl_tName";
+			this.tl_tName.Size = new System.Drawing.Size(59, 17);
+			this.tl_tName.Text = "tl_tName";
+			this.tl_tName.Click += new System.EventHandler(this.toolStripStatusLabel2_Click);
+			// 
+			// 操作ToolStripMenuItem
+			// 
+			this.操作ToolStripMenuItem.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.开始传输ToolStripMenuItem,
+            this.停止传输ToolStripMenuItem});
+			this.操作ToolStripMenuItem.Name = "操作ToolStripMenuItem";
+			this.操作ToolStripMenuItem.Size = new System.Drawing.Size(44, 21);
+			this.操作ToolStripMenuItem.Text = "操作";
+			// 
+			// 开始传输ToolStripMenuItem
+			// 
+			this.开始传输ToolStripMenuItem.Name = "开始传输ToolStripMenuItem";
+			this.开始传输ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.开始传输ToolStripMenuItem.Text = "开始传输";
+			this.开始传输ToolStripMenuItem.Click += new System.EventHandler(this.开始传输ToolStripMenuItem_Click);
+			// 
+			// 停止传输ToolStripMenuItem
+			// 
+			this.停止传输ToolStripMenuItem.Name = "停止传输ToolStripMenuItem";
+			this.停止传输ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+			this.停止传输ToolStripMenuItem.Text = "停止传输";
+			this.停止传输ToolStripMenuItem.Click += new System.EventHandler(this.停止传输ToolStripMenuItem_Click);
+			// 
 			// Main
 			// 
 			this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
@@ -298,6 +325,9 @@
 		private System.Windows.Forms.DataGridViewTextBoxColumn resultDataGridViewTextBoxColumn;
 		private System.Windows.Forms.DataGridViewTextBoxColumn remarkDataGridViewTextBoxColumn;
 		private System.Windows.Forms.DataGridViewTextBoxColumn tranTimeDataGridViewTextBoxColumn;
+		private System.Windows.Forms.ToolStripMenuItem 操作ToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem 开始传输ToolStripMenuItem;
+		private System.Windows.Forms.ToolStripMenuItem 停止传输ToolStripMenuItem;
 
 
 	}

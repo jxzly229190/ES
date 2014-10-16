@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ES.Client.TransferService {
+namespace ES.Client.ServiceReference {
     using System.Runtime.Serialization;
     using System;
     
@@ -18,6 +18,84 @@ namespace ES.Client.TransferService {
     [System.Runtime.Serialization.CollectionDataContractAttribute(Name="ArrayOfAnyType", Namespace="http://tempuri.org/", ItemName="anyType")]
     [System.SerializableAttribute()]
     public class ArrayOfAnyType : System.Collections.Generic.List<object> {
+    }
+    
+    [System.Diagnostics.DebuggerStepThroughAttribute()]
+    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
+    [System.Runtime.Serialization.DataContractAttribute(Name="ResponseData", Namespace="http://tempuri.org/")]
+    [System.SerializableAttribute()]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(ES.Client.ServiceReference.ArrayOfAnyType))]
+    [System.Runtime.Serialization.KnownTypeAttribute(typeof(ES.Client.ServiceReference.SqlData))]
+    public partial class ResponseData : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
+        
+        [System.NonSerializedAttribute()]
+        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
+        
+        private int StateField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private string MessageField;
+        
+        [System.Runtime.Serialization.OptionalFieldAttribute()]
+        private object dataField;
+        
+        [global::System.ComponentModel.BrowsableAttribute(false)]
+        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
+            get {
+                return this.extensionDataField;
+            }
+            set {
+                this.extensionDataField = value;
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
+        public int State {
+            get {
+                return this.StateField;
+            }
+            set {
+                if ((this.StateField.Equals(value) != true)) {
+                    this.StateField = value;
+                    this.RaisePropertyChanged("State");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=1)]
+        public string Message {
+            get {
+                return this.MessageField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.MessageField, value) != true)) {
+                    this.MessageField = value;
+                    this.RaisePropertyChanged("Message");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=2)]
+        public object data {
+            get {
+                return this.dataField;
+            }
+            set {
+                if ((object.ReferenceEquals(this.dataField, value) != true)) {
+                    this.dataField = value;
+                    this.RaisePropertyChanged("data");
+                }
+            }
+        }
+        
+        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
+        
+        protected void RaisePropertyChanged(string propertyName) {
+            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
+            if ((propertyChanged != null)) {
+                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
+            }
+        }
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
@@ -143,118 +221,28 @@ namespace ES.Client.TransferService {
         }
     }
     
-    [System.Diagnostics.DebuggerStepThroughAttribute()]
-    [System.CodeDom.Compiler.GeneratedCodeAttribute("System.Runtime.Serialization", "4.0.0.0")]
-    [System.Runtime.Serialization.DataContractAttribute(Name="ResponseData", Namespace="http://tempuri.org/")]
-    [System.SerializableAttribute()]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(ES.Client.TransferService.ArrayOfAnyType))]
-    [System.Runtime.Serialization.KnownTypeAttribute(typeof(ES.Client.TransferService.SqlData))]
-    public partial class ResponseData : object, System.Runtime.Serialization.IExtensibleDataObject, System.ComponentModel.INotifyPropertyChanged {
-        
-        [System.NonSerializedAttribute()]
-        private System.Runtime.Serialization.ExtensionDataObject extensionDataField;
-        
-        private int StateField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private string MessageField;
-        
-        [System.Runtime.Serialization.OptionalFieldAttribute()]
-        private object dataField;
-        
-        [global::System.ComponentModel.BrowsableAttribute(false)]
-        public System.Runtime.Serialization.ExtensionDataObject ExtensionData {
-            get {
-                return this.extensionDataField;
-            }
-            set {
-                this.extensionDataField = value;
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true)]
-        public int State {
-            get {
-                return this.StateField;
-            }
-            set {
-                if ((this.StateField.Equals(value) != true)) {
-                    this.StateField = value;
-                    this.RaisePropertyChanged("State");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=1)]
-        public string Message {
-            get {
-                return this.MessageField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.MessageField, value) != true)) {
-                    this.MessageField = value;
-                    this.RaisePropertyChanged("Message");
-                }
-            }
-        }
-        
-        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=2)]
-        public object data {
-            get {
-                return this.dataField;
-            }
-            set {
-                if ((object.ReferenceEquals(this.dataField, value) != true)) {
-                    this.dataField = value;
-                    this.RaisePropertyChanged("data");
-                }
-            }
-        }
-        
-        public event System.ComponentModel.PropertyChangedEventHandler PropertyChanged;
-        
-        protected void RaisePropertyChanged(string propertyName) {
-            System.ComponentModel.PropertyChangedEventHandler propertyChanged = this.PropertyChanged;
-            if ((propertyChanged != null)) {
-                propertyChanged(this, new System.ComponentModel.PropertyChangedEventArgs(propertyName));
-            }
-        }
-    }
-    
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="TransferService.TransferSoap")]
+    [System.ServiceModel.ServiceContractAttribute(ConfigurationName="ServiceReference.TransferSoap")]
     public interface TransferSoap {
         
         // CODEGEN: 命名空间 http://tempuri.org/ 的元素名称 HelloWorldResult 以后生成的消息协定未标记为 nillable
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/HelloWorld", ReplyAction="*")]
-        ES.Client.TransferService.HelloWorldResponse HelloWorld(ES.Client.TransferService.HelloWorldRequest request);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/HelloWorld", ReplyAction="*")]
-        System.Threading.Tasks.Task<ES.Client.TransferService.HelloWorldResponse> HelloWorldAsync(ES.Client.TransferService.HelloWorldRequest request);
+        ES.Client.ServiceReference.HelloWorldResponse HelloWorld(ES.Client.ServiceReference.HelloWorldRequest request);
         
         // CODEGEN: 命名空间 http://tempuri.org/ 的元素名称 clientCode 以后生成的消息协定未标记为 nillable
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/Get", ReplyAction="*")]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(ES.Client.TransferService.ArrayOfAnyType))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(ES.Client.TransferService.SqlData))]
-        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(ES.Client.TransferService.ResponseData))]
-        ES.Client.TransferService.GetResponse Get(ES.Client.TransferService.GetRequest request);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/Get", ReplyAction="*")]
-        System.Threading.Tasks.Task<ES.Client.TransferService.GetResponse> GetAsync(ES.Client.TransferService.GetRequest request);
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(ES.Client.ServiceReference.ArrayOfAnyType))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(ES.Client.ServiceReference.ResponseData))]
+        [System.ServiceModel.ServiceKnownTypeAttribute(typeof(ES.Client.ServiceReference.SqlData))]
+        ES.Client.ServiceReference.GetResponse Get(ES.Client.ServiceReference.GetRequest request);
         
         // CODEGEN: 命名空间 http://tempuri.org/ 的元素名称 clientCode 以后生成的消息协定未标记为 nillable
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/Post", ReplyAction="*")]
-        ES.Client.TransferService.PostResponse Post(ES.Client.TransferService.PostRequest request);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/Post", ReplyAction="*")]
-        System.Threading.Tasks.Task<ES.Client.TransferService.PostResponse> PostAsync(ES.Client.TransferService.PostRequest request);
+        ES.Client.ServiceReference.PostResponse Post(ES.Client.ServiceReference.PostRequest request);
         
         // CODEGEN: 命名空间 http://tempuri.org/ 的元素名称 clientCode 以后生成的消息协定未标记为 nillable
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/GetTranConfigs", ReplyAction="*")]
-        ES.Client.TransferService.GetTranConfigsResponse GetTranConfigs(ES.Client.TransferService.GetTranConfigsRequest request);
-        
-        [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/GetTranConfigs", ReplyAction="*")]
-        System.Threading.Tasks.Task<ES.Client.TransferService.GetTranConfigsResponse> GetTranConfigsAsync(ES.Client.TransferService.GetTranConfigsRequest request);
+        ES.Client.ServiceReference.GetTranConfigsResponse GetTranConfigs(ES.Client.ServiceReference.GetTranConfigsRequest request);
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
@@ -264,12 +252,12 @@ namespace ES.Client.TransferService {
     public partial class HelloWorldRequest {
         
         [System.ServiceModel.MessageBodyMemberAttribute(Name="HelloWorld", Namespace="http://tempuri.org/", Order=0)]
-        public ES.Client.TransferService.HelloWorldRequestBody Body;
+        public ES.Client.ServiceReference.HelloWorldRequestBody Body;
         
         public HelloWorldRequest() {
         }
         
-        public HelloWorldRequest(ES.Client.TransferService.HelloWorldRequestBody Body) {
+        public HelloWorldRequest(ES.Client.ServiceReference.HelloWorldRequestBody Body) {
             this.Body = Body;
         }
     }
@@ -291,12 +279,12 @@ namespace ES.Client.TransferService {
     public partial class HelloWorldResponse {
         
         [System.ServiceModel.MessageBodyMemberAttribute(Name="HelloWorldResponse", Namespace="http://tempuri.org/", Order=0)]
-        public ES.Client.TransferService.HelloWorldResponseBody Body;
+        public ES.Client.ServiceReference.HelloWorldResponseBody Body;
         
         public HelloWorldResponse() {
         }
         
-        public HelloWorldResponse(ES.Client.TransferService.HelloWorldResponseBody Body) {
+        public HelloWorldResponse(ES.Client.ServiceReference.HelloWorldResponseBody Body) {
             this.Body = Body;
         }
     }
@@ -325,12 +313,12 @@ namespace ES.Client.TransferService {
     public partial class GetRequest {
         
         [System.ServiceModel.MessageBodyMemberAttribute(Name="Get", Namespace="http://tempuri.org/", Order=0)]
-        public ES.Client.TransferService.GetRequestBody Body;
+        public ES.Client.ServiceReference.GetRequestBody Body;
         
         public GetRequest() {
         }
         
-        public GetRequest(ES.Client.TransferService.GetRequestBody Body) {
+        public GetRequest(ES.Client.ServiceReference.GetRequestBody Body) {
             this.Body = Body;
         }
     }
@@ -357,12 +345,12 @@ namespace ES.Client.TransferService {
         public string configGuid;
         
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=5)]
-        public ES.Client.TransferService.ArrayOfAnyType paras;
+        public ES.Client.ServiceReference.ArrayOfAnyType paras;
         
         public GetRequestBody() {
         }
         
-        public GetRequestBody(string clientCode, string varifyCode, long lastTimeStamp, int rowCount, string configGuid, ES.Client.TransferService.ArrayOfAnyType paras) {
+        public GetRequestBody(string clientCode, string varifyCode, long lastTimeStamp, int rowCount, string configGuid, ES.Client.ServiceReference.ArrayOfAnyType paras) {
             this.clientCode = clientCode;
             this.varifyCode = varifyCode;
             this.lastTimeStamp = lastTimeStamp;
@@ -379,12 +367,12 @@ namespace ES.Client.TransferService {
     public partial class GetResponse {
         
         [System.ServiceModel.MessageBodyMemberAttribute(Name="GetResponse", Namespace="http://tempuri.org/", Order=0)]
-        public ES.Client.TransferService.GetResponseBody Body;
+        public ES.Client.ServiceReference.GetResponseBody Body;
         
         public GetResponse() {
         }
         
-        public GetResponse(ES.Client.TransferService.GetResponseBody Body) {
+        public GetResponse(ES.Client.ServiceReference.GetResponseBody Body) {
             this.Body = Body;
         }
     }
@@ -396,12 +384,12 @@ namespace ES.Client.TransferService {
     public partial class GetResponseBody {
         
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
-        public ES.Client.TransferService.ResponseData GetResult;
+        public ES.Client.ServiceReference.ResponseData GetResult;
         
         public GetResponseBody() {
         }
         
-        public GetResponseBody(ES.Client.TransferService.ResponseData GetResult) {
+        public GetResponseBody(ES.Client.ServiceReference.ResponseData GetResult) {
             this.GetResult = GetResult;
         }
     }
@@ -413,12 +401,12 @@ namespace ES.Client.TransferService {
     public partial class PostRequest {
         
         [System.ServiceModel.MessageBodyMemberAttribute(Name="Post", Namespace="http://tempuri.org/", Order=0)]
-        public ES.Client.TransferService.PostRequestBody Body;
+        public ES.Client.ServiceReference.PostRequestBody Body;
         
         public PostRequest() {
         }
         
-        public PostRequest(ES.Client.TransferService.PostRequestBody Body) {
+        public PostRequest(ES.Client.ServiceReference.PostRequestBody Body) {
             this.Body = Body;
         }
     }
@@ -436,12 +424,12 @@ namespace ES.Client.TransferService {
         public string varifyCode;
         
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=2)]
-        public ES.Client.TransferService.SqlData data;
+        public ES.Client.ServiceReference.SqlData data;
         
         public PostRequestBody() {
         }
         
-        public PostRequestBody(string clientCode, string varifyCode, ES.Client.TransferService.SqlData data) {
+        public PostRequestBody(string clientCode, string varifyCode, ES.Client.ServiceReference.SqlData data) {
             this.clientCode = clientCode;
             this.varifyCode = varifyCode;
             this.data = data;
@@ -455,12 +443,12 @@ namespace ES.Client.TransferService {
     public partial class PostResponse {
         
         [System.ServiceModel.MessageBodyMemberAttribute(Name="PostResponse", Namespace="http://tempuri.org/", Order=0)]
-        public ES.Client.TransferService.PostResponseBody Body;
+        public ES.Client.ServiceReference.PostResponseBody Body;
         
         public PostResponse() {
         }
         
-        public PostResponse(ES.Client.TransferService.PostResponseBody Body) {
+        public PostResponse(ES.Client.ServiceReference.PostResponseBody Body) {
             this.Body = Body;
         }
     }
@@ -472,12 +460,12 @@ namespace ES.Client.TransferService {
     public partial class PostResponseBody {
         
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
-        public ES.Client.TransferService.ResponseData PostResult;
+        public ES.Client.ServiceReference.ResponseData PostResult;
         
         public PostResponseBody() {
         }
         
-        public PostResponseBody(ES.Client.TransferService.ResponseData PostResult) {
+        public PostResponseBody(ES.Client.ServiceReference.ResponseData PostResult) {
             this.PostResult = PostResult;
         }
     }
@@ -489,12 +477,12 @@ namespace ES.Client.TransferService {
     public partial class GetTranConfigsRequest {
         
         [System.ServiceModel.MessageBodyMemberAttribute(Name="GetTranConfigs", Namespace="http://tempuri.org/", Order=0)]
-        public ES.Client.TransferService.GetTranConfigsRequestBody Body;
+        public ES.Client.ServiceReference.GetTranConfigsRequestBody Body;
         
         public GetTranConfigsRequest() {
         }
         
-        public GetTranConfigsRequest(ES.Client.TransferService.GetTranConfigsRequestBody Body) {
+        public GetTranConfigsRequest(ES.Client.ServiceReference.GetTranConfigsRequestBody Body) {
             this.Body = Body;
         }
     }
@@ -531,12 +519,12 @@ namespace ES.Client.TransferService {
     public partial class GetTranConfigsResponse {
         
         [System.ServiceModel.MessageBodyMemberAttribute(Name="GetTranConfigsResponse", Namespace="http://tempuri.org/", Order=0)]
-        public ES.Client.TransferService.GetTranConfigsResponseBody Body;
+        public ES.Client.ServiceReference.GetTranConfigsResponseBody Body;
         
         public GetTranConfigsResponse() {
         }
         
-        public GetTranConfigsResponse(ES.Client.TransferService.GetTranConfigsResponseBody Body) {
+        public GetTranConfigsResponse(ES.Client.ServiceReference.GetTranConfigsResponseBody Body) {
             this.Body = Body;
         }
     }
@@ -548,23 +536,23 @@ namespace ES.Client.TransferService {
     public partial class GetTranConfigsResponseBody {
         
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
-        public ES.Client.TransferService.ResponseData GetTranConfigsResult;
+        public ES.Client.ServiceReference.ResponseData GetTranConfigsResult;
         
         public GetTranConfigsResponseBody() {
         }
         
-        public GetTranConfigsResponseBody(ES.Client.TransferService.ResponseData GetTranConfigsResult) {
+        public GetTranConfigsResponseBody(ES.Client.ServiceReference.ResponseData GetTranConfigsResult) {
             this.GetTranConfigsResult = GetTranConfigsResult;
         }
     }
     
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public interface TransferSoapChannel : ES.Client.TransferService.TransferSoap, System.ServiceModel.IClientChannel {
+    public interface TransferSoapChannel : ES.Client.ServiceReference.TransferSoap, System.ServiceModel.IClientChannel {
     }
     
     [System.Diagnostics.DebuggerStepThroughAttribute()]
     [System.CodeDom.Compiler.GeneratedCodeAttribute("System.ServiceModel", "4.0.0.0")]
-    public partial class TransferSoapClient : System.ServiceModel.ClientBase<ES.Client.TransferService.TransferSoap>, ES.Client.TransferService.TransferSoap {
+    public partial class TransferSoapClient : System.ServiceModel.ClientBase<ES.Client.ServiceReference.TransferSoap>, ES.Client.ServiceReference.TransferSoap {
         
         public TransferSoapClient() {
         }
@@ -586,119 +574,63 @@ namespace ES.Client.TransferService {
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        ES.Client.TransferService.HelloWorldResponse ES.Client.TransferService.TransferSoap.HelloWorld(ES.Client.TransferService.HelloWorldRequest request) {
+        ES.Client.ServiceReference.HelloWorldResponse ES.Client.ServiceReference.TransferSoap.HelloWorld(ES.Client.ServiceReference.HelloWorldRequest request) {
             return base.Channel.HelloWorld(request);
         }
         
         public string HelloWorld() {
-            ES.Client.TransferService.HelloWorldRequest inValue = new ES.Client.TransferService.HelloWorldRequest();
-            inValue.Body = new ES.Client.TransferService.HelloWorldRequestBody();
-            ES.Client.TransferService.HelloWorldResponse retVal = ((ES.Client.TransferService.TransferSoap)(this)).HelloWorld(inValue);
+            ES.Client.ServiceReference.HelloWorldRequest inValue = new ES.Client.ServiceReference.HelloWorldRequest();
+            inValue.Body = new ES.Client.ServiceReference.HelloWorldRequestBody();
+            ES.Client.ServiceReference.HelloWorldResponse retVal = ((ES.Client.ServiceReference.TransferSoap)(this)).HelloWorld(inValue);
             return retVal.Body.HelloWorldResult;
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.Threading.Tasks.Task<ES.Client.TransferService.HelloWorldResponse> ES.Client.TransferService.TransferSoap.HelloWorldAsync(ES.Client.TransferService.HelloWorldRequest request) {
-            return base.Channel.HelloWorldAsync(request);
-        }
-        
-        public System.Threading.Tasks.Task<ES.Client.TransferService.HelloWorldResponse> HelloWorldAsync() {
-            ES.Client.TransferService.HelloWorldRequest inValue = new ES.Client.TransferService.HelloWorldRequest();
-            inValue.Body = new ES.Client.TransferService.HelloWorldRequestBody();
-            return ((ES.Client.TransferService.TransferSoap)(this)).HelloWorldAsync(inValue);
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        ES.Client.TransferService.GetResponse ES.Client.TransferService.TransferSoap.Get(ES.Client.TransferService.GetRequest request) {
+        ES.Client.ServiceReference.GetResponse ES.Client.ServiceReference.TransferSoap.Get(ES.Client.ServiceReference.GetRequest request) {
             return base.Channel.Get(request);
         }
         
-        public ES.Client.TransferService.ResponseData Get(string clientCode, string varifyCode, long lastTimeStamp, int rowCount, string configGuid, ES.Client.TransferService.ArrayOfAnyType paras) {
-            ES.Client.TransferService.GetRequest inValue = new ES.Client.TransferService.GetRequest();
-            inValue.Body = new ES.Client.TransferService.GetRequestBody();
+        public ES.Client.ServiceReference.ResponseData Get(string clientCode, string varifyCode, long lastTimeStamp, int rowCount, string configGuid, ES.Client.ServiceReference.ArrayOfAnyType paras) {
+            ES.Client.ServiceReference.GetRequest inValue = new ES.Client.ServiceReference.GetRequest();
+            inValue.Body = new ES.Client.ServiceReference.GetRequestBody();
             inValue.Body.clientCode = clientCode;
             inValue.Body.varifyCode = varifyCode;
             inValue.Body.lastTimeStamp = lastTimeStamp;
             inValue.Body.rowCount = rowCount;
             inValue.Body.configGuid = configGuid;
             inValue.Body.paras = paras;
-            ES.Client.TransferService.GetResponse retVal = ((ES.Client.TransferService.TransferSoap)(this)).Get(inValue);
+            ES.Client.ServiceReference.GetResponse retVal = ((ES.Client.ServiceReference.TransferSoap)(this)).Get(inValue);
             return retVal.Body.GetResult;
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.Threading.Tasks.Task<ES.Client.TransferService.GetResponse> ES.Client.TransferService.TransferSoap.GetAsync(ES.Client.TransferService.GetRequest request) {
-            return base.Channel.GetAsync(request);
-        }
-        
-        public System.Threading.Tasks.Task<ES.Client.TransferService.GetResponse> GetAsync(string clientCode, string varifyCode, long lastTimeStamp, int rowCount, string configGuid, ES.Client.TransferService.ArrayOfAnyType paras) {
-            ES.Client.TransferService.GetRequest inValue = new ES.Client.TransferService.GetRequest();
-            inValue.Body = new ES.Client.TransferService.GetRequestBody();
-            inValue.Body.clientCode = clientCode;
-            inValue.Body.varifyCode = varifyCode;
-            inValue.Body.lastTimeStamp = lastTimeStamp;
-            inValue.Body.rowCount = rowCount;
-            inValue.Body.configGuid = configGuid;
-            inValue.Body.paras = paras;
-            return ((ES.Client.TransferService.TransferSoap)(this)).GetAsync(inValue);
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        ES.Client.TransferService.PostResponse ES.Client.TransferService.TransferSoap.Post(ES.Client.TransferService.PostRequest request) {
+        ES.Client.ServiceReference.PostResponse ES.Client.ServiceReference.TransferSoap.Post(ES.Client.ServiceReference.PostRequest request) {
             return base.Channel.Post(request);
         }
         
-        public ES.Client.TransferService.ResponseData Post(string clientCode, string varifyCode, ES.Client.TransferService.SqlData data) {
-            ES.Client.TransferService.PostRequest inValue = new ES.Client.TransferService.PostRequest();
-            inValue.Body = new ES.Client.TransferService.PostRequestBody();
+        public ES.Client.ServiceReference.ResponseData Post(string clientCode, string varifyCode, ES.Client.ServiceReference.SqlData data) {
+            ES.Client.ServiceReference.PostRequest inValue = new ES.Client.ServiceReference.PostRequest();
+            inValue.Body = new ES.Client.ServiceReference.PostRequestBody();
             inValue.Body.clientCode = clientCode;
             inValue.Body.varifyCode = varifyCode;
             inValue.Body.data = data;
-            ES.Client.TransferService.PostResponse retVal = ((ES.Client.TransferService.TransferSoap)(this)).Post(inValue);
+            ES.Client.ServiceReference.PostResponse retVal = ((ES.Client.ServiceReference.TransferSoap)(this)).Post(inValue);
             return retVal.Body.PostResult;
         }
         
         [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.Threading.Tasks.Task<ES.Client.TransferService.PostResponse> ES.Client.TransferService.TransferSoap.PostAsync(ES.Client.TransferService.PostRequest request) {
-            return base.Channel.PostAsync(request);
-        }
-        
-        public System.Threading.Tasks.Task<ES.Client.TransferService.PostResponse> PostAsync(string clientCode, string varifyCode, ES.Client.TransferService.SqlData data) {
-            ES.Client.TransferService.PostRequest inValue = new ES.Client.TransferService.PostRequest();
-            inValue.Body = new ES.Client.TransferService.PostRequestBody();
-            inValue.Body.clientCode = clientCode;
-            inValue.Body.varifyCode = varifyCode;
-            inValue.Body.data = data;
-            return ((ES.Client.TransferService.TransferSoap)(this)).PostAsync(inValue);
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        ES.Client.TransferService.GetTranConfigsResponse ES.Client.TransferService.TransferSoap.GetTranConfigs(ES.Client.TransferService.GetTranConfigsRequest request) {
+        ES.Client.ServiceReference.GetTranConfigsResponse ES.Client.ServiceReference.TransferSoap.GetTranConfigs(ES.Client.ServiceReference.GetTranConfigsRequest request) {
             return base.Channel.GetTranConfigs(request);
         }
         
-        public ES.Client.TransferService.ResponseData GetTranConfigs(string clientCode, string varifyCode, long timestamp) {
-            ES.Client.TransferService.GetTranConfigsRequest inValue = new ES.Client.TransferService.GetTranConfigsRequest();
-            inValue.Body = new ES.Client.TransferService.GetTranConfigsRequestBody();
+        public ES.Client.ServiceReference.ResponseData GetTranConfigs(string clientCode, string varifyCode, long timestamp) {
+            ES.Client.ServiceReference.GetTranConfigsRequest inValue = new ES.Client.ServiceReference.GetTranConfigsRequest();
+            inValue.Body = new ES.Client.ServiceReference.GetTranConfigsRequestBody();
             inValue.Body.clientCode = clientCode;
             inValue.Body.varifyCode = varifyCode;
             inValue.Body.timestamp = timestamp;
-            ES.Client.TransferService.GetTranConfigsResponse retVal = ((ES.Client.TransferService.TransferSoap)(this)).GetTranConfigs(inValue);
+            ES.Client.ServiceReference.GetTranConfigsResponse retVal = ((ES.Client.ServiceReference.TransferSoap)(this)).GetTranConfigs(inValue);
             return retVal.Body.GetTranConfigsResult;
-        }
-        
-        [System.ComponentModel.EditorBrowsableAttribute(System.ComponentModel.EditorBrowsableState.Advanced)]
-        System.Threading.Tasks.Task<ES.Client.TransferService.GetTranConfigsResponse> ES.Client.TransferService.TransferSoap.GetTranConfigsAsync(ES.Client.TransferService.GetTranConfigsRequest request) {
-            return base.Channel.GetTranConfigsAsync(request);
-        }
-        
-        public System.Threading.Tasks.Task<ES.Client.TransferService.GetTranConfigsResponse> GetTranConfigsAsync(string clientCode, string varifyCode, long timestamp) {
-            ES.Client.TransferService.GetTranConfigsRequest inValue = new ES.Client.TransferService.GetTranConfigsRequest();
-            inValue.Body = new ES.Client.TransferService.GetTranConfigsRequestBody();
-            inValue.Body.clientCode = clientCode;
-            inValue.Body.varifyCode = varifyCode;
-            inValue.Body.timestamp = timestamp;
-            return ((ES.Client.TransferService.TransferSoap)(this)).GetTranConfigsAsync(inValue);
         }
     }
 }

@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Forms;
 using ES.Repository;
-using ES.Client.TransferService;
-using ES.Repository.Client;
+using ES.Client.ServiceReference;
 using System.Threading;
 
 namespace ES.Client
@@ -22,18 +21,14 @@ namespace ES.Client
             dgv_log.ReadOnly = true;
         }
 
-        TransferService.TransferSoapClient server = new TransferService.TransferSoapClient();
-        ES.Repository.Client.DBDataContext db = new ES.Repository.Client.DBDataContext();
+		ServiceReference.TransferSoapClient server = new ServiceReference.TransferSoapClient();
+		dbDataContext db = new dbDataContext();
 
         private void Main_Load(object sender, EventArgs e)
         {
             ReloadLog(null);
             tl_pName.Text = "传输状态：";
-
-            var result = server.HelloWorld();
-            Thread t = new Thread(new ParameterizedThreadStart(SyncData), 0);
-            t.IsBackground = true;
-            t.Start(this);
+			tl_tName.Text="准备";
         }
 
         public void ShowTranferName(object name)
@@ -250,7 +245,7 @@ namespace ES.Client
             while (sqlData.RowCount == config.MaxCount);
         }
 
-        private void Post(string md5Pulickey, string clientCode, string clientGuid, Repository.Client.TranConfig config)
+        private void Post(string md5Pulickey, string clientCode, string clientGuid, TranConfig config)
         {
             List<ES.Repository.Model.QueryResult> results = null;
             long lastStamp;
@@ -269,7 +264,7 @@ namespace ES.Client
                     {
                         sql += result.sql + ";";
                     }
-                    var sqlData = new ES.Client.TransferService.SqlData() { ConfigGuid = config.Guid.ToString(), RowCount = results.Count(), MaxTimeStamp = results.Count(), HeaderSql = config.HeaderSql, DetailSql = sql, FooterSql = config.FooterSql };
+                    var sqlData = new ES.Client.ServiceReference.SqlData() { ConfigGuid = config.Guid.ToString(), RowCount = results.Count(), MaxTimeStamp = results.Count(), HeaderSql = config.HeaderSql, DetailSql = sql, FooterSql = config.FooterSql };
 
                     var response = server.Post(clientCode, Common.MD5(md5Pulickey + clientGuid), sqlData);
 
@@ -458,5 +453,26 @@ namespace ES.Client
             if (MessageBox.Show("您确定退出吗？", "提示", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
                 this.Close();
         }
+		
+		Thread t =null;
+		private void 开始传输ToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			t = new Thread(new ParameterizedThreadStart(SyncData), 0);
+			t.IsBackground = true;
+			
+			t.Start(this);
+
+			开始传输ToolStripMenuItem.Enabled=false;
+		}
+
+		private void 停止传输ToolStripMenuItem_Click(object sender, EventArgs e)
+		{
+			if (t != null && t.IsAlive)
+			{
+				t.Abort();
+				开始传输ToolStripMenuItem.Enabled = true;
+				this.ShowTranferName("传输停止");
+			}
+		}
     }
 }
