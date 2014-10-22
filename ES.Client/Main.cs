@@ -11,7 +11,7 @@ namespace ES.Client
     public partial class Main : Form
     {
         private object lockFlag = new object();
-        SynchronizationContext _syncContext = null; 
+        SynchronizationContext _syncContext = null;
 
         public Main()
         {
@@ -21,24 +21,24 @@ namespace ES.Client
             dgv_log.ReadOnly = true;
         }
 
-		ServiceReference.TransferSoapClient server = new ServiceReference.TransferSoapClient();
-		dbDataContext db = new dbDataContext();
+        ServiceReference.TransferSoapClient server = new ServiceReference.TransferSoapClient();
+        dbDataContext db = new dbDataContext();
 
         private void Main_Load(object sender, EventArgs e)
         {
             ReloadLog(null);
             tl_pName.Text = "传输状态：";
-			tl_tName.Text="准备";
+            tl_tName.Text = "准备";
         }
 
         public void ShowTranferName(object name)
         {
-            tl_tName.Text = name.ToString();            
+            tl_tName.Text = name.ToString();
         }
 
         public void ReloadLog(object listData)
         {
-            dgv_log.DataSource = listData;           
+            dgv_log.DataSource = listData;
         }
 
         private void SyncData(object form)
@@ -47,82 +47,61 @@ namespace ES.Client
 
             lock (lockFlag)
             {
-                UpdateConfigs();
-
-                var md5Pulickey = Common.MD5(Common.PublicKey);
-                string clientCode, clientGuid;
-                clientGuid = QueryCurrentClientGUID(out clientCode);
-
-                var configs = db.TranConfig.Where(c => c.Code != "PZSJ" && c.Status == 0 && c.Sort >= 0).ToList();
-
-                if (configs != null)
+                try
                 {
-                    foreach (var config in configs)
+                    UpdateConfigs();
+
+                    var md5Pulickey = Common.MD5(Common.PublicKey);
+                    string clientCode, clientGuid;
+                    clientGuid = QueryCurrentClientGUID(out clientCode);
+
+                    var configs = db.TranConfig.Where(c => c.Code != "PZSJ" && c.Status == 0 && c.Sort >= 0).ToList();
+
+                    if (configs != null)
                     {
-                        if (config.Direct == 0)
+                        foreach (var config in configs)
                         {
-                            _syncContext.Post(formObj.ShowTranferName, "获取" + config.Name);
-                            Get(md5Pulickey, clientCode, clientGuid, config);
-                            _syncContext.Post(formObj.ReloadLog, db.TranLog.OrderByDescending(p => p.ID).Take(200).ToList());
-                        }
-                        else
-                        {
-                            if (formObj != null)
+                            if (config.Direct == 0)
                             {
-                                //formObj.ShowTranferName("推送" + config.Name);
-                                _syncContext.Post(formObj.ShowTranferName, "推送" + config.Name);
+                                _syncContext.Post(formObj.ShowTranferName, "获取" + config.Name);
+                                Get(md5Pulickey, clientCode, clientGuid, config);
+                                _syncContext.Post(formObj.ReloadLog, db.TranLog.OrderByDescending(p => p.ID).Take(200).ToList());
                             }
-                            
-                            Post(md5Pulickey, clientCode, clientGuid, config);
-                            _syncContext.Post(formObj.ReloadLog, db.TranLog.OrderByDescending(p => p.ID).Take(200).ToList());
+                            else
+                            {
+                                if (formObj != null)
+                                {
+                                    //formObj.ShowTranferName("推送" + config.Name);
+                                    _syncContext.Post(formObj.ShowTranferName, "推送" + config.Name);
+                                }
+
+                                Post(md5Pulickey, clientCode, clientGuid, config);
+                                _syncContext.Post(formObj.ReloadLog, db.TranLog.OrderByDescending(p => p.ID).Take(200).ToList());
+                            }
                         }
                     }
-                }
 
-                if (formObj != null)
+                    if (formObj != null)
+                    {
+                        formObj.ShowTranferName("数据更新完成");
+                        _syncContext.Post(formObj.ReloadLog, db.TranLog.OrderByDescending(p => p.ID).Take(200).ToList());
+                    }
+                }
+                catch (Exception ex)
                 {
-                    formObj.ShowTranferName("数据更新完成");
-                    _syncContext.Post(formObj.ReloadLog, db.TranLog.OrderByDescending(p => p.ID).Take(200).ToList());
+                    if (formObj != null)
+                    {
+                        _syncContext.Post(formObj.HandleError, "错误原因：" + ex.Message);
+                    }
                 }
             }
         }
 
-        #region 多余的代码
-        private void GetDataFromServer()
+        public void HandleError(object msg)
         {
-            var md5Pulickey = Common.MD5(Common.PublicKey);
-            string clientCode, clientGuid;
-            clientGuid = QueryCurrentClientGUID(out clientCode);
-
-            var configs = db.TranConfig.Where(c => c.Code != "PZSJ" && c.Status == 0 && c.Sort >= 0 && c.Direct == 0).OrderBy(c => c.Sort).ToList();
-
-            if (configs != null)
-            {
-                foreach (var config in configs)
-                {
-                    Get(md5Pulickey, clientCode, clientGuid, config);
-                }
-            }
+            MessageBox.Show(msg.ToString(), "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            停止传输ToolStripMenuItem_Click(null, null);
         }
-
-        private void PostDataToServer()
-        {
-            var md5Pulickey = Common.MD5(Common.PublicKey);
-            string clientCode, clientGuid;
-            clientGuid = QueryCurrentClientGUID(out clientCode);
-
-            var configs = db.TranConfig.Where(c => c.Code != "PZSJ" && c.Status == 0 && c.Sort >= 0 && c.Direct == 1).ToList();
-
-            if (configs != null)
-            {
-
-                foreach (var config in configs)
-                {
-                    Post(md5Pulickey, clientCode, clientGuid, config);
-                }
-            }
-        }
-        #endregion
 
         private void Get(string md5Pulickey, string clientCode, string clientGuid, TranConfig config)
         {
@@ -196,7 +175,15 @@ namespace ES.Client
                     return;
                 }
 
-                this.UpdateDbByResponse(sqlData, config.Guid.ToString());
+                string errorMsg = null;
+                try
+                {
+                    this.UpdateDbByResponse(sqlData, config.Guid.ToString());
+                }
+                catch (Exception ex)
+                {
+                    errorMsg = ex.Message;
+                }
 
                 config.LastStamp = sqlData.MaxTimeStamp;
 
@@ -207,13 +194,14 @@ namespace ES.Client
                     ConfigName = config.Name,
                     Count = sqlData.RowCount,
                     Direct = 0,
-                    Result = "数据更新成功",
+                    Result = errorMsg == null ? "数据更新成功" : "更新出错，详情见备注。",
                     Sort = config.Sort,
                     Stamp = sqlData.MaxTimeStamp,
                     Header = sqlData.HeaderSql,
                     Detail = sqlData.DetailSql,
                     Footer = sqlData.FooterSql,
-                    TranTime = DateTime.Now
+                    TranTime = DateTime.Now,
+                    Remark = errorMsg
                 };
 
                 db.TranLog.InsertOnSubmit(log);
@@ -395,7 +383,15 @@ namespace ES.Client
                 throw new Exception("转换出错");
             }
 
-            UpdateDbByResponse(sqlData, sqlData.ConfigGuid);
+            string errorMsg = null;
+            try
+            {
+                UpdateDbByResponse(sqlData, sqlData.ConfigGuid);
+            }
+            catch (Exception ex)
+            {
+                errorMsg = ex.Message;
+            }
 
             log = new TranLog()
             {
@@ -404,13 +400,14 @@ namespace ES.Client
                 ConfigName = "传输配置数据",
                 Direct = 0,
                 Count = sqlData.RowCount,
-                Result = "更新数据成功",
+                Result = errorMsg == null ? "更新数据成功" : "更新出错，详情见备注。",
                 Sort = -1,
                 Stamp = sqlData.MaxTimeStamp,
                 Header = sqlData.HeaderSql,
                 Detail = sqlData.DetailSql,
                 Footer = sqlData.FooterSql,
-                TranTime = DateTime.Now
+                TranTime = DateTime.Now,
+                Remark = errorMsg
             };
             db.TranLog.InsertOnSubmit(log);
             db.SubmitChanges();
@@ -418,15 +415,7 @@ namespace ES.Client
 
         private void UpdateDbByResponse(SqlData sqlData, string configGuid)
         {
-            try
-            {
-                db.ExecuteCommand(sqlData.HeaderSql + ";" + sqlData.DetailSql + ";" + sqlData.FooterSql + ";" + "Update tranconfig Set lastStamp={0} Where Guid={1}", sqlData.MaxTimeStamp, configGuid);
-            }
-            catch (Exception ex)
-            {
-                db.Transaction.Rollback();
-                throw ex;
-            }
+            db.ExecuteCommand(sqlData.HeaderSql + ";" + sqlData.DetailSql + ";" + sqlData.FooterSql + ";" + "Update tranconfig Set lastStamp={0} Where Guid={1}", sqlData.MaxTimeStamp, configGuid);
         }
 
         private string QueryCurrentClientGUID(out string clientCode)
@@ -453,26 +442,28 @@ namespace ES.Client
             if (MessageBox.Show("您确定退出吗？", "提示", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
                 this.Close();
         }
-		
-		Thread t =null;
-		private void 开始传输ToolStripMenuItem_Click(object sender, EventArgs e)
-		{
-			t = new Thread(new ParameterizedThreadStart(SyncData), 0);
-			t.IsBackground = true;
-			
-			t.Start(this);
 
-			开始传输ToolStripMenuItem.Enabled=false;
-		}
+        Thread t = null;
+        private void 开始传输ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            t = new Thread(new ParameterizedThreadStart(SyncData), 0);
+            t.IsBackground = true;
 
-		private void 停止传输ToolStripMenuItem_Click(object sender, EventArgs e)
-		{
-			if (t != null && t.IsAlive)
-			{
-				t.Abort();
-				开始传输ToolStripMenuItem.Enabled = true;
-				this.ShowTranferName("传输停止");
-			}
-		}
+            t.Start(this);
+
+            开始传输ToolStripMenuItem.Enabled = false;
+        }
+
+        private void 停止传输ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (t != null && t.IsAlive)
+            {
+                t.Abort();                
+            }
+
+            开始传输ToolStripMenuItem.Enabled = true;
+            停止传输ToolStripMenuItem.Enabled = false;
+            this.ShowTranferName("传输停止");
+        }
     }
 }
