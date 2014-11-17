@@ -74,6 +74,13 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Reference.svcmap</DependentUpon>
     </Compile>
+    <Compile Include="ServiceConfig.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="ServiceConfig.Designer.cs">
+      <DependentUpon>ServiceConfig.cs</DependentUpon>
+    </Compile>
+    <Compile Include="util.cs" />
     <EmbeddedResource Include="Main.resx">
       <DependentUpon>Main.cs</DependentUpon>
       <SubType>Designer</SubType>
@@ -88,6 +95,9 @@
       <DependentUpon>Resources.resx</DependentUpon>
       <DesignTime>True</DesignTime>
     </Compile>
+    <EmbeddedResource Include="ServiceConfig.resx">
+      <DependentUpon>ServiceConfig.cs</DependentUpon>
+    </EmbeddedResource>
     <None Include="db.dbml">
       <Generator>MSLinqToSQLGenerator</Generator>
       <LastGenOutput>db.designer.cs</LastGenOutput>

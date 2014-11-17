@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="6d5bd966-4346-4bbf-8897-2ef4678e97ef" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
+<ReferenceGroup xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema" ID="9703dd3b-3ce0-453e-ae64-e18c4646fe88" xmlns="urn:schemas-microsoft-com:xml-wcfservicemap">
   <ClientOptions>
     <GenerateAsynchronousMethods>false</GenerateAsynchronousMethods>
     <EnableDataBinding>true</EnableDataBinding>
@@ -21,8 +21,8 @@
     <MetadataSource Address="http://localhost:2008/Transfer.asmx" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="Transfer.wsdl" MetadataType="Wsdl" ID="6e74b5e2-5696-4603-a8ad-7757d8dee0d1" SourceId="1" SourceUrl="http://localhost:2008/Transfer.asmx?wsdl" />
-    <MetadataFile FileName="Transfer.disco" MetadataType="Disco" ID="4a3d4a65-e9cd-4931-944b-dc1e058e27fa" SourceId="1" SourceUrl="http://localhost:2008/Transfer.asmx?disco" />
+    <MetadataFile FileName="Transfer.wsdl" MetadataType="Wsdl" ID="58cfc658-4b71-4b11-8919-ded04c84169a" SourceId="1" SourceUrl="http://localhost:2008/Transfer.asmx?wsdl" />
+    <MetadataFile FileName="Transfer.disco" MetadataType="Disco" ID="497520c9-208a-4d33-a969-1ff1bf038af0" SourceId="1" SourceUrl="http://localhost:2008/Transfer.asmx?disco" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />
