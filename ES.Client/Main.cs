@@ -27,22 +27,21 @@ namespace ES.Client
 
         private void Main_Load(object sender, EventArgs e)
         {
-            LoadServiceAddress();
-            ReloadLog(null);
+            //ReloadLog(null);
             tl_pName.Text = "传输状态：";
             tl_tName.Text = "准备";
         }
 
-        private void LoadServiceAddress()
+        private bool LoadServiceAddress()
         {
             var url = util.GetSetting("serviceUrl");
             if (string.IsNullOrWhiteSpace(url))
             {
                 MessageBox.Show("请先配置服务器地址");
-                this.Close();
-                return;
+                return false;
             }
             _server.Endpoint.Address = new EndpointAddress(util.GetSetting("serviceUrl"));
+            return true;
         }
 
         public void ShowTranferName(object name)
@@ -449,6 +448,10 @@ namespace ES.Client
         Thread t = null;
         private void 开始传输ToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            if (!LoadServiceAddress()) {
+                return;
+            }
+
             t = new Thread(new ParameterizedThreadStart(SyncData), 0);
             t.IsBackground = true;
 

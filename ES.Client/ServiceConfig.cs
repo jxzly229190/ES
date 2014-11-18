@@ -33,6 +33,10 @@ namespace ES.Client
             }
 
             util.SetSetting("serviceUrl", url);
+
+            MessageBox.Show("配置成功");
+
+            this.Close();
         }
     }
 }

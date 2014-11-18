@@ -24,7 +24,7 @@ namespace ES.Client
                 throw new ArgumentNullException("value");
             }
 
-            System.Configuration.ConfigurationManager.AppSettings[key] = value;
+            System.Configuration.ConfigurationManager.AppSettings.Set(key,value);
         }
     }
 }
