@@ -452,8 +452,7 @@ namespace ES.Client
                 return;
             }
 
-            t = new Thread(new ParameterizedThreadStart(SyncData), 0);
-            t.IsBackground = true;
+            t = new Thread(new ParameterizedThreadStart(SyncData), 0) {IsBackground = true};
 
             t.Start(this);
 
