@@ -11,7 +11,10 @@ namespace ES.Server
     {
         protected void Page_Load(object sender, EventArgs e)
         {
-
+            if (Session["loginUser"] == null)
+            {
+                Response.Redirect("Login.aspx");
+            }
         }
     }
 }

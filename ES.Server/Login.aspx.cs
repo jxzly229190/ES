@@ -22,12 +22,14 @@ namespace ES.Server
             {
                 user.LastLogin = DateTime.Now;
                 db.SubmitChanges();
+                Session["loginUser"] = user;
                 Response.Redirect("NewClient.aspx");
             }
             else
             {
                 Login1.FailureText = "用户名或者密码错误，请确认后重新输入";
                 Login1.UserName = "";
+                Login1.Focus();
             }
         }
     }
