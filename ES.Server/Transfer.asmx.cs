@@ -1,4 +1,6 @@
-﻿using ES.Repository;
+﻿using System.Data.Entity;
+using System.Data.Entity.Infrastructure;
+using ES.Repository;
 using ES.Repository.Model;
 using System;
 using System.Collections.Generic;
@@ -23,7 +25,7 @@ namespace ES.Server
 	[XmlInclude(typeof(SqlData))]
 	public class Transfer : System.Web.Services.WebService
 	{
-		dbDataContext db = new dbDataContext();
+        Entities db = new Entities();
 
 		[WebMethod]
 		public string HelloWorld()
@@ -74,7 +76,7 @@ namespace ES.Server
 
 			try
 			{
-				var result = db.ExecuteQuery<QueryResult>(detailSql).ToList();
+                var result = db.Database.SqlQuery<QueryResult>(detailSql);//db.ExecuteQuery<QueryResult>(detailSql).ToList();
 
 				string sql = "";
 
@@ -125,7 +127,7 @@ namespace ES.Server
 
 			try
 			{
-				db.ExecuteCommand(sql);
+				db.Database.ExecuteSqlCommand(sql);
 				return new ResponseData() { State = 0, Message = "执行成功" };
 			}
 			catch (Exception ex)

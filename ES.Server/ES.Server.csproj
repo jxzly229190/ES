@@ -44,6 +44,8 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Linq" />
     <Reference Include="System.Drawing" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.Security" />
     <Reference Include="System.Web.DynamicData" />
     <Reference Include="System.Web.Entity" />
     <Reference Include="System.Web.ApplicationServices" />
@@ -159,22 +161,46 @@
     <Compile Include="App_Start\IdentityConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="App_Start\Startup.Auth.cs" />
+    <Compile Include="AspNetUsers.cs">
+      <DependentUpon>Svr.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Client.cs">
+      <DependentUpon>Svr.tt</DependentUpon>
+    </Compile>
     <Compile Include="Controllers\AccountController.cs" />
+    <Compile Include="Controllers\ClientsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
-    <Compile Include="db.designer.cs">
-      <DependentUpon>db.dbml</DependentUpon>
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Models\AccountViewModels.cs" />
+    <Compile Include="Models\Common.cs" />
     <Compile Include="Models\IdentityModels.cs" />
     <Compile Include="Models\ManageViewModels.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="Svr.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Svr.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Svr.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Svr.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Svr.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Svr.edmx</DependentUpon>
+    </Compile>
+    <Compile Include="TranConfig.cs">
+      <DependentUpon>Svr.tt</DependentUpon>
+    </Compile>
+    <Compile Include="TranLog.cs">
+      <DependentUpon>Svr.tt</DependentUpon>
+    </Compile>
     <Compile Include="Transfer.asmx.cs">
       <DependentUpon>Transfer.asmx</DependentUpon>
       <SubType>Component</SubType>
@@ -189,11 +215,6 @@
     <Content Include="Content\Site.css" />
     <Content Include="Scripts\bootstrap.js" />
     <Content Include="Scripts\bootstrap.min.js" />
-    <Content Include="db.dbml">
-      <Generator>MSLinqToSQLGenerator</Generator>
-      <LastGenOutput>db.designer.cs</LastGenOutput>
-      <SubType>Designer</SubType>
-    </Content>
     <None Include="Scripts\jquery-1.10.2.intellisense.js" />
     <Content Include="Scripts\jquery-1.10.2.js" />
     <Content Include="Scripts\jquery-1.10.2.min.js" />
@@ -206,6 +227,16 @@
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\_references.js" />
+    <Content Include="Svr.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Svr.edmx</DependentUpon>
+      <LastGenOutput>Svr.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Svr.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <DependentUpon>Svr.edmx</DependentUpon>
+      <LastGenOutput>Svr.cs</LastGenOutput>
+    </Content>
     <Content Include="Transfer.asmx" />
     <Content Include="Web.config" />
     <Content Include="Web.Debug.config">
@@ -242,6 +273,18 @@
     <Content Include="Views\Manage\VerifyPhoneNumber.cshtml" />
     <Content Include="Views\Shared\Lockout.cshtml" />
     <Content Include="Views\Shared\_LoginPartial.cshtml" />
+    <EntityDeploy Include="Svr.edmx">
+      <Generator>EntityModelCodeGenerator</Generator>
+      <LastGenOutput>Svr.Designer.cs</LastGenOutput>
+    </EntityDeploy>
+    <Content Include="Svr.edmx.diagram">
+      <DependentUpon>Svr.edmx</DependentUpon>
+    </Content>
+    <Content Include="Views\Clients\Create.cshtml" />
+    <Content Include="Views\Clients\Delete.cshtml" />
+    <Content Include="Views\Clients\Details.cshtml" />
+    <Content Include="Views\Clients\Edit.cshtml" />
+    <Content Include="Views\Clients\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
@@ -254,12 +297,8 @@
     <None Include="Project_Readme.html" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="db.dbml.layout">
-      <DependentUpon>db.dbml</DependentUpon>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
     <Service Include="{3259AA49-8AA1-44D3-9025-A0B520596A8C}" />
+    <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\ES.Repository\ES.Repository.csproj">
