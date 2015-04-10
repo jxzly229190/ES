@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 
-namespace ES.Server
+namespace ES.WebServer
 {
     public partial class NewClient : System.Web.UI.Page
     {
@@ -20,6 +20,8 @@ namespace ES.Server
 
         protected void BtnOkClick(object sender, EventArgs e)
         {
+            lblMsg.Text = string.Empty;
+
             lblMsg.Visible = true;
             bool isValid = false;
             if (string.IsNullOrEmpty(tbName.Text))
@@ -42,7 +44,7 @@ namespace ES.Server
             string code = tbCode.Text;
             string address = tbAddress.Text;
             var db = new dbDataContext();
-            if (db.Client.Count(c => c.Code == code) >= 0)
+            if (db.Client.Count(c => c.Code == code) > 0)
             {
                 lblMsg.Text += "客户端编码已经使用！！\r\n";
                 tbCode.Text = "";
@@ -51,12 +53,14 @@ namespace ES.Server
 
             var client = new Client
             {
+                GUID = Guid.NewGuid(),
                 Address = address,
                 Code = code,
                 Name = name,
                 CreatedTime = DateTime.Now,
                 CreatedBy = ((LoginUser) Session["loginUser"]).Name,
-                IsCurrent = false
+                IsCurrent = false,
+                Type = 1
             };
 
             db.Client.InsertOnSubmit(client);

@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace ES.Server {
+namespace ES.WebServer {
     
     
     public partial class NewClient {

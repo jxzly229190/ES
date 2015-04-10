@@ -1,4 +1,4 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="NewClient.aspx.cs" Inherits="ES.Server.NewClient" %>
+﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="NewClient.aspx.cs" Inherits="ES.WebServer.NewClient" %>
 
 <!DOCTYPE html>
 
