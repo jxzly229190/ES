@@ -162,9 +162,6 @@
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
-    <Compile Include="db.cs">
-      <DependentUpon>db.dbml</DependentUpon>
-    </Compile>
     <Compile Include="db.designer.cs">
       <DependentUpon>db.dbml</DependentUpon>
       <DesignTime>True</DesignTime>
