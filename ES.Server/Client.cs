@@ -17,7 +17,6 @@ namespace ES.Server
     public partial class Client
     {
         public int ID { get; set; }
-        [Display(Name = "防伪码")]
         public System.Guid GUID { get; set; }
         [Required(ErrorMessage = "门店编码不能为空")]
         [Display(Name = "门店编码")]

@@ -15,7 +15,7 @@ namespace ES.Server.Controllers
         // GET: Clients
         public ActionResult Index()
         {
-            return View(db.Client.ToList());
+            return View(db.Client.Where(c => c.Status != 255).ToList());
         }
 
         // GET: Clients/Details/5

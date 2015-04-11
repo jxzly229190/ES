@@ -7,6 +7,9 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+
 namespace ES.Server
 {
     using System;
@@ -16,17 +19,36 @@ namespace ES.Server
     {
         public int ID { get; set; }
         public System.Guid Guid { get; set; }
+        [Required(ErrorMessage = "传输名称 不能为空")]
+        [Display(Name = "传输名称")]
         public string Name { get; set; }
+        [Required(ErrorMessage = "传输编码 不能为空")]
+        [Display(Name = "传输编码")]
         public string Code { get; set; }
+        [Required(ErrorMessage = "顺序 不能为空")]
+        [Display(Name = "顺序")]
         public int Sort { get; set; }
+        [Required(ErrorMessage = "最大传输行 不能为空")]
+        [Display(Name = "最大传输行")]
         public int MaxCount { get; set; }
         public Nullable<long> LastStamp { get; set; }
+        [Display(Name = "方向")]
         public int Direct { get; set; }
+        [Display(Name = "传输头")]
+        [DataType(DataType.MultilineText)]
         public string HeaderSql { get; set; }
+        [Display(Name = "传输体")]
+        [DataType(DataType.MultilineText)]
         public string DetailSql { get; set; }
+        [Display(Name = "传输脚")]
+        [DataType(DataType.MultilineText)]
         public string FooterSql { get; set; }
+        [Display(Name = "备注")]
+        [DataType(DataType.MultilineText)]
         public string Remark { get; set; }
+        [Display(Name = "状态")]
         public int Status { get; set; }
+        [Display(Name = "时间戳")]
         public byte[] Timestamp { get; set; }
         public System.DateTime CreatedTime { get; set; }
         public string CreatedBy { get; set; }

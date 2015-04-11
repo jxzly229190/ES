@@ -1,0 +1,154 @@
+﻿@model ES.Server.TranConfig
+
+@{
+    ViewBag.Title = "Details";
+}
+
+<h2>Details</h2>
+
+<div>
+    <h4>TranConfig</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Guid)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Guid)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Name)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Name)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Code)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Code)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Sort)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Sort)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.MaxCount)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.MaxCount)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LastStamp)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.LastStamp)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Direct)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Direct)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.HeaderSql)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.HeaderSql)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.DetailSql)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.DetailSql)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.FooterSql)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.FooterSql)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Remark)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Remark)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Status)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Status)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Timestamp)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Timestamp)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CreatedTime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreatedTime)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.CreatedBy)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.CreatedBy)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ModifiedTime)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ModifiedTime)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.ModifiedBy)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.ModifiedBy)
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
+    @Html.ActionLink("Back to List", "Index")
+</p>
