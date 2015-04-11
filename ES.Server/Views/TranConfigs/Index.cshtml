@@ -59,7 +59,7 @@
             @Html.DisplayFor(modelItem => item.MaxCount)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Direct)
+            @Html.Raw(Tools.GetSelectedTextByTableColumn("TranConfig", "Direct", item.Direct.ToString()))
         </td>
         <td>
             @Html.Raw(Tools.GetSelectedTextByTableColumn("TranConfig","Import",item.Import.ToString()))
