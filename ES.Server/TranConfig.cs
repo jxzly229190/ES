@@ -7,7 +7,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 
 namespace ES.Server
@@ -48,6 +47,8 @@ namespace ES.Server
         public string Remark { get; set; }
         [Display(Name = "状态")]
         public int Status { get; set; }
+        [Display(Name = "重要程度")]
+        public int Import { get; set; }
         [Display(Name = "时间戳")]
         public byte[] Timestamp { get; set; }
         public System.DateTime CreatedTime { get; set; }
