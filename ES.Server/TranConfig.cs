@@ -51,9 +51,13 @@ namespace ES.Server
         public int Import { get; set; }
         [Display(Name = "时间戳")]
         public byte[] Timestamp { get; set; }
+        [Display(Name = "创建时间")]
         public System.DateTime CreatedTime { get; set; }
+        [Display(Name = "创建人")]
         public string CreatedBy { get; set; }
+        [Display(Name = "修改时间")]
         public Nullable<System.DateTime> ModifiedTime { get; set; }
+        [Display(Name = "修改人")]
         public string ModifiedBy { get; set; }
     }
 }
