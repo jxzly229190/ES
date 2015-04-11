@@ -1,14 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Data;
 using System.Data.Entity;
 using System.Linq;
 using System.Net;
-using System.Web;
 using System.Web.Mvc;
-using ES.Server;
-using ES.Server.Models;
-using Microsoft.AspNet.Identity;
 
 namespace ES.Server.Controllers
 {
@@ -96,6 +90,8 @@ namespace ES.Server.Controllers
         {
             if (ModelState.IsValid)
             {
+                client.ModifiedBy = User.Identity.Name;
+                client.ModifiedTime = DateTime.Now;
                 db.Entry(client).State = EntityState.Modified;
                 db.SaveChanges();
                 return RedirectToAction("Index");
