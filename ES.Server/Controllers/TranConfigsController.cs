@@ -2,11 +2,13 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Data.Entity;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using ES.Server;
+using ES.Server.Models;
 
 namespace ES.Server.Controllers
 {
@@ -39,7 +41,21 @@ namespace ES.Server.Controllers
         // GET: TranConfigs/Create
         public ActionResult Create()
         {
-            return View();
+            var model = new CreateTranConfigViewModel();
+            var tables =
+                db.Database.SqlQuery<string>(
+                    "select Table_Name from INFORMATION_SCHEMA.TABLES Where TABLE_NAME not like 'AspNet%' And TABLE_NAME <>'__MigrationHistory'");
+            if (tables.Any())
+            {
+                model.TableNames = new List<SelectListItem>();
+                model.ColumnList = new List<SelectListItem>();
+                model.TableNames.Add(new SelectListItem(){ Text = "--请选择--", Value = "-1"});
+                foreach (var table in tables)
+                {
+                    model.TableNames.Add(new SelectListItem() {Text = table, Value = table});
+                }
+            }
+            return View(model);
         }
 
         // POST: TranConfigs/Create
@@ -47,16 +63,27 @@ namespace ES.Server.Controllers
         // 详细信息，请参阅 http://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,Guid,Name,Code,Sort,MaxCount,LastStamp,Direct,HeaderSql,DetailSql,FooterSql,Remark,Status,Timestamp,CreatedTime,CreatedBy,ModifiedTime,ModifiedBy")] TranConfig tranConfig)
+        public ActionResult Create(string Name, string Code, int Sort, int MaxCount, int Direct,string TableNames, string[] ColumnList)
         {
             if (ModelState.IsValid)
             {
-                db.TranConfig.Add(tranConfig);
+                //todo:生成Sql代码
+                //db.TranConfig.Add(model);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View(tranConfig);
+            return View();
+        }
+
+        public JsonResult GetColumnsByTableName(string table)
+        {
+            var cols =
+                db.Database.SqlQuery<string>(
+                    "select COLUMN_NAME from INFORMATION_SCHEMA.COLUMNS Where TABLE_NAME = @table",
+                    new SqlParameter("@table", table));
+
+            return Json(cols, JsonRequestBehavior.AllowGet);
         }
 
         // GET: TranConfigs/Edit/5
