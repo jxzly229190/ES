@@ -90,11 +90,22 @@ namespace ES.Server.Controllers
         {
             if (ModelState.IsValid)
             {
-                client.ModifiedBy = User.Identity.Name;
-                client.ModifiedTime = DateTime.Now;
-                db.Entry(client).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                var old = db.Client.FirstOrDefault(c => c.ID == client.ID);
+                if (old == null)
+                {
+                    AddErrors("当前修改的门店不存在。");
+                }
+                else
+                {
+                    old.Name = client.Name;
+                    old.Address = client.Address;
+                    old.Status = client.Status;
+                    old.ModifiedBy = User.Identity.Name;
+                    old.ModifiedTime = DateTime.Now;
+                    //db.Entry(client).State = EntityState.Modified;
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
             }
             return View(client);
         }
