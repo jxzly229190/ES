@@ -15,7 +15,7 @@ namespace ES.Repository
         {
             MD5CryptoServiceProvider md5 = new MD5CryptoServiceProvider();
 
-            return BitConverter.ToString(md5.ComputeHash(UTF8Encoding.Default.GetBytes(str)));
+            return BitConverter.ToString(md5.ComputeHash(UTF8Encoding.Default.GetBytes(str.ToLower())));
         }
     }
 }
