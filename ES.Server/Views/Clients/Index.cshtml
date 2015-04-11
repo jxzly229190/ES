@@ -45,13 +45,13 @@
             @Html.DisplayFor(modelItem => item.Name)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Type)
+            @Html.Label(Tools.GetSelectedTextByTableColumn("Client", "Type", item.Type.ToString()))
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.Address)
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.Status)
+            @Html.Label(Tools.GetSelectedTextByTableColumn("Client", "Status", item.Status.ToString()))
         </td>
         <td>
             @Html.ActionLink("修改", "Edit", new { id=item.ID }) |
