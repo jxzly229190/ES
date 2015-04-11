@@ -1,13 +1,13 @@
 ﻿@model ES.Server.Client
 
 @{
-    ViewBag.Title = "Details";
+    ViewBag.Title = "详情--门店管理";
 }
 
-<h2>Details</h2>
+<h2>详情</h2>
 
 <div>
-    <h4>Client</h4>
+    <h4>门店管理</h4>
     <hr />
     <dl class="dl-horizontal">
         <dt>
@@ -47,7 +47,7 @@
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Type)
+            @Html.Label(Tools.GetSelectedTextByTableColumn("Client", "Type", Model.Type.ToString()))
         </dd>
 
         <dt>
@@ -71,7 +71,7 @@
         </dt>
 
         <dd>
-            @Html.DisplayFor(model => model.Status)
+            @Html.Label(Tools.GetSelectedTextByTableColumn("Client", "Status", Model.Status.ToString()))
         </dd>
 
         <dt>
@@ -109,6 +109,6 @@
     </dl>
 </div>
 <p>
-    @Html.ActionLink("Edit", "Edit", new { id = Model.ID }) |
-    @Html.ActionLink("Back to List", "Index")
+    @Html.ActionLink("修改", "Edit", new { id = Model.ID }) |
+    @Html.ActionLink("返回管理页", "Index")
 </p>
