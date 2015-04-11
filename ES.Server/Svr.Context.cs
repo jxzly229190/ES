@@ -29,5 +29,6 @@ namespace ES.Server
         public virtual DbSet<Client> Client { get; set; }
         public virtual DbSet<TranConfig> TranConfig { get; set; }
         public virtual DbSet<TranLog> TranLog { get; set; }
+        public virtual DbSet<Meta_KeyValue> Meta_KeyValue { get; set; }
     }
 }

@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-      <Schema Namespace="ES.ServerModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="ES.ServerModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="AspNetUsers">
           <Key>
             <PropertyRef Name="Id" />
@@ -39,6 +39,16 @@
           <Property Name="CreatedTime" Type="datetime" />
           <Property Name="ModifiedBy" Type="varchar" MaxLength="50" />
           <Property Name="ModifiedTime" Type="datetime" />
+        </EntityType>
+        <EntityType Name="Meta_KeyValue">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="TableName" Type="varchar" MaxLength="64" />
+          <Property Name="ColName" Type="varchar" MaxLength="64" />
+          <Property Name="Value" Type="nvarchar" MaxLength="256" />
+          <Property Name="Text" Type="nvarchar" MaxLength="256" />
         </EntityType>
         <EntityType Name="TranConfig">
           <Key>
@@ -86,11 +96,11 @@
         <EntityContainer Name="ESServerModelStoreContainer">
           <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Client" EntityType="Self.Client" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Meta_KeyValue" EntityType="Self.Meta_KeyValue" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TranConfig" EntityType="Self.TranConfig" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TranLog" EntityType="Self.TranLog" Schema="dbo" store:Type="Tables" />
         </EntityContainer>
-      </Schema>
-    </edmx:StorageModels>
+      </Schema></edmx:StorageModels>
     <!-- CSDL content -->
     <edmx:ConceptualModels>
       <Schema Namespace="ES.ServerModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
@@ -177,7 +187,18 @@
           <EntitySet Name="Client" EntityType="Self.Client" />
           <EntitySet Name="TranConfig" EntityType="Self.TranConfig" />
           <EntitySet Name="TranLog" EntityType="Self.TranLog" />
+          <EntitySet Name="Meta_KeyValue" EntityType="ES.ServerModel.Meta_KeyValue" />
         </EntityContainer>
+        <EntityType Name="Meta_KeyValue">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="TableName" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
+          <Property Name="ColName" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
+          <Property Name="Value" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="Text" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+        </EntityType>
       </Schema>
     </edmx:ConceptualModels>
     <!-- C-S mapping content -->
@@ -263,6 +284,17 @@
                 <ScalarProperty Name="Result" ColumnName="Result" />
                 <ScalarProperty Name="Remark" ColumnName="Remark" />
                 <ScalarProperty Name="TranTime" ColumnName="TranTime" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Meta_KeyValue">
+            <EntityTypeMapping TypeName="ES.ServerModel.Meta_KeyValue">
+              <MappingFragment StoreEntitySet="Meta_KeyValue">
+                <ScalarProperty Name="Text" ColumnName="Text" />
+                <ScalarProperty Name="Value" ColumnName="Value" />
+                <ScalarProperty Name="ColName" ColumnName="ColName" />
+                <ScalarProperty Name="TableName" ColumnName="TableName" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>
             </EntityTypeMapping>
           </EntitySetMapping>
