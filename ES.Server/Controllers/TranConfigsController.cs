@@ -41,20 +41,7 @@ namespace ES.Server.Controllers
         // GET: TranConfigs/Create
         public ActionResult Create()
         {
-            var model = new CreateTranConfigViewModel();
-            var tables =
-                db.Database.SqlQuery<string>(
-                    "select Table_Name from INFORMATION_SCHEMA.TABLES Where TABLE_NAME not like 'AspNet%' And TABLE_NAME <>'__MigrationHistory'");
-            if (tables.Any())
-            {
-                model.TableNames = new List<SelectListItem>();
-                model.ColumnList = new List<SelectListItem>();
-                model.TableNames.Add(new SelectListItem(){ Text = "--请选择--", Value = "-1"});
-                foreach (var table in tables)
-                {
-                    model.TableNames.Add(new SelectListItem() {Text = table, Value = table});
-                }
-            }
+            var model = new TranConfig();
             return View(model);
         }
 
@@ -63,17 +50,27 @@ namespace ES.Server.Controllers
         // 详细信息，请参阅 http://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create(string Name, string Code, int Sort, int MaxCount, int Direct,string TableNames, string[] ColumnList)
+        public ActionResult Create([Bind(Include = "ID,Guid,Name,Code,Sort,MaxCount,LastStamp,TableNames,ColumnList,Direct,Import,HeaderSql,DetailSql,FooterSql,Remark,Status,Timestamp,CreatedTime,CreatedBy,ModifiedTime,ModifiedBy")] TranConfig tranConfig)
         {
             if (ModelState.IsValid)
             {
-                //todo:生成Sql代码
-                //db.TranConfig.Add(model);
+                if (db.TranConfig.FirstOrDefault(t => t.Code == tranConfig.Code) != null)
+                {
+                    ModelState.AddModelError("Code", "传输编码 " + tranConfig.Code + " 已被使用，请更换。");
+                    return View(tranConfig);
+                }
+
+                tranConfig.Guid = Guid.NewGuid();
+                tranConfig.Status = 0;
+                tranConfig.CreatedBy = User.Identity.Name;
+                tranConfig.CreatedTime = DateTime.Now;
+
+                db.TranConfig.Add(tranConfig);
                 db.SaveChanges();
                 return RedirectToAction("Index");
             }
 
-            return View();
+            return View(tranConfig);
         }
 
         public JsonResult GetColumnsByTableName(string table)

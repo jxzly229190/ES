@@ -27,11 +27,9 @@ namespace ES.Server.Models
         public int Direct { get; set; }
 
         [Display(Name = "传输表")]
-        [Required(ErrorMessage = "表名不能为空。")]
         public List<SelectListItem> TableNames { get; set; }
 
         [Display(Name = "传输字段")]
-        [Required(ErrorMessage = "至少需要1个字段。")]
         public List<SelectListItem> ColumnList { get; set; }
         [Display(Name = "传输头")]
         [DataType(DataType.MultilineText)]
@@ -47,8 +45,10 @@ namespace ES.Server.Models
         [DataType(DataType.MultilineText)]
         public string Remark { get; set; }
         [Display(Name = "状态")]
+        [Required(ErrorMessage = "请选择 状态")]
         public int Status { get; set; }
         [Display(Name = "重要程度")]
+        [Required(ErrorMessage = "请选择 重要程度")]
         public int Import { get; set; }
     }
 }

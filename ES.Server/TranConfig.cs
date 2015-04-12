@@ -8,6 +8,7 @@
 //------------------------------------------------------------------------------
 
 using System.ComponentModel.DataAnnotations;
+using System.Web.Mvc;
 
 namespace ES.Server
 {
@@ -42,8 +43,12 @@ namespace ES.Server
         [Display(Name = "传输脚")]
         [DataType(DataType.MultilineText)]
         public string FooterSql { get; set; }
-        [Display(Name = "备注")]
+        [Display(Name = "传输表")]
+        public string TableName { get; set; }
+        [Display(Name = "传输字段")]
+        public List<SelectListItem> ColumnList { get; set; }
         [DataType(DataType.MultilineText)]
+        [Display(Name = "备注")]
         public string Remark { get; set; }
         [Display(Name = "状态")]
         public int Status { get; set; }

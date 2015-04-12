@@ -1,6 +1,6 @@
 ﻿function createSql() {
     if ($('input:checked').length > 0) {
-        var table = $('#TableNames').children('option:selected').val();
+        var table = $('#TableName').children('option:selected').val();
 
         var columns = '';
         var vd = '';
@@ -45,7 +45,7 @@
 }
 
 $(function () {
-    $('#TableNames').change(function () {
+    $('#TableName').change(function () {
         if ($(this).children('option:selected').val() == "-1") {
             return;
         }

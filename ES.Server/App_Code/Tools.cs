@@ -26,5 +26,25 @@ namespace ES.Server
 
             return null;
         }
+
+        public static List<SelectListItem> GetTableList()
+        {
+            var tables =
+                new Entities().Database.SqlQuery<string>(
+                    "select Table_Name from INFORMATION_SCHEMA.TABLES Where TABLE_NAME not like 'AspNet%' And TABLE_NAME <>'__MigrationHistory'");
+            if (tables.Any())
+            {
+                var TableNames = new List<SelectListItem>();
+                TableNames.Add(new SelectListItem() { Text = "--请选择--", Value = "-1" });
+                foreach (var table in tables)
+                {
+                    TableNames.Add(new SelectListItem() { Text = table, Value = table });
+                }
+
+                return TableNames;
+            }
+
+            return null;
+        }
     }
 }
