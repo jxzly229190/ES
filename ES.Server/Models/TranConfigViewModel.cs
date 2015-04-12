@@ -26,13 +26,22 @@ namespace ES.Server.Models
         [Display(Name = "方向")]
         public int Direct { get; set; }
 
-        [Display(Name = "表名")]
+        [Display(Name = "传输表")]
         [Required(ErrorMessage = "表名不能为空。")]
         public List<SelectListItem> TableNames { get; set; }
 
-        [Display(Name = "字段")]
+        [Display(Name = "传输字段")]
         [Required(ErrorMessage = "至少需要1个字段。")]
         public List<SelectListItem> ColumnList { get; set; }
+        [Display(Name = "传输头")]
+        [DataType(DataType.MultilineText)]
+        public string HeaderSql { get; set; }
+        [Display(Name = "传输体")]
+        [DataType(DataType.MultilineText)]
+        public string DetailSql { get; set; }
+        [Display(Name = "传输脚")]
+        [DataType(DataType.MultilineText)]
+        public string FooterSql { get; set; }
 
         [Display(Name = "备注")]
         [DataType(DataType.MultilineText)]

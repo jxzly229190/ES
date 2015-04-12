@@ -80,10 +80,20 @@ namespace ES.Server.Controllers
         {
             var cols =
                 db.Database.SqlQuery<string>(
-                    "select COLUMN_NAME from INFORMATION_SCHEMA.COLUMNS Where TABLE_NAME = @table",
+                    "select COLUMN_NAME+','+DATA_TYPE from INFORMATION_SCHEMA.COLUMNS Where TABLE_NAME = @table",
                     new SqlParameter("@table", table));
+            
+            List<string> cs=new List<string>();
+            foreach (var col in cols)
+            {
+                var fields = col.Split(',');
+                if (fields[0].ToUpper() != "ID" && fields[1] != "timestamp")
+                {
+                    cs.Add(fields[0]);
+                }
+            }
 
-            return Json(cols, JsonRequestBehavior.AllowGet);
+            return Json(cs, JsonRequestBehavior.AllowGet);
         }
 
         // GET: TranConfigs/Edit/5
