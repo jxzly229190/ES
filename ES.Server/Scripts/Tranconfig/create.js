@@ -50,7 +50,7 @@ $(function () {
             return;
         }
 
-        $.get("GetColumnsByTableName?table=" + $(this).children('option:selected').val(), function(data) {
+        $.get("/TranConfigs/GetColumnsByTableName?table=" + $(this).children('option:selected').val(), function(data) {
             $("#cols").html("");
             if (data) {
                 var i = 0;

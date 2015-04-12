@@ -24,24 +24,30 @@ namespace ES.Server
         public string Name { get; set; }
         [Required(ErrorMessage = "传输编码 不能为空")]
         [Display(Name = "传输编码")]
+        [MaxLength(32,ErrorMessage = "长度不能超过32个字符")]
         public string Code { get; set; }
         [Required(ErrorMessage = "顺序 不能为空")]
         [Display(Name = "顺序")]
+        [Range(0,500)]
         public int Sort { get; set; }
         [Required(ErrorMessage = "最大传输行 不能为空")]
         [Display(Name = "最大传输行")]
+        [Range(10, 200)]
         public int MaxCount { get; set; }
         public Nullable<long> LastStamp { get; set; }
         [Display(Name = "方向")]
         public int Direct { get; set; }
         [Display(Name = "传输头")]
         [DataType(DataType.MultilineText)]
+        [Required(ErrorMessage = "传输头 不能为空")]
         public string HeaderSql { get; set; }
         [Display(Name = "传输体")]
         [DataType(DataType.MultilineText)]
+        [Required(ErrorMessage = "传输体 不能为空")]
         public string DetailSql { get; set; }
         [Display(Name = "传输脚")]
         [DataType(DataType.MultilineText)]
+        [Required(ErrorMessage = "传输脚 不能为空")]
         public string FooterSql { get; set; }
         [Display(Name = "传输表")]
         public string TableName { get; set; }

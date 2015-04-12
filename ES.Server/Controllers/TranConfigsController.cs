@@ -100,7 +100,7 @@ namespace ES.Server.Controllers
             {
                 return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            TranConfig tranConfig = db.TranConfig.Find(id);
+            TranConfig tranConfig = db.TranConfig.FirstOrDefault(t => t.ID == id && t.Status != 255);
             if (tranConfig == null)
             {
                 return HttpNotFound();
@@ -117,9 +117,32 @@ namespace ES.Server.Controllers
         {
             if (ModelState.IsValid)
             {
-                db.Entry(tranConfig).State = EntityState.Modified;
-                db.SaveChanges();
-                return RedirectToAction("Index");
+                if (db.TranConfig.FirstOrDefault(t => t.Code == tranConfig.Code&&t.ID!=tranConfig.ID) != null)
+                {
+                    ModelState.AddModelError("Code", "传输编码 " + tranConfig.Code + " 已被使用，请更换。");
+                    return View(tranConfig);
+                }
+
+                var original = db.TranConfig.FirstOrDefault(t => t.ID == tranConfig.ID && t.Status != 255);
+                if (original != null)
+                {
+                    original.Code = tranConfig.Code;
+                    original.Name = tranConfig.Name;
+                    original.Sort = tranConfig.Sort;
+                    original.MaxCount = tranConfig.MaxCount;
+                    original.Direct = tranConfig.Direct;
+                    original.Import = tranConfig.Import;
+                    original.HeaderSql = tranConfig.HeaderSql;
+                    original.DetailSql = tranConfig.DetailSql;
+                    original.FooterSql = tranConfig.FooterSql;
+                    original.Remark = tranConfig.Remark;
+                    original.Status = tranConfig.Status;
+                    original.ModifiedBy = User.Identity.Name;
+                    original.ModifiedTime = DateTime.Now;
+                    db.SaveChanges();
+                    return RedirectToAction("Index");
+                }
+                return HttpNotFound();
             }
             return View(tranConfig);
         }
