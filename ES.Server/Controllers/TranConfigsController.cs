@@ -20,7 +20,7 @@ namespace ES.Server.Controllers
         // GET: TranConfigs
         public ActionResult Index()
         {
-            return View(db.TranConfig.ToList());
+            return View(db.TranConfig.Where(t => t.Status != 255).ToList());
         }
 
         // GET: TranConfigs/Details/5
