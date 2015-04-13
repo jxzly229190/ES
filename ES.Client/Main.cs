@@ -137,7 +137,6 @@ namespace ES.Client
                         Remark = result.Message,
                         Result = "服务器出错了",
                         Sort = config.Sort,
-                        Stamp = config.LastStamp,
                         TranTime = DateTime.Now
                     };
 
@@ -158,7 +157,6 @@ namespace ES.Client
                         Result = "没有返回数据",
                         Remark = "已经是最新数据",
                         Sort = config.Sort,
-                        Stamp = config.LastStamp,
                         TranTime = DateTime.Now
                     };
                     _db.TranLog.InsertOnSubmit(log);
@@ -180,7 +178,6 @@ namespace ES.Client
                         Remark = "SqlData 为 Null",
                         Result = "SqlData转换出错",
                         Sort = config.Sort,
-                        Stamp = config.LastStamp,
                         TranTime = DateTime.Now
                     };
 
@@ -193,13 +190,13 @@ namespace ES.Client
                 try
                 {
                     this.UpdateDbByResponse(sqlData, config.Guid.ToString());
+                    config.LastStamp = sqlData.MaxTimeStamp;
+                    //_db.SubmitChanges();
                 }
                 catch (Exception ex)
                 {
                     errorMsg = ex.Message;
                 }
-
-                config.LastStamp = sqlData.MaxTimeStamp;
 
                 log = new TranLog()
                 {
@@ -210,13 +207,17 @@ namespace ES.Client
                     Direct = 0,
                     Result = errorMsg == null ? "数据更新成功" : "更新出错，详情见备注。",
                     Sort = config.Sort,
-                    Stamp = sqlData.MaxTimeStamp,
                     Header = sqlData.HeaderSql,
                     Detail = sqlData.DetailSql,
                     Footer = sqlData.FooterSql,
                     TranTime = DateTime.Now,
                     Remark = errorMsg
                 };
+
+                if (errorMsg == null)
+                {
+                    log.Stamp = sqlData.MaxTimeStamp;
+                }
 
                 _db.TranLog.InsertOnSubmit(log);
                 try
