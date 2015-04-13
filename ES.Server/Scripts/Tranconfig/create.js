@@ -7,8 +7,18 @@
         var vf = '';
         $('input:checked').each(function () {
             var col = $(this).val();
+            var index = col.indexOf('_varbinary');
+            if (index > 0) {
+                col = col.slice(0, index);
+            }
+            
             columns += "[" + col + '],';
-            vd += "'+dbo.bims_f_var_to_string(" + col + ")+',";
+            if (index > 0) {
+                vd += "'+upper(sys.fn_varbintohexstr(" + col + "))+',";
+            } else {
+                vd += "'+dbo.bims_f_var_to_string(" + col + ")+',";
+            }
+            
             vf += "b."+col+" = a."+col+",";
         });
 

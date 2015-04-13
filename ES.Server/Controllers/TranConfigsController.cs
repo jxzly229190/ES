@@ -86,7 +86,14 @@ namespace ES.Server.Controllers
                 var fields = col.Split(',');
                 if (fields[0].ToUpper() != "ID" && fields[1] != "timestamp")
                 {
-                    cs.Add(fields[0]);
+                    if (fields[1].EndsWith("varbinary"))
+                    {
+                        cs.Add(fields[0]+"_varbinary");
+                    }
+                    else
+                    {
+                        cs.Add(fields[0]);
+                    }
                 }
             }
 
