@@ -68,7 +68,7 @@ namespace ES.Client
                     string clientCode;
                     string clientGuid = QueryCurrentClientGuid(out clientCode);
 
-                    var configs = _db.TranConfig.Where(c => c.Code != "PZSJ" && c.Status == 0 && c.Sort >= 0).ToList();
+                    var configs = _db.TranConfigs.Where(c => c.Code != "PZSJ" && c.Status == 0 && c.Sort >= 0).ToList();
 
                     foreach (var config in configs)
                     {
@@ -122,7 +122,7 @@ namespace ES.Client
             SqlData sqlData = null;
             do
             {
-                var result = _server.Get(clientCode, Common.MD5(md5Pulickey + clientGuid), Convert.ToInt64(config.LastStamp), config.MaxCount, config.Guid.ToString(), null);
+                var result = _server.Get(clientCode, Common.MD5(md5Pulickey + clientGuid), Convert.ToInt64(config.Sstamp), config.MaxCount, config.Guid.ToString(), null);
 
                 TranLog log = null;
                 if (result.State != 0)
@@ -190,7 +190,7 @@ namespace ES.Client
                 try
                 {
                     this.UpdateDbByResponse(sqlData, config.Guid.ToString());
-                    config.LastStamp = sqlData.MaxTimeStamp;
+                    config.Sstamp = sqlData.MaxTimeStamp;
                     //_db.SubmitChanges();
                 }
                 catch (Exception ex)
@@ -244,7 +244,7 @@ namespace ES.Client
         {
             List<ES.Repository.Model.QueryResult> results = null;
             string sql = "";
-            long lastStamp = Convert.ToInt64(config.LastStamp);
+            long lastStamp = Convert.ToInt64(config.Cstamp);
 
             do
             {
@@ -268,7 +268,7 @@ namespace ES.Client
                         Direct = 0,
                         Remark = response.Message,
                         Sort = config.Sort,
-                        Stamp = config.LastStamp,
+                        Stamp = config.Cstamp,
                         Header = config.HeaderSql,
                         Detail = sql,
                         Footer = config.FooterSql,
@@ -306,9 +306,9 @@ namespace ES.Client
             string clientGuid = QueryCurrentClientGuid(out clientCode);
             TranLog log = null;
 
-            var config = _db.TranConfig.FirstOrDefault(c => c.Code == "PZSJ" && c.Status == 0);
+            var config = _db.TranConfigs.FirstOrDefault(c => c.Code == "PZSJ" && c.Status == 0);
 
-            var result = _server.GetTranConfigs(clientCode, Common.MD5(md5Pulickey + clientGuid), config == null ? 0 : Convert.ToInt64(config.LastStamp));
+            var result = _server.GetTranConfigs(clientCode, Common.MD5(md5Pulickey + clientGuid), config == null ? 0 : Convert.ToInt64(config.Sstamp));
 
             if (result == null)
             {
@@ -320,7 +320,7 @@ namespace ES.Client
                     Direct = 0,
                     Result = "返回数据出错",
                     Sort = -1,
-                    Stamp = config == null ? 0 : config.LastStamp,
+                    Stamp = config == null ? 0 : config.Sstamp,
                     TranTime = DateTime.Now
                 };
 
@@ -341,7 +341,7 @@ namespace ES.Client
                     Result = "服务器发生错误",
                     Remark = result.Message,
                     Sort = -1,
-                    Stamp = config == null ? 0 : config.LastStamp,
+                    Stamp = config == null ? 0 : config.Sstamp,
                     TranTime = DateTime.Now
                 };
 
@@ -363,7 +363,7 @@ namespace ES.Client
                     Result = "没有返回数据",
                     Remark = "已经是最新数据",
                     Sort = -1,
-                    Stamp = config == null ? 0 : config.LastStamp,
+                    Stamp = config == null ? 0 : config.Sstamp,
                     TranTime = DateTime.Now
                 };
 
@@ -376,7 +376,7 @@ namespace ES.Client
 
             if (config == null)
             {
-                config = _db.TranConfig.FirstOrDefault(c => c.Code == "PZSJ" && c.Status == 0);
+                config = _db.TranConfigs.FirstOrDefault(c => c.Code == "PZSJ" && c.Status == 0);
             }
 
             var sqlData = result.data as SqlData;

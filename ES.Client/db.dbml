@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?><Database Name="ES.Client" Class="dbDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
-  <Connection Mode="AppSettings" ConnectionString="Data Source=.;Initial Catalog=ES.Client;Integrated Security=True" SettingsObjectName="ES.Client.Properties.Settings" SettingsPropertyName="ES_ClientConnectionString" Provider="System.Data.SqlClient" />
+  <Connection Mode="AppSettings" ConnectionString="Data Source=.;Initial Catalog=ES.Client;Persist Security Info=True;User ID=sa" SettingsObjectName="ES.Client.Properties.Settings" SettingsPropertyName="ES_ClientConnectionString1" Provider="System.Data.SqlClient" />
   <Table Name="dbo.Client" Member="Client">
     <Type Name="Client">
       <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -36,7 +36,7 @@
       <Column Name="TranTime" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
     </Type>
   </Table>
-  <Table Name="dbo.TranConfig" Member="TranConfig">
+  <Table Name="dbo.TranConfig" Member="TranConfigs">
     <Type Name="TranConfig">
       <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
       <Column Name="Guid" Type="System.Guid" DbType="UniqueIdentifier NOT NULL" CanBeNull="false" />
@@ -44,7 +44,8 @@
       <Column Name="Code" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
       <Column Name="Sort" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="MaxCount" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
-      <Column Name="LastStamp" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
+      <Column Name="Cstamp" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
+      <Column Name="Sstamp" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
       <Column Name="Direct" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="HeaderSql" Type="System.String" DbType="NVarChar(4000)" CanBeNull="true" />
       <Column Name="DetailSql" Type="System.String" DbType="NVarChar(4000) NOT NULL" CanBeNull="false" />
