@@ -77,7 +77,7 @@ namespace ES.Server.Controllers
         {
             var cols =
                 db.Database.SqlQuery<string>(
-                    "select COLUMN_NAME+','+DATA_TYPE from INFORMATION_SCHEMA.COLUMNS Where TABLE_NAME = @table",
+                    "select COLUMN_NAME+','+DATA_TYPE from INFORMATION_SCHEMA.COLUMNS Where TABLE_NAME = @table And (DATA_TYPE <> 'varbinary' And DATA_TYPE <> 'binary' And DATA_TYPE <> 'image')",
                     new SqlParameter("@table", table));
             
             List<string> cs=new List<string>();
@@ -120,7 +120,7 @@ namespace ES.Server.Controllers
         // 详细信息，请参阅 http://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,Guid,Name,Code,Sort,MaxCount,LastStamp,Direct,HeaderSql,DetailSql,FooterSql,Remark,Status,Timestamp,CreatedTime,CreatedBy,ModifiedTime,ModifiedBy")] TranConfig tranConfig)
+        public ActionResult Edit([Bind(Include = "ID,Guid,Name,Code,Sort,MaxCount,Direct,HeaderSql,DetailSql,FooterSql,Remark,Status,Timestamp,CreatedTime,CreatedBy,ModifiedTime,ModifiedBy")] TranConfig tranConfig)
         {
             if (ModelState.IsValid)
             {

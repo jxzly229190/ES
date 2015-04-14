@@ -7,6 +7,8 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
+using System.ComponentModel.DataAnnotations;
+
 namespace ES.Server
 {
     using System;
@@ -16,15 +18,30 @@ namespace ES.Server
     {
         public int ID { get; set; }
         public System.Guid Guid { get; set; }
+        [Display(Name = "数据表名")]
+        [Required(ErrorMessage = "请选择需要传输的数据表")]
         public string TableName { get; set; }
+        [Display(Name = "字段名")]
+        [Required(ErrorMessage = "请选择需要传输的数据字段")]
         public string ColName { get; set; }
+        [Display(Name = "传输顺序")]
+        [Range(0,200)]
+        [Required(ErrorMessage = "请填写 传输顺序，且必须是正整数。")]
         public int Sort { get; set; }
+        [Display(Name = "传输方向")]
+        [Range(0, 2)]
         public byte Direct { get; set; }
+        [Display(Name = "每次传输行")]
+        [Range(0, 10)]
+        [Required(ErrorMessage = "请填写 每次传输行，且必须是正整数。")]
         public Nullable<int> MaxCount { get; set; }
         public Nullable<long> Cstamp { get; set; }
         public Nullable<long> Sstamp { get; set; }
+        [Display(Name = "时间戳")]
         public byte[] Timestamp { get; set; }
+        [Display(Name = "创建人")]
         public string CreatedBy { get; set; }
+        [Display(Name = "创建时间")]
         public Nullable<System.DateTime> CreatedTime { get; set; }
     }
 }

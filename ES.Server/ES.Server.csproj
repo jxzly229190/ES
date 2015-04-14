@@ -176,6 +176,7 @@
     <Compile Include="Controllers\ClientsController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\ManageController.cs" />
+    <Compile Include="Controllers\TranBlobConfigsController.cs" />
     <Compile Include="Controllers\TranConfigsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -238,6 +239,7 @@
     <Content Include="Scripts\modernizr-2.6.2.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
+    <Content Include="Scripts\Tranblobconfig\create.js" />
     <Content Include="Scripts\Tranconfig\create.js" />
     <Content Include="Scripts\_references.js" />
     <Content Include="Svr.Context.tt">
@@ -303,6 +305,11 @@
     <Content Include="Views\TranConfigs\Details.cshtml" />
     <Content Include="Views\TranConfigs\Edit.cshtml" />
     <Content Include="Views\TranConfigs\Index.cshtml" />
+    <Content Include="Views\TranBlobConfigs\Create.cshtml" />
+    <Content Include="Views\TranBlobConfigs\Delete.cshtml" />
+    <Content Include="Views\TranBlobConfigs\Details.cshtml" />
+    <Content Include="Views\TranBlobConfigs\Edit.cshtml" />
+    <Content Include="Views\TranBlobConfigs\Index.cshtml" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
