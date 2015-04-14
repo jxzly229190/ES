@@ -50,7 +50,7 @@ namespace ES.Server.Controllers
         // 详细信息，请参阅 http://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,Guid,Name,Code,Sort,MaxCount,LastStamp,TableNames,ColumnList,Direct,Import,HeaderSql,DetailSql,FooterSql,Remark,Status,Timestamp,CreatedTime,CreatedBy,ModifiedTime,ModifiedBy")] TranConfig tranConfig)
+        public ActionResult Create([Bind(Include = "ID,Guid,Name,Code,Sort,MaxCount,Cstamp,Sstamp,TableNames,ColumnList,Direct,Import,HeaderSql,DetailSql,FooterSql,Remark,Status,Timestamp,CreatedTime,CreatedBy,ModifiedTime,ModifiedBy")] TranConfig tranConfig)
         {
             if (ModelState.IsValid)
             {

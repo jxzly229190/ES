@@ -204,6 +204,9 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Svr.edmx</DependentUpon>
     </Compile>
+    <Compile Include="TranBlobConfig.cs">
+      <DependentUpon>Svr.tt</DependentUpon>
+    </Compile>
     <Compile Include="TranConfig.cs">
       <DependentUpon>Svr.tt</DependentUpon>
     </Compile>
