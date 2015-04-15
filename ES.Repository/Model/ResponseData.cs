@@ -14,7 +14,7 @@ namespace ES.Repository.Model
 
         public string Message { get; set; }
 
-		public object data { get;set;} 
+		public object data { get;set;}
     }
 
 	public class SqlData
@@ -30,6 +30,8 @@ namespace ES.Repository.Model
 		public int RowCount { get; set; }
 
 		public long MaxTimeStamp { get; set; }
+
+        public List<BlobData> BlobDatas { get; set; }
 	}
 
 	public class QueryResult {

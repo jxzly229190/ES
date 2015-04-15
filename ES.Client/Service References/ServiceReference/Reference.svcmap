@@ -18,11 +18,11 @@
     <ServiceContractMappings />
   </ClientOptions>
   <MetadataSources>
-    <MetadataSource Address="http://localhost:2014/Transfer.asmx" Protocol="http" SourceId="1" />
+    <MetadataSource Address="http://localhost:22439/Transfer.asmx" Protocol="http" SourceId="1" />
   </MetadataSources>
   <Metadata>
-    <MetadataFile FileName="Transfer.wsdl" MetadataType="Wsdl" ID="18965fa6-db26-432a-a563-5720b38e1d59" SourceId="1" SourceUrl="http://localhost:2014/Transfer.asmx?wsdl" />
-    <MetadataFile FileName="Transfer.disco" MetadataType="Disco" ID="71f9472c-95ac-45b0-9d8d-4f9abef81d6b" SourceId="1" SourceUrl="http://localhost:2014/Transfer.asmx?disco" />
+    <MetadataFile FileName="Transfer1.wsdl" MetadataType="Wsdl" ID="3ac25d34-cc29-49c0-a02f-c4db0b114282" SourceId="1" SourceUrl="http://localhost:22439/Transfer.asmx?wsdl" />
+    <MetadataFile FileName="Transfer1.disco" MetadataType="Disco" ID="918e277a-068d-424c-94b7-73a52443d1b4" SourceId="1" SourceUrl="http://localhost:22439/Transfer.asmx?disco" />
   </Metadata>
   <Extensions>
     <ExtensionFile FileName="configuration91.svcinfo" Name="configuration91.svcinfo" />

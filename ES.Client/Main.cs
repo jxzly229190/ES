@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.ServiceModel;
+using System.Text;
 using System.Windows.Forms;
 using ES.Repository;
 using ES.Client.ServiceReference;
@@ -189,8 +191,8 @@ namespace ES.Client
                 string errorMsg = null;
                 try
                 {
-                    this.UpdateDbByResponse(sqlData, config.Guid.ToString());
-                    config.Sstamp = sqlData.MaxTimeStamp;
+                    this.UpdateDbByResponse(sqlData, config.Guid.ToString(),config.TableName,config.ColName);
+                    //config.Sstamp = sqlData.MaxTimeStamp;
                     //_db.SubmitChanges();
                 }
                 catch (Exception ex)
@@ -280,7 +282,7 @@ namespace ES.Client
                         //更新配置时间戳
                         var maxItem = results.OrderByDescending(c => c.stamp).FirstOrDefault();
                         lastStamp = maxItem == null ? 0 : maxItem.stamp;
-                        _db.ExecuteCommand("Update tranconfig Set lastStamp={0} Where Guid={1}", lastStamp, config.Guid);
+                        _db.ExecuteCommand("Update tranconfig Set Sstamp={0} Where Guid={1}", lastStamp, config.Guid);
 
                         log.Result = "提交数据成功";
                         _db.TranLog.InsertOnSubmit(log);
@@ -389,7 +391,7 @@ namespace ES.Client
             string errorMsg = null;
             try
             {
-                UpdateDbByResponse(sqlData, sqlData.ConfigGuid);
+                UpdateDbByResponse(sqlData, sqlData.ConfigGuid, null, null);
             }
             catch (Exception ex)
             {
@@ -416,9 +418,36 @@ namespace ES.Client
             _db.SubmitChanges();
         }
 
-        private void UpdateDbByResponse(SqlData sqlData, string configGuid)
+        private void UpdateDbByResponse(SqlData sqlData, string configGuid, string table, string column)
         {
-            _db.ExecuteCommand(sqlData.HeaderSql + ";" + sqlData.DetailSql + ";" + sqlData.FooterSql + ";" + "Update tranconfig Set lastStamp={0} Where Guid={1}", sqlData.MaxTimeStamp, configGuid);
+            StringBuilder sql = new StringBuilder(sqlData.HeaderSql + ";" + sqlData.DetailSql + ";");
+            StringBuilder updateBlobSql=new StringBuilder();
+            object[] paramters = null;
+
+            if (sqlData.BlobDatas != null && sqlData.BlobDatas.Length > 0)
+            {
+                var blobs = sqlData.BlobDatas;
+                paramters = new object[blobs.Length*2];
+                for (var i = 0; i < blobs.Length; i++)
+                {
+                    updateBlobSql.Append("Update ")
+                        .Append(table)
+                        .Append(" set ")
+                        .Append("[Guid] = {" + i*2 + "},")
+                        .Append(column + "= {" + i*2 + 1 + "}").Append(";");
+
+                    paramters[i*2] = blobs[i].Guid;
+                    paramters[i*2 + 1] = blobs[i].Blob;
+                }
+            }
+
+            sql.Append(updateBlobSql)
+                .Append(sqlData.FooterSql)
+                .Append(";")
+                .Append(string.Format("Update tranconfig Set lastStamp={0} Where Guid={1}", sqlData.MaxTimeStamp,
+                    configGuid));
+
+            _db.ExecuteCommand(sql.ToString(), paramters);
         }
 
         private string QueryCurrentClientGuid(out string clientCode)

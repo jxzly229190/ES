@@ -80,6 +80,8 @@
           <Property Name="Sstamp" Type="bigint" />
           <Property Name="Cstamp" Type="bigint" />
           <Property Name="Direct" Type="int" Nullable="false" />
+          <Property Name="TableName" Type="nvarchar" MaxLength="128" />
+          <Property Name="BlobColumn" Type="nvarchar" MaxLength="128" />
           <Property Name="HeaderSql" Type="nvarchar" MaxLength="4000" />
           <Property Name="DetailSql" Type="nvarchar" MaxLength="4000" Nullable="false" />
           <Property Name="FooterSql" Type="nvarchar" MaxLength="4000" />
@@ -183,6 +185,8 @@
           <Property Name="ModifiedBy" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
           <Property Name="Sstamp" Type="Int64" />
           <Property Name="Cstamp" Type="Int64" />
+          <Property Name="TableName" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="BlobColumn" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
         </EntityType>
         <EntityType Name="TranLog">
           <Key>
@@ -285,6 +289,8 @@
           <EntitySetMapping Name="TranConfig">
             <EntityTypeMapping TypeName="ES.ServerModel.TranConfig">
               <MappingFragment StoreEntitySet="TranConfig">
+                <ScalarProperty Name="BlobColumn" ColumnName="BlobColumn" />
+                <ScalarProperty Name="TableName" ColumnName="TableName" />
                 <ScalarProperty Name="Cstamp" ColumnName="Cstamp" />
                 <ScalarProperty Name="Sstamp" ColumnName="Sstamp" />
                 <ScalarProperty Name="Import" ColumnName="Import" />

@@ -30,6 +30,12 @@
             @Html.DisplayNameFor(model => model.Import)
         </th>
         <th>
+            @Html.DisplayNameFor(model => model.TableName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.BlobColumn)
+        </th>
+        <th>
             @Html.DisplayNameFor(model => model.HeaderSql)
         </th>
         <th>
@@ -63,6 +69,12 @@
         </td>
         <td>
             @Html.Raw(Tools.GetSelectedTextByTableColumn("TranConfig","Import",item.Import.ToString()))
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TableName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.BlobColumn)
         </td>
         <td>
             @Html.ActionLink("请查看详情", "Details", new { id = item.ID })

@@ -7,8 +7,6 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-using System.ComponentModel.DataAnnotations;
-
 namespace ES.Server
 {
     using System;
@@ -18,29 +16,16 @@ namespace ES.Server
     {
         public int ID { get; set; }
         public System.Guid GUID { get; set; }
-        [Required(ErrorMessage = "门店编码不能为空")]
-        [Display(Name = "门店编码")]
         public string Code { get; set; }
-        [Required(ErrorMessage = "门店名称不能为空")]
-        [Display(Name = "名称")]
         public string Name { get; set; }
         public Nullable<bool> IsCurrent { get; set; }
-        [Display(Name = "是否分店")]
         public int Type { get; set; }
-        [Required(ErrorMessage = "地址不能为空")]
-        [Display(Name = "地址")]
         public string Address { get; set; }
-        [Display(Name = "时间戳")]
         public byte[] Timestamp { get; set; }
-        [Display(Name = "状态")]
         public int Status { get; set; }
-        [Display(Name = "创建人")]
         public string CreatedBy { get; set; }
-        [Display(Name = "创建时间")]
         public Nullable<System.DateTime> CreatedTime { get; set; }
-        [Display(Name = "修改人")]
         public string ModifiedBy { get; set; }
-        [Display(Name = "最后修改时间")]
         public Nullable<System.DateTime> ModifiedTime { get; set; }
     }
 }

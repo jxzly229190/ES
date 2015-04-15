@@ -874,6 +874,10 @@ namespace ES.Client
 		
 		private string _FooterSql;
 		
+		private string _TableName;
+		
+		private string _ColName;
+		
 		private string _Remark;
 		
 		private int _Status;
@@ -916,6 +920,10 @@ namespace ES.Client
     partial void OnDetailSqlChanged();
     partial void OnFooterSqlChanging(string value);
     partial void OnFooterSqlChanged();
+    partial void OnTableNameChanging(string value);
+    partial void OnTableNameChanged();
+    partial void OnColNameChanging(string value);
+    partial void OnColNameChanged();
     partial void OnRemarkChanging(string value);
     partial void OnRemarkChanged();
     partial void OnStatusChanging(int value);
@@ -1173,6 +1181,46 @@ namespace ES.Client
 					this._FooterSql = value;
 					this.SendPropertyChanged("FooterSql");
 					this.OnFooterSqlChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TableName", DbType="NVarChar(128)", UpdateCheck=UpdateCheck.Never)]
+		public string TableName
+		{
+			get
+			{
+				return this._TableName;
+			}
+			set
+			{
+				if ((this._TableName != value))
+				{
+					this.OnTableNameChanging(value);
+					this.SendPropertyChanging();
+					this._TableName = value;
+					this.SendPropertyChanged("TableName");
+					this.OnTableNameChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ColName", DbType="NVarChar(128)", UpdateCheck=UpdateCheck.Never)]
+		public string ColName
+		{
+			get
+			{
+				return this._ColName;
+			}
+			set
+			{
+				if ((this._ColName != value))
+				{
+					this.OnColNameChanging(value);
+					this.SendPropertyChanging();
+					this._ColName = value;
+					this.SendPropertyChanged("ColName");
+					this.OnColNameChanged();
 				}
 			}
 		}

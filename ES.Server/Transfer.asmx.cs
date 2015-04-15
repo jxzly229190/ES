@@ -72,8 +72,6 @@ namespace ES.Server
 				detailSql = string.Format(detailSql, paras);
 			}
 
-			detailSql = detailSql.Replace("from", " as sql,cast(timestamp as bigint) as stamp from");
-
 			try
 			{
                 var result = db.Database.SqlQuery<QueryResult>(detailSql);//db.ExecuteQuery<QueryResult>(detailSql).ToList();
@@ -90,17 +88,40 @@ namespace ES.Server
                 else {
                     return new ResponseData() { State = 0, Message = "没有数据了" };
                 }
+			    List<BlobData> blobData = null;
+			    if (!string.IsNullOrEmpty(config.BlobColumn))
+			    {
+			        var blobs =
+			            db.Database.SqlQuery<BlobData>("Select top " + rowCount + " [Guid]," + config.BlobColumn + " From " +
+			                                           config.TableName + " Where  [timestamp] > cast(cast(" + lastTimeStamp +
+			                                           " as bigint) as timestamp) Order by [TimeStamp];");
+
+			        if (blobs != null && blobs.Any())
+			        {
+                        blobData=new List<BlobData>(blobs);
+			        }
+			    }
 
                 //获取最大时间戳
                 var maxItem = result.OrderByDescending(d => d.stamp).FirstOrDefault();
-                
-				var response = new ResponseData()
-				{
-					State = 0,
-					data = new SqlData() { HeaderSql = config.HeaderSql, DetailSql = sql, FooterSql = config.FooterSql, MaxTimeStamp = maxItem==null?0:maxItem.stamp, RowCount = result.Count(), ConfigGuid=config.Guid.ToString() }
-				};
 
-				return response;
+			    var response = new ResponseData()
+			    {
+			        State = 0,
+			        data =
+			            new SqlData()
+			            {
+			                HeaderSql = config.HeaderSql,
+			                DetailSql = sql,
+			                FooterSql = config.FooterSql,
+			                MaxTimeStamp = maxItem == null ? 0 : maxItem.stamp,
+			                RowCount = result.Count(),
+			                ConfigGuid = config.Guid.ToString(),
+			                BlobDatas = blobData
+			            }
+			    };
+
+			    return response;
 			}
 			catch (Exception ex)
 			{

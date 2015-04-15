@@ -50,7 +50,7 @@ namespace ES.Server.Controllers
         // 详细信息，请参阅 http://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,Guid,Name,Code,Sort,MaxCount,Cstamp,Sstamp,TableNames,ColumnList,Direct,Import,HeaderSql,DetailSql,FooterSql,Remark,Status,Timestamp,CreatedTime,CreatedBy,ModifiedTime,ModifiedBy")] TranConfig tranConfig)
+        public ActionResult Create([Bind(Include = "ID,Guid,Name,Code,Sort,MaxCount,Cstamp,Sstamp,TableNames,ColumnList,BlobColumn,Direct,Import,HeaderSql,DetailSql,FooterSql,Remark,Status,Timestamp,CreatedTime,CreatedBy,ModifiedTime,ModifiedBy")] TranConfig tranConfig)
         {
             if (ModelState.IsValid)
             {
@@ -77,7 +77,7 @@ namespace ES.Server.Controllers
         {
             var cols =
                 db.Database.SqlQuery<string>(
-                    "select COLUMN_NAME+','+DATA_TYPE from INFORMATION_SCHEMA.COLUMNS Where TABLE_NAME = @table And (DATA_TYPE <> 'varbinary' And DATA_TYPE <> 'binary' And DATA_TYPE <> 'image')",
+                    "select COLUMN_NAME+','+DATA_TYPE from INFORMATION_SCHEMA.COLUMNS Where TABLE_NAME = @table",
                     new SqlParameter("@table", table));
             
             List<string> cs=new List<string>();
@@ -88,7 +88,7 @@ namespace ES.Server.Controllers
                 {
                     if (fields[1].EndsWith("varbinary"))
                     {
-                        cs.Add(fields[0]+"_varbinary");
+                        cs.Add(fields[0]+"(Blob)");
                     }
                     else
                     {
@@ -120,7 +120,7 @@ namespace ES.Server.Controllers
         // 详细信息，请参阅 http://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,Guid,Name,Code,Sort,MaxCount,Direct,HeaderSql,DetailSql,FooterSql,Remark,Status,Timestamp,CreatedTime,CreatedBy,ModifiedTime,ModifiedBy")] TranConfig tranConfig)
+        public ActionResult Edit([Bind(Include = "ID,Guid,Name,Code,Sort,MaxCount,TableName,BlobColumn,,Direct,HeaderSql,DetailSql,FooterSql,Remark,Status,Timestamp,CreatedTime,CreatedBy,ModifiedTime,ModifiedBy")] TranConfig tranConfig)
         {
             if (ModelState.IsValid)
             {
@@ -135,6 +135,8 @@ namespace ES.Server.Controllers
                 {
                     original.Code = tranConfig.Code;
                     original.Name = tranConfig.Name;
+                    original.TableName = tranConfig.TableName;
+                    original.BlobColumn = tranConfig.BlobColumn;
                     original.Sort = tranConfig.Sort;
                     original.MaxCount = tranConfig.MaxCount;
                     original.Direct = tranConfig.Direct;

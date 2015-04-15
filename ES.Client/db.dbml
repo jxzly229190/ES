@@ -50,6 +50,8 @@
       <Column Name="HeaderSql" Type="System.String" DbType="NVarChar(4000)" CanBeNull="true" />
       <Column Name="DetailSql" Type="System.String" DbType="NVarChar(4000) NOT NULL" CanBeNull="false" />
       <Column Name="FooterSql" Type="System.String" DbType="NVarChar(4000)" CanBeNull="true" />
+      <Column Name="TableName" Type="System.String" DbType="NVarChar(128)" CanBeNull="true" />
+      <Column Name="ColName" Type="System.String" DbType="NVarChar(128)" CanBeNull="true" />
       <Column Name="Remark" Type="System.String" DbType="NVarChar(4000)" CanBeNull="true" />
       <Column Name="Status" Type="System.Int32" DbType="Int NOT NULL" CanBeNull="false" />
       <Column Name="Timestamp" Type="System.Data.Linq.Binary" DbType="rowversion NOT NULL" CanBeNull="false" IsVersion="true" />
