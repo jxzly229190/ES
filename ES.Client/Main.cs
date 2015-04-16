@@ -76,24 +76,23 @@ namespace ES.Client
                     {
                         if (config.Direct == 0)
                         {
-                            if (formObj != null)
-                            {
-                                _syncContext.Post(formObj.ShowTranferName, "获取" + config.Name);
-                                Get(md5Pulickey, clientCode, clientGuid, config);
-                                _syncContext.Post(formObj.ReloadLog, _db.TranLog.OrderByDescending(p => p.ID).Take(200).ToList());
-                            }
+                            GetDataFromServer(formObj, config, md5Pulickey, clientCode, clientGuid);
+                        }
+                        else if (config.Direct == 1)
+                        {
+                            PostDataToServer(formObj, config, md5Pulickey, clientCode, clientGuid);
+                        }
+                        else if (config.Direct == 2)
+                        {
+                            //先提交再更新
+                            PostDataToServer(formObj, config, md5Pulickey, clientCode, clientGuid);
+
+                            GetDataFromServer(formObj, config, md5Pulickey, clientCode, clientGuid);
                         }
                         else
                         {
-                            if (formObj != null)
-                            {
-                                //formObj.ShowTranferName("推送" + config.Name);
-                                _syncContext.Post(formObj.ShowTranferName, "推送" + config.Name);
-                            }
-
-                            Post(md5Pulickey, clientCode, clientGuid, config);
-                            if (formObj != null)
-                                _syncContext.Post(formObj.ReloadLog, _db.TranLog.OrderByDescending(p => p.ID).Take(200).ToList());
+                            _syncContext.Post(formObj.HandleError, "传输方向常异，无法处理。");
+                            return;
                         }
                     }
 
@@ -110,6 +109,29 @@ namespace ES.Client
                         _syncContext.Post(formObj.HandleError, "错误原因：" + ex.Message);
                     }
                 }
+            }
+        }
+
+        private void PostDataToServer(Main formObj, TranConfig config, string md5Pulickey, string clientCode, string clientGuid)
+        {
+            if (formObj != null)
+            {
+                //formObj.ShowTranferName("推送" + config.Name);
+                _syncContext.Post(formObj.ShowTranferName, "推送" + config.Name);
+            }
+
+            Post(md5Pulickey, clientCode, clientGuid, config);
+            if (formObj != null)
+                _syncContext.Post(formObj.ReloadLog, _db.TranLog.OrderByDescending(p => p.ID).Take(200).ToList());
+        }
+
+        private void GetDataFromServer(Main formObj, TranConfig config, string md5Pulickey, string clientCode, string clientGuid)
+        {
+            if (formObj != null)
+            {
+                _syncContext.Post(formObj.ShowTranferName, "获取" + config.Name);
+                Get(md5Pulickey, clientCode, clientGuid, config);
+                _syncContext.Post(formObj.ReloadLog, _db.TranLog.OrderByDescending(p => p.ID).Take(200).ToList());
             }
         }
 
