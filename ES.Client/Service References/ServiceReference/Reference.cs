@@ -307,7 +307,7 @@ namespace ES.Client.ServiceReference {
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/HelloWorld", ReplyAction="*")]
         global::ES.Client.ServiceReference.HelloWorldResponse HelloWorld(global::ES.Client.ServiceReference.HelloWorldRequest request);
         
-        // CODEGEN: 命名空间 http://tempuri.org/ 的元素名称 clientCode 以后生成的消息协定未标记为 nillable
+        // CODEGEN: 命名空间 http://tempuri.org/ 的元素名称 tranferCode 以后生成的消息协定未标记为 nillable
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/Get", ReplyAction="*")]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(ES.Client.ServiceReference.ArrayOfAnyType))]
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(ES.Client.ServiceReference.ResponseData))]
@@ -317,11 +317,11 @@ namespace ES.Client.ServiceReference {
         [System.ServiceModel.ServiceKnownTypeAttribute(typeof(System.Guid))]
         global::ES.Client.ServiceReference.GetResponse Get(global::ES.Client.ServiceReference.GetRequest request);
         
-        // CODEGEN: 命名空间 http://tempuri.org/ 的元素名称 clientCode 以后生成的消息协定未标记为 nillable
+        // CODEGEN: 命名空间 http://tempuri.org/ 的元素名称 tranferCode 以后生成的消息协定未标记为 nillable
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/Post", ReplyAction="*")]
         global::ES.Client.ServiceReference.PostResponse Post(global::ES.Client.ServiceReference.PostRequest request);
         
-        // CODEGEN: 命名空间 http://tempuri.org/ 的元素名称 clientCode 以后生成的消息协定未标记为 nillable
+        // CODEGEN: 命名空间 http://tempuri.org/ 的元素名称 tranferCode 以后生成的消息协定未标记为 nillable
         [System.ServiceModel.OperationContractAttribute(Action="http://tempuri.org/GetTranConfigs", ReplyAction="*")]
         global::ES.Client.ServiceReference.GetTranConfigsResponse GetTranConfigs(global::ES.Client.ServiceReference.GetTranConfigsRequest request);
     }
@@ -411,27 +411,31 @@ namespace ES.Client.ServiceReference {
     public partial class GetRequestBody {
         
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
-        public string clientCode;
+        public string tranferCode;
         
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=1)]
+        public string clientCode;
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=2)]
         public string varifyCode;
         
-        [System.Runtime.Serialization.DataMemberAttribute(Order=2)]
+        [System.Runtime.Serialization.DataMemberAttribute(Order=3)]
         public long lastTimeStamp;
         
-        [System.Runtime.Serialization.DataMemberAttribute(Order=3)]
+        [System.Runtime.Serialization.DataMemberAttribute(Order=4)]
         public int rowCount;
         
-        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=4)]
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=5)]
         public string configGuid;
         
-        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=5)]
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=6)]
         public ES.Client.ServiceReference.ArrayOfAnyType paras;
         
         public GetRequestBody() {
         }
         
-        public GetRequestBody(string clientCode, string varifyCode, long lastTimeStamp, int rowCount, string configGuid, ES.Client.ServiceReference.ArrayOfAnyType paras) {
+        public GetRequestBody(string tranferCode, string clientCode, string varifyCode, long lastTimeStamp, int rowCount, string configGuid, ES.Client.ServiceReference.ArrayOfAnyType paras) {
+            this.tranferCode = tranferCode;
             this.clientCode = clientCode;
             this.varifyCode = varifyCode;
             this.lastTimeStamp = lastTimeStamp;
@@ -499,21 +503,25 @@ namespace ES.Client.ServiceReference {
     public partial class PostRequestBody {
         
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
-        public string clientCode;
+        public string tranferCode;
         
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=1)]
-        public string varifyCode;
+        public string clientCode;
         
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=2)]
-        public ES.Client.ServiceReference.SqlData data;
+        public string varifyCode;
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=3)]
+        public ES.Client.ServiceReference.SqlData sqlData;
         
         public PostRequestBody() {
         }
         
-        public PostRequestBody(string clientCode, string varifyCode, ES.Client.ServiceReference.SqlData data) {
+        public PostRequestBody(string tranferCode, string clientCode, string varifyCode, ES.Client.ServiceReference.SqlData sqlData) {
+            this.tranferCode = tranferCode;
             this.clientCode = clientCode;
             this.varifyCode = varifyCode;
-            this.data = data;
+            this.sqlData = sqlData;
         }
     }
     
@@ -575,18 +583,22 @@ namespace ES.Client.ServiceReference {
     public partial class GetTranConfigsRequestBody {
         
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=0)]
-        public string clientCode;
+        public string tranferCode;
         
         [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=1)]
+        public string clientCode;
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=2)]
         public string varifyCode;
         
-        [System.Runtime.Serialization.DataMemberAttribute(Order=2)]
+        [System.Runtime.Serialization.DataMemberAttribute(Order=3)]
         public long timestamp;
         
         public GetTranConfigsRequestBody() {
         }
         
-        public GetTranConfigsRequestBody(string clientCode, string varifyCode, long timestamp) {
+        public GetTranConfigsRequestBody(string tranferCode, string clientCode, string varifyCode, long timestamp) {
+            this.tranferCode = tranferCode;
             this.clientCode = clientCode;
             this.varifyCode = varifyCode;
             this.timestamp = timestamp;
@@ -671,9 +683,10 @@ namespace ES.Client.ServiceReference {
             return base.Channel.Get(request);
         }
         
-        public ES.Client.ServiceReference.ResponseData Get(string clientCode, string varifyCode, long lastTimeStamp, int rowCount, string configGuid, ES.Client.ServiceReference.ArrayOfAnyType paras) {
+        public ES.Client.ServiceReference.ResponseData Get(string tranferCode, string clientCode, string varifyCode, long lastTimeStamp, int rowCount, string configGuid, ES.Client.ServiceReference.ArrayOfAnyType paras) {
             global::ES.Client.ServiceReference.GetRequest inValue = new global::ES.Client.ServiceReference.GetRequest();
             inValue.Body = new global::ES.Client.ServiceReference.GetRequestBody();
+            inValue.Body.tranferCode = tranferCode;
             inValue.Body.clientCode = clientCode;
             inValue.Body.varifyCode = varifyCode;
             inValue.Body.lastTimeStamp = lastTimeStamp;
@@ -689,12 +702,13 @@ namespace ES.Client.ServiceReference {
             return base.Channel.Post(request);
         }
         
-        public ES.Client.ServiceReference.ResponseData Post(string clientCode, string varifyCode, ES.Client.ServiceReference.SqlData data) {
+        public ES.Client.ServiceReference.ResponseData Post(string tranferCode, string clientCode, string varifyCode, ES.Client.ServiceReference.SqlData sqlData) {
             global::ES.Client.ServiceReference.PostRequest inValue = new global::ES.Client.ServiceReference.PostRequest();
             inValue.Body = new global::ES.Client.ServiceReference.PostRequestBody();
+            inValue.Body.tranferCode = tranferCode;
             inValue.Body.clientCode = clientCode;
             inValue.Body.varifyCode = varifyCode;
-            inValue.Body.data = data;
+            inValue.Body.sqlData = sqlData;
             global::ES.Client.ServiceReference.PostResponse retVal = ((global::ES.Client.ServiceReference.TransferSoap)(this)).Post(inValue);
             return retVal.Body.PostResult;
         }
@@ -704,9 +718,10 @@ namespace ES.Client.ServiceReference {
             return base.Channel.GetTranConfigs(request);
         }
         
-        public ES.Client.ServiceReference.ResponseData GetTranConfigs(string clientCode, string varifyCode, long timestamp) {
+        public ES.Client.ServiceReference.ResponseData GetTranConfigs(string tranferCode, string clientCode, string varifyCode, long timestamp) {
             global::ES.Client.ServiceReference.GetTranConfigsRequest inValue = new global::ES.Client.ServiceReference.GetTranConfigsRequest();
             inValue.Body = new global::ES.Client.ServiceReference.GetTranConfigsRequestBody();
+            inValue.Body.tranferCode = tranferCode;
             inValue.Body.clientCode = clientCode;
             inValue.Body.varifyCode = varifyCode;
             inValue.Body.timestamp = timestamp;

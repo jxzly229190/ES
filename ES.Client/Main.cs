@@ -147,7 +147,7 @@ namespace ES.Client
             SqlData sqlData = null;
             do
             {
-                var result = _server.Get(clientCode, Common.MD5(md5Pulickey + clientGuid), Convert.ToInt64(config.Sstamp), config.MaxCount, config.Guid.ToString(), null);
+                var result = _server.Get(tranferCode, clientCode, Common.MD5(md5Pulickey + clientGuid), Convert.ToInt64(config.Sstamp), config.MaxCount, config.Guid.ToString(), null);
 
                 TranLog log = null;
                 if (result.State != 0)
@@ -292,7 +292,7 @@ namespace ES.Client
                     
                     sql = results.Aggregate(sql, (current, result) => current + (current + ";"));
 
-                    var response = _server.Post(clientCode, Common.MD5(md5Pulickey + clientGuid), sqlData);
+                    var response = _server.Post(tranferCode,clientCode, Common.MD5(md5Pulickey + clientGuid), sqlData);
 
                     var log = new TranLog()
                     {
@@ -343,7 +343,7 @@ namespace ES.Client
 
             var config = _db.TranConfigs.FirstOrDefault(c => c.Code == "PZSJ" && c.Status == 0);
 
-            var result = _server.GetTranConfigs(clientCode, Common.MD5(md5Pulickey + clientGuid), config == null ? 0 : Convert.ToInt64(config.Sstamp));
+            var result = _server.GetTranConfigs(tranferCode, clientCode, Common.MD5(md5Pulickey + clientGuid), config == null ? 0 : Convert.ToInt64(config.Sstamp));
 
             if (result == null)
             {

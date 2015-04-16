@@ -45,7 +45,7 @@ namespace ES.Server
 		/// <param name="paras">其他参数</param>
 		/// <returns></returns>
 		[WebMethod]
-		public ResponseData Get(string clientCode, string varifyCode, long lastTimeStamp, int rowCount, string configGuid, params object[] paras)
+        public ResponseData Get(string tranferCode, string clientCode, string varifyCode, long lastTimeStamp, int rowCount, string configGuid, params object[] paras)
 		{
 			var client = db.Client.FirstOrDefault(c => c.Status == 0 && c.Code == clientCode);
 
@@ -67,6 +67,9 @@ namespace ES.Server
 			}
 
 			var detailSql = config.DetailSql.Replace("$lastStamp$", lastTimeStamp.ToString()).Replace("$rowCount$", rowCount.ToString());
+		    detailSql = detailSql.Replace("Order by",
+                " and [Guid] not in (Select [guid] from tranferTempLog where transferCode = " + tranferCode + " and tableName='" +
+		        config.TableName + "') Order by");
 
 			if (paras != null && paras.Length > 0)
 			{
@@ -131,7 +134,7 @@ namespace ES.Server
 		}
 
 	    [WebMethod]
-	    public ResponseData Post(string clientCode, string varifyCode, SqlData sqlData)
+	    public ResponseData Post(string tranferCode, string clientCode, string varifyCode, SqlData sqlData)
 	    {
 	        var client = db.Client.FirstOrDefault(c => c.Status == 0 && c.Code == clientCode);
 
@@ -193,12 +196,36 @@ namespace ES.Server
 	            {
 	                db.Database.ExecuteSqlCommand(sql.ToString(), paramters);
 	            }
-	            return new ResponseData() {State = 0, Message = "执行成功"};
+
 	        }
 	        catch (Exception ex)
 	        {
 	            return new ResponseData() {State = 100, Message = ex.Message};
 	        }
+
+	        if (config.Direct == 2)
+	        {
+                var tempSql = "";
+	            try
+	            {
+                    tempSql += "Insert into tranferTempLog([tranferCode],[TableName],[guid]) select '" + tranferCode + "','" + config.TableName +
+	                           "',[Guid] From #temp_" + config.TableName +
+	                           ";if object_id('tempdb..#temp_" + config.TableName + "') is not null Drop table #temp_" +
+	                           config.TableName;
+
+	                db.Database.ExecuteSqlCommand(tempSql);
+	            }
+	            catch (Exception exception)
+	            {
+	                db.TranLog.Add(new TranLog()
+	                {
+	                    Remark = "插入数据到##temp_Tranfer发生错误，错误信息：" + exception.Message + "/" + exception.InnerException,
+	                    Detail = tempSql
+	                });
+	            }
+	        }
+
+	        return new ResponseData() { State = 0, Message = "执行成功" };
 	    }
 
 	    /// <summary>
@@ -206,7 +233,7 @@ namespace ES.Server
 		/// </summary>
 		/// <returns></returns>
 		[WebMethod]
-		public ResponseData GetTranConfigs(string clientCode, string varifyCode, long timestamp)
+		public ResponseData GetTranConfigs(string tranferCode, string clientCode, string varifyCode, long timestamp)
 		{
 			var client = db.Client.FirstOrDefault(c => c.Status == 0 && c.Code == clientCode);
 
@@ -227,7 +254,7 @@ namespace ES.Server
 				return new ResponseData() { State = 3, Message = "配置不存在" };
 			}
 
-			return this.Get(clientCode, varifyCode, timestamp, tranConfig.MaxCount, tranConfig.Guid.ToString());
+            return this.Get(tranferCode, clientCode, varifyCode, timestamp, tranConfig.MaxCount, tranConfig.Guid.ToString());
 		}
 
 		private bool VarifyClient(string clientGuid, string varifyCode)
