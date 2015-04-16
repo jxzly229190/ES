@@ -40,6 +40,16 @@
           <Property Name="ModifiedBy" Type="varchar" MaxLength="50" />
           <Property Name="ModifiedTime" Type="datetime" />
         </EntityType>
+        <EntityType Name="DataTest">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="Guid" Type="uniqueidentifier" />
+          <Property Name="Name" Type="nvarchar" MaxLength="50" />
+          <Property Name="Data" Type="varbinary(max)" />
+          <Property Name="Timestamp" Type="timestamp" StoreGeneratedPattern="Computed" />
+        </EntityType>
         <EntityType Name="Meta_KeyValue">
           <Key>
             <PropertyRef Name="ID" />
@@ -117,6 +127,7 @@
         <EntityContainer Name="ESServerModelStoreContainer">
           <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Client" EntityType="Self.Client" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="DataTest" EntityType="Self.DataTest" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="Meta_KeyValue" EntityType="Self.Meta_KeyValue" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TranBlobConfig" EntityType="Self.TranBlobConfig" Schema="dbo" store:Type="Tables" />
           <EntitySet Name="TranConfig" EntityType="Self.TranConfig" Schema="dbo" store:Type="Tables" />
@@ -215,6 +226,7 @@
           <EntitySet Name="TranLog" EntityType="Self.TranLog" />
           <EntitySet Name="Meta_KeyValue" EntityType="ES.ServerModel.Meta_KeyValue" />
           <EntitySet Name="TranBlobConfig" EntityType="ES.ServerModel.TranBlobConfig" />
+          <EntitySet Name="DataTest" EntityType="ES.ServerModel.DataTest" />
         </EntityContainer>
         <EntityType Name="Meta_KeyValue">
           <Key>
@@ -242,6 +254,16 @@
           <Property Name="Timestamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
           <Property Name="CreatedBy" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
           <Property Name="CreatedTime" Type="DateTime" Precision="3" />
+        </EntityType>
+        <EntityType Name="DataTest">
+          <Key>
+            <PropertyRef Name="ID" />
+          </Key>
+          <Property Name="ID" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="Guid" Type="Guid" />
+          <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="Data" Type="Binary" MaxLength="Max" FixedLength="false" />
+          <Property Name="Timestamp" Type="Binary" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -359,6 +381,17 @@
                 <ScalarProperty Name="Sort" ColumnName="Sort" />
                 <ScalarProperty Name="ColName" ColumnName="ColName" />
                 <ScalarProperty Name="TableName" ColumnName="TableName" />
+                <ScalarProperty Name="Guid" ColumnName="Guid" />
+                <ScalarProperty Name="ID" ColumnName="ID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="DataTest">
+            <EntityTypeMapping TypeName="ES.ServerModel.DataTest">
+              <MappingFragment StoreEntitySet="DataTest">
+                <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
+                <ScalarProperty Name="Data" ColumnName="Data" />
+                <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Guid" ColumnName="Guid" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
               </MappingFragment>

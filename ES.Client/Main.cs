@@ -191,7 +191,7 @@ namespace ES.Client
                 string errorMsg = null;
                 try
                 {
-                    this.UpdateDbByResponse(sqlData, config.Guid.ToString(),config.TableName,config.ColName);
+                    this.UpdateDbByResponse(sqlData, config.Guid.ToString(),config.TableName,config.BlobColumn);
                     //config.Sstamp = sqlData.MaxTimeStamp;
                     //_db.SubmitChanges();
                 }
@@ -431,23 +431,31 @@ namespace ES.Client
                 for (var i = 0; i < blobs.Length; i++)
                 {
                     updateBlobSql.Append("Update ")
-                        .Append(table)
+                        .Append("#temp_" + table)
                         .Append(" set ")
-                        .Append("[Guid] = {" + i*2 + "},")
-                        .Append(column + "= {" + i*2 + 1 + "}").Append(";");
+                        .Append(column + "= {" + (i*2) + "}")
+                        .Append(" Where [Guid]=")
+                        .Append("{" + (i*2 + 1) + "}")
+                        .Append(";");
 
-                    paramters[i*2] = blobs[i].Guid;
-                    paramters[i*2 + 1] = blobs[i].Blob;
+                    paramters[i*2] = blobs[i].Blob;
+                    paramters[i*2 + 1] = blobs[i].Guid;
                 }
             }
 
             sql.Append(updateBlobSql)
                 .Append(sqlData.FooterSql)
                 .Append(";")
-                .Append(string.Format("Update tranconfig Set lastStamp={0} Where Guid={1}", sqlData.MaxTimeStamp,
+                .Append(string.Format("Update tranconfig Set Cstamp={0} Where Guid='{1}'", sqlData.MaxTimeStamp,
                     configGuid));
 
-            _db.ExecuteCommand(sql.ToString(), paramters);
+            if (paramters == null)
+            {
+                _db.ExecuteCommand(sql.ToString());
+            }else
+            {
+                _db.ExecuteCommand(sql.ToString(), paramters);
+            }
         }
 
         private string QueryCurrentClientGuid(out string clientCode)

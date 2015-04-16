@@ -91,10 +91,10 @@ namespace ES.Server
 			    List<BlobData> blobData = null;
 			    if (!string.IsNullOrEmpty(config.BlobColumn))
 			    {
-			        var blobs =
-			            db.Database.SqlQuery<BlobData>("Select top " + rowCount + " [Guid]," + config.BlobColumn + " From " +
-			                                           config.TableName + " Where  [timestamp] > cast(cast(" + lastTimeStamp +
-			                                           " as bigint) as timestamp) Order by [TimeStamp];");
+                    var blobs =
+                        db.Database.SqlQuery<BlobData>("Select top " + rowCount + " [Guid]," + config.BlobColumn + " as Blob From " +
+                                                       config.TableName + " Where  [timestamp] > cast(cast(" + lastTimeStamp +
+                                                       " as bigint) as timestamp) Order by [TimeStamp];");
 
 			        if (blobs != null && blobs.Any())
 			        {

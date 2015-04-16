@@ -178,6 +178,9 @@
     <Compile Include="Controllers\ManageController.cs" />
     <Compile Include="Controllers\TranBlobConfigsController.cs" />
     <Compile Include="Controllers\TranConfigsController.cs" />
+    <Compile Include="DataTest.cs">
+      <DependentUpon>Svr.tt</DependentUpon>
+    </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
