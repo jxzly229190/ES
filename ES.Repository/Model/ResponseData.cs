@@ -17,7 +17,7 @@ namespace ES.Repository.Model
 		public object data { get;set;}
     }
 
-	public class SqlData
+    public class SqlData
 	{
 		public string ConfigGuid { get;set;}
 

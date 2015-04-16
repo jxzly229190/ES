@@ -1,5 +1,6 @@
 ﻿using System.Data.Entity;
 using System.Data.Entity.Infrastructure;
+using System.Text;
 using ES.Repository;
 using ES.Repository.Model;
 using System;
@@ -129,35 +130,78 @@ namespace ES.Server
 			}
 		}
 
-		[WebMethod]
-		public ResponseData Post(string clientCode, string varifyCode, SqlData data)
-		{
-			var client = db.Client.FirstOrDefault(c => c.Status == 0 && c.Code == clientCode);
+	    [WebMethod]
+	    public ResponseData Post(string clientCode, string varifyCode, SqlData sqlData)
+	    {
+	        var client = db.Client.FirstOrDefault(c => c.Status == 0 && c.Code == clientCode);
 
-			if (client == null)
-			{
-				return new ResponseData() { State = 1, Message = "客户端不存在" };
-			}
+	        if (client == null)
+	        {
+	            return new ResponseData() {State = 1, Message = "客户端不存在"};
+	        }
 
-			if (!VarifyClient(client.GUID.ToString(), varifyCode))
-			{
-				return new ResponseData() { State = 2, Message = "非法请求" };
-			}
+	        if (!VarifyClient(client.GUID.ToString(), varifyCode))
+	        {
+	            return new ResponseData() {State = 2, Message = "非法请求"};
+	        }
 
-			var sql = data.HeaderSql + ";" + data.DetailSql + ";" + data.FooterSql;
+	        var config =
+	            db.TranConfig.FirstOrDefault(
+	                t => t.Status == 0 && t.Guid.ToString().Equals(sqlData.ConfigGuid, StringComparison.OrdinalIgnoreCase));
 
-			try
-			{
-				db.Database.ExecuteSqlCommand(sql);
-				return new ResponseData() { State = 0, Message = "执行成功" };
-			}
-			catch (Exception ex)
-			{
-				return new ResponseData() { State = 100, Message = ex.Message };
-			}
-		}
+	        if (config == null)
+	        {
+	            return new ResponseData() {State = 3, Message = "配置不存在或者已经停用，无法完成数据同步。"};
+	        }
 
-		/// <summary>
+	        //var sql = data.HeaderSql + ";" + data.DetailSql + ";" + data.FooterSql;
+
+	        StringBuilder sql = new StringBuilder(sqlData.HeaderSql + ";" + sqlData.DetailSql + ";");
+	        StringBuilder updateBlobSql = new StringBuilder();
+	        object[] paramters = null;
+
+	        if (sqlData.BlobDatas != null && sqlData.BlobDatas.Count > 0)
+	        {
+	            var blobs = sqlData.BlobDatas;
+	            paramters = new object[blobs.Count*2];
+	            for (var i = 0; i < blobs.Count; i++)
+	            {
+	                updateBlobSql.Append("Update ")
+	                    .Append("#temp_" + config.TableName)
+	                    .Append(" set ")
+	                    .Append(config.BlobColumn + "= {" + (i*2) + "}")
+	                    .Append(" Where [Guid]=")
+	                    .Append("{" + (i*2 + 1) + "}")
+	                    .Append(";");
+
+	                paramters[i*2] = blobs[i].Blob;
+	                paramters[i*2 + 1] = blobs[i].Guid;
+	            }
+	        }
+
+	        sql.Append(updateBlobSql)
+	            .Append(sqlData.FooterSql)
+	            .Append(";");
+
+	        try
+	        {
+	            if (paramters == null)
+	            {
+	                db.Database.ExecuteSqlCommand(sql.ToString());
+	            }
+	            else
+	            {
+	                db.Database.ExecuteSqlCommand(sql.ToString(), paramters);
+	            }
+	            return new ResponseData() {State = 0, Message = "执行成功"};
+	        }
+	        catch (Exception ex)
+	        {
+	            return new ResponseData() {State = 100, Message = ex.Message};
+	        }
+	    }
+
+	    /// <summary>
 		/// 获取传输配置
 		/// </summary>
 		/// <returns></returns>

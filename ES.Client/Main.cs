@@ -26,6 +26,7 @@ namespace ES.Client
 
         ServiceReference.TransferSoapClient _server = new ServiceReference.TransferSoapClient();
         dbDataContext _db = new dbDataContext();
+        private string tranferCode = string.Empty;
 
         private void Main_Load(object sender, EventArgs e)
         {
@@ -268,7 +269,7 @@ namespace ES.Client
         {
             List<ES.Repository.Model.QueryResult> results = null;
             string sql = "";
-            long lastStamp = Convert.ToInt64(config.Cstamp);
+            long lastStamp = Convert.ToInt64(config.Sstamp);
 
             do
             {
@@ -278,8 +279,18 @@ namespace ES.Client
 
                 if (results.Any())
                 {
-                    sql = results.Aggregate(sql, (current, result) => current + (current + ";"));
                     var sqlData = new ES.Client.ServiceReference.SqlData() { ConfigGuid = config.Guid.ToString(), RowCount = results.Count(), MaxTimeStamp = results.Count(), HeaderSql = config.HeaderSql, DetailSql = sql, FooterSql = config.FooterSql };
+
+                    if (config.BlobColumn != null)
+                    {
+                        var blobs = _db.ExecuteQuery<BlobData>("Select top " + config.MaxCount + " [Guid]," + config.BlobColumn + " as Blob From " +
+                                                       config.TableName + " Where  [timestamp] > cast(cast(" + lastStamp +
+                                                       " as bigint) as timestamp) Order by [TimeStamp];").ToArray();
+
+                        sqlData.BlobDatas = blobs;
+                    }
+                    
+                    sql = results.Aggregate(sql, (current, result) => current + (current + ";"));
 
                     var response = _server.Post(clientCode, Common.MD5(md5Pulickey + clientGuid), sqlData);
 
@@ -292,7 +303,7 @@ namespace ES.Client
                         Direct = 0,
                         Remark = response.Message,
                         Sort = config.Sort,
-                        Stamp = config.Cstamp,
+                        Stamp = config.Sstamp,
                         Header = config.HeaderSql,
                         Detail = sql,
                         Footer = config.FooterSql,
@@ -511,6 +522,8 @@ namespace ES.Client
             if (!LoadServiceAddress()) {
                 return;
             }
+
+            tranferCode = Guid.NewGuid().ToString();
 
             t = new Thread(new ParameterizedThreadStart(SyncData), 0) {IsBackground = true};
 
