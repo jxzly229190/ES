@@ -68,7 +68,7 @@ namespace ES.Server
 
 			var detailSql = config.DetailSql.Replace("$lastStamp$", lastTimeStamp.ToString()).Replace("$rowCount$", rowCount.ToString());
 		    detailSql = detailSql.Replace("Order by",
-                " and [Guid] not in (Select [guid] from tranferTempLog where transferCode = " + tranferCode + " and tableName='" +
+                " and [Guid] not in (Select [guid] from tranferTempLog where transferCode = '" + tranferCode + "' and tableName='" +
 		        config.TableName + "') Order by");
 
 			if (paras != null && paras.Length > 0)
@@ -174,7 +174,7 @@ namespace ES.Server
 	                    .Append(" set ")
 	                    .Append(config.BlobColumn + "= {" + (i*2) + "}")
 	                    .Append(" Where [Guid]=")
-	                    .Append("{" + (i*2 + 1) + "}")
+	                    .Append("'{" + (i*2 + 1) + "}'")
 	                    .Append(";");
 
 	                paramters[i*2] = blobs[i].Blob;
@@ -219,7 +219,7 @@ namespace ES.Server
 	            {
 	                db.TranLog.Add(new TranLog()
 	                {
-	                    Remark = "插入数据到##temp_Tranfer发生错误，错误信息：" + exception.Message + "/" + exception.InnerException,
+                        Remark = "插入数据到tranferTempLog发生错误，错误信息：" + exception.Message + "/" + exception.InnerException,
 	                    Detail = tempSql
 	                });
 	            }

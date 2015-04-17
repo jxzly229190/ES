@@ -167,9 +167,13 @@ namespace ES.Client
 
                     _db.TranLog.InsertOnSubmit(log);
                     _db.SubmitChanges();
+                    if (config.Import == 2)
+                    {
+                        ThrowException("服务器出错了：" + result.Message);
+                    }
                     return;
                 }
-
+                
                 if (result.data == null)
                 {
                     log = new TranLog()
@@ -208,6 +212,10 @@ namespace ES.Client
 
                     _db.TranLog.InsertOnSubmit(log);
                     _db.SubmitChanges();
+                    if (config.Import == 2)
+                    {
+                        ThrowException("服务器返回异常，无法解析，结束传输。");
+                    }
                     return;
                 }
 
@@ -221,48 +229,38 @@ namespace ES.Client
                 catch (Exception ex)
                 {
                     errorMsg = ex.Message;
-                }
 
-                log = new TranLog()
-                {
-                    Client = clientCode,
-                    ConfigCode = config.Code,
-                    ConfigName = config.Name,
-                    Count = sqlData.RowCount,
-                    Direct = 0,
-                    Result = errorMsg == null ? "数据更新成功" : "更新出错，详情见备注。",
-                    Sort = config.Sort,
-                    Header = sqlData.HeaderSql,
-                    Detail = sqlData.DetailSql,
-                    Footer = sqlData.FooterSql,
-                    TranTime = DateTime.Now,
-                    Remark = errorMsg
-                };
-
-                if (errorMsg == null)
-                {
-                    log.Stamp = sqlData.MaxTimeStamp;
-                }
-
-                _db.TranLog.InsertOnSubmit(log);
-                try
-                {
-                    _db.SubmitChanges(System.Data.Linq.ConflictMode.ContinueOnConflict);
-                }
-                catch (System.Data.Linq.ChangeConflictException ex)
-                {
-                    foreach (System.Data.Linq.ObjectChangeConflict occ in _db.ChangeConflicts)
+                    log = new TranLog()
                     {
-                        // 使用当前数据库中的值，覆盖Linq缓存中实体对象的值
-                        occ.Resolve(System.Data.Linq.RefreshMode.OverwriteCurrentValues);
-                    }
+                        Client = clientCode,
+                        ConfigCode = config.Code,
+                        ConfigName = config.Name,
+                        Count = sqlData.RowCount,
+                        Direct = 0,
+                        Result = "更新出错，详情见备注。",
+                        Sort = config.Sort,
+                        Header = sqlData.HeaderSql,
+                        Detail = sqlData.DetailSql,
+                        Footer = sqlData.FooterSql,
+                        TranTime = DateTime.Now,
+                        Remark = errorMsg
+                    };
 
-                    // 这个地方要注意，Catch方法中，我们前面只是指明了怎样来解决冲突，这个地方还需要再次提交更新，这样的话，值    //才会提交到数据库。
+                    _db.TranLog.InsertOnSubmit(log);
                     _db.SubmitChanges();
 
+                    if (config.Import == 2)
+                    {
+                        ThrowException("本地更新数据库发生错误，详情：" + errorMsg);
+                    }
                 }
             }
             while (sqlData.RowCount == config.MaxCount);
+        }
+
+        private void ThrowException(string errorMsg)
+        {
+            throw new Exception(errorMsg);
         }
 
         private void Post(string md5Pulickey, string clientCode, string clientGuid, TranConfig config)
@@ -273,12 +271,14 @@ namespace ES.Client
 
             do
             {
-                var detailSql = config.DetailSql.Replace("$lastStamp$", lastStamp.ToString()).Replace("$rowCount$", config.MaxCount.ToString()).Replace("from", " as sql,cast(timestamp as bigint) as stamp from");
+                var detailSql = config.DetailSql.Replace("$lastStamp$", lastStamp.ToString())
+                    .Replace("$rowCount$", config.MaxCount.ToString());
 
                 results = _db.ExecuteQuery<ES.Repository.Model.QueryResult>(detailSql).ToList();
 
                 if (results.Any())
                 {
+                    sql = results.Aggregate(sql, (current, result) => current + (result.sql + ";"));
                     var sqlData = new ES.Client.ServiceReference.SqlData() { ConfigGuid = config.Guid.ToString(), RowCount = results.Count(), MaxTimeStamp = results.Count(), HeaderSql = config.HeaderSql, DetailSql = sql, FooterSql = config.FooterSql };
 
                     if (config.BlobColumn != null)
@@ -289,8 +289,6 @@ namespace ES.Client
 
                         sqlData.BlobDatas = blobs;
                     }
-                    
-                    sql = results.Aggregate(sql, (current, result) => current + (current + ";"));
 
                     var response = _server.Post(tranferCode,clientCode, Common.MD5(md5Pulickey + clientGuid), sqlData);
 
@@ -326,6 +324,11 @@ namespace ES.Client
                         log.Result = "提交数据出错";
                         _db.TranLog.InsertOnSubmit(log);
                         _db.SubmitChanges();
+
+                        if (config.Import == 2)
+                        {
+                            ThrowException("提交数据出错，结束传输。");
+                        }
 
                         //继续下一条配置数据传输
                         break;
