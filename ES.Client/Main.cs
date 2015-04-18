@@ -26,11 +26,13 @@ namespace ES.Client
 
         ServiceReference.TransferSoapClient _server = new ServiceReference.TransferSoapClient();
         dbDataContext _db = new dbDataContext();
+        
         private string tranferCode = string.Empty;
 
         private void Main_Load(object sender, EventArgs e)
         {
             //ReloadLog(null);
+            //_db.ObjectTrackingEnabled = false;
             tl_pName.Text = "传输状态：";
             tl_tName.Text = "准备";
         }
@@ -60,6 +62,7 @@ namespace ES.Client
         private void SyncData(object form)
         {
             var formObj = form as Main;
+            _db=new dbDataContext();
 
             lock (_lockFlag)
             {
@@ -71,7 +74,8 @@ namespace ES.Client
                     string clientCode;
                     string clientGuid = QueryCurrentClientGuid(out clientCode);
 
-                    var configs = _db.TranConfigs.Where(c => c.Code != "PZSJ" && c.Status == 0 && c.Sort >= 0).ToList();
+                    List<TranConfig> configs =
+                        _db.TranConfigs.Where(tranConfig => tranConfig.Status == 0 && tranConfig.Code != "PZSJ" && tranConfig.Sort >= 0).ToList();
 
                     foreach (var config in configs)
                     {
@@ -266,8 +270,8 @@ namespace ES.Client
         private void Post(string md5Pulickey, string clientCode, string clientGuid, TranConfig config)
         {
             List<ES.Repository.Model.QueryResult> results = null;
-            string sql = "";
-            long lastStamp = Convert.ToInt64(config.Sstamp);
+            StringBuilder sql = new StringBuilder();
+            long lastStamp = Convert.ToInt64(config.Cstamp);
 
             do
             {
@@ -278,17 +282,23 @@ namespace ES.Client
 
                 if (results.Any())
                 {
-                    sql = results.Aggregate(sql, (current, result) => current + (result.sql + ";"));
-                    var sqlData = new ES.Client.ServiceReference.SqlData() { ConfigGuid = config.Guid.ToString(), RowCount = results.Count(), MaxTimeStamp = results.Count(), HeaderSql = config.HeaderSql, DetailSql = sql, FooterSql = config.FooterSql };
-
-                    if (config.BlobColumn != null)
+                    //sql = results.Aggregate(sql, (current, result) => current + (result.sql + ";"));
+                    var blobData = new List<ES.Client.ServiceReference.BlobData>();
+                    foreach (var result in results)
                     {
-                        var blobs = _db.ExecuteQuery<BlobData>("Select top " + config.MaxCount + " [Guid]," + config.BlobColumn + " as Blob From " +
-                                                       config.TableName + " Where  [timestamp] > cast(cast(" + lastStamp +
-                                                       " as bigint) as timestamp) Order by [TimeStamp];").ToArray();
-
-                        sqlData.BlobDatas = blobs;
+                        sql.Append(result.sql).Append(";");
+                        blobData.Add(new BlobData(){ Blob = result.Blob, Guid = result.Guid});
                     }
+                    var sqlData = new ES.Client.ServiceReference.SqlData()
+                    {
+                        ConfigGuid = config.Guid.ToString(),
+                        RowCount = results.Count(),
+                        MaxTimeStamp = results.Count(),
+                        HeaderSql = config.HeaderSql,
+                        DetailSql = sql.ToString(),
+                        FooterSql = config.FooterSql,
+                        BlobDatas = blobData.ToArray()
+                    };
 
                     var response = _server.Post(tranferCode,clientCode, Common.MD5(md5Pulickey + clientGuid), sqlData);
 
@@ -301,9 +311,9 @@ namespace ES.Client
                         Direct = 0,
                         Remark = response.Message,
                         Sort = config.Sort,
-                        Stamp = config.Sstamp,
+                        Stamp = config.Cstamp,
                         Header = config.HeaderSql,
-                        Detail = sql,
+                        Detail = sql.ToString(),
                         Footer = config.FooterSql,
                         TranTime = DateTime.Now
                     };
@@ -313,7 +323,7 @@ namespace ES.Client
                         //更新配置时间戳
                         var maxItem = results.OrderByDescending(c => c.stamp).FirstOrDefault();
                         lastStamp = maxItem == null ? 0 : maxItem.stamp;
-                        _db.ExecuteCommand("Update tranconfig Set Sstamp={0} Where Guid={1}", lastStamp, config.Guid);
+                        _db.ExecuteCommand("Update tranconfig Set Cstamp={0} Where Guid={1}", lastStamp, config.Guid);
 
                         log.Result = "提交数据成功";
                         _db.TranLog.InsertOnSubmit(log);
@@ -454,13 +464,13 @@ namespace ES.Client
             _db.SubmitChanges();
         }
 
-        private void UpdateDbByResponse(SqlData sqlData, string configGuid, string table, string column)
+        private void UpdateDbByResponse(SqlData sqlData, string configGuid, string table, string bloblColumn)
         {
             StringBuilder sql = new StringBuilder(sqlData.HeaderSql + ";" + sqlData.DetailSql + ";");
             StringBuilder updateBlobSql=new StringBuilder();
             object[] paramters = null;
 
-            if (sqlData.BlobDatas != null && sqlData.BlobDatas.Length > 0)
+            if (!string.IsNullOrEmpty(bloblColumn))
             {
                 var blobs = sqlData.BlobDatas;
                 paramters = new object[blobs.Length*2];
@@ -469,7 +479,7 @@ namespace ES.Client
                     updateBlobSql.Append("Update ")
                         .Append("#temp_" + table)
                         .Append(" set ")
-                        .Append(column + "= {" + (i*2) + "}")
+                        .Append(bloblColumn + "= {" + (i*2) + "}")
                         .Append(" Where [Guid]=")
                         .Append("{" + (i*2 + 1) + "}")
                         .Append(";");
@@ -482,8 +492,10 @@ namespace ES.Client
             sql.Append(updateBlobSql)
                 .Append(sqlData.FooterSql)
                 .Append(";")
-                .Append(string.Format("Update tranconfig Set Cstamp={0} Where Guid='{1}'", sqlData.MaxTimeStamp,
-                    configGuid));
+                .Append(
+                    string.Format(
+                        "Update tranconfig Set Sstamp={0},Cstamp=(Select CAST(max(timestamp) as bigint) From {1}) Where Guid='{2}'",
+                        sqlData.MaxTimeStamp, table, configGuid));
 
             if (paramters == null)
             {
@@ -492,6 +504,8 @@ namespace ES.Client
             {
                 _db.ExecuteCommand(sql.ToString(), paramters);
             }
+
+            _db.SubmitChanges();
         }
 
         private string QueryCurrentClientGuid(out string clientCode)

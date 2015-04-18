@@ -79,31 +79,22 @@ namespace ES.Server
 			try
 			{
                 var result = db.Database.SqlQuery<QueryResult>(detailSql);//db.ExecuteQuery<QueryResult>(detailSql).ToList();
+                List<BlobData> blobData = null;
 
 				string sql = "";
 
-                if (result.Any())
-                {
-                    foreach (var res in result)
-                    {
-                        sql += res.sql + ";";
-                    }
-                }
-                else {
-                    return new ResponseData() { State = 0, Message = "没有数据了" };
-                }
-			    List<BlobData> blobData = null;
-			    if (!string.IsNullOrEmpty(config.BlobColumn))
+			    if (result.Any())
 			    {
-                    var blobs =
-                        db.Database.SqlQuery<BlobData>("Select top " + rowCount + " [Guid]," + config.BlobColumn + " as Blob From " +
-                                                       config.TableName + " Where  [timestamp] > cast(cast(" + lastTimeStamp +
-                                                       " as bigint) as timestamp) Order by [TimeStamp];");
-
-			        if (blobs != null && blobs.Any())
+			        blobData = new List<BlobData>();
+			        foreach (var res in result)
 			        {
-                        blobData=new List<BlobData>(blobs);
+			            sql += res.sql + ";";
+			            blobData.Add(new BlobData() {Guid = res.Guid, Blob = res.Blob});
 			        }
+			    }
+			    else
+			    {
+			        return new ResponseData() {State = 0, Message = "没有数据了"};
 			    }
 
                 //获取最大时间戳
@@ -163,7 +154,7 @@ namespace ES.Server
 	        StringBuilder updateBlobSql = new StringBuilder();
 	        object[] paramters = null;
 
-	        if (sqlData.BlobDatas != null && sqlData.BlobDatas.Count > 0)
+	        if (!string.IsNullOrEmpty(config.BlobColumn))
 	        {
 	            var blobs = sqlData.BlobDatas;
 	            paramters = new object[blobs.Count*2];
@@ -174,7 +165,7 @@ namespace ES.Server
 	                    .Append(" set ")
 	                    .Append(config.BlobColumn + "= {" + (i*2) + "}")
 	                    .Append(" Where [Guid]=")
-	                    .Append("'{" + (i*2 + 1) + "}'")
+	                    .Append("{" + (i*2 + 1) + "}")
 	                    .Append(";");
 
 	                paramters[i*2] = blobs[i].Blob;
@@ -186,42 +177,41 @@ namespace ES.Server
 	            .Append(sqlData.FooterSql)
 	            .Append(";");
 
-	        try
+	        using (var dbContextTransaction = db.Database.BeginTransaction())
 	        {
-	            if (paramters == null)
-	            {
-	                db.Database.ExecuteSqlCommand(sql.ToString());
-	            }
-	            else
-	            {
-	                db.Database.ExecuteSqlCommand(sql.ToString(), paramters);
-	            }
-
-	        }
-	        catch (Exception ex)
-	        {
-	            return new ResponseData() {State = 100, Message = ex.Message};
-	        }
-
-	        if (config.Direct == 2)
-	        {
-                var tempSql = "";
 	            try
 	            {
-                    tempSql += "Insert into tranferTempLog([tranferCode],[TableName],[guid]) select '" + tranferCode + "','" + config.TableName +
-	                           "',[Guid] From #temp_" + config.TableName +
-	                           ";if object_id('tempdb..#temp_" + config.TableName + "') is not null Drop table #temp_" +
-	                           config.TableName;
 
-	                db.Database.ExecuteSqlCommand(tempSql);
-	            }
-	            catch (Exception exception)
-	            {
-	                db.TranLog.Add(new TranLog()
+	                if (paramters == null)
 	                {
-                        Remark = "插入数据到tranferTempLog发生错误，错误信息：" + exception.Message + "/" + exception.InnerException,
-	                    Detail = tempSql
-	                });
+                        db.Database.ExecuteSqlCommand(TransactionalBehavior.EnsureTransaction, sql.ToString());
+	                }
+	                else
+	                {
+	                    db.Database.ExecuteSqlCommand(TransactionalBehavior.EnsureTransaction, sql.ToString(), paramters);
+	                }
+
+                    if (config.Direct == 2)
+                    {
+                        StringBuilder tempSql=new StringBuilder();
+                        foreach (var item in sqlData.BlobDatas)
+                        {
+                            tempSql.Append("Insert into tranferTempLog([transferCode],[TableName],[guid]) select '")
+                                .Append(tranferCode)
+                                .Append("','")
+                                .Append(config.TableName)
+                                .Append("','")
+                                .Append(item.Guid).Append("';");
+                        }
+
+                        db.Database.ExecuteSqlCommand(tempSql.ToString());
+                    }
+                    dbContextTransaction.Commit();
+	            }
+	            catch (Exception ex)
+	            {
+                    dbContextTransaction.Rollback();
+	                return new ResponseData() {State = 100, Message = ex.Message};
 	            }
 	        }
 

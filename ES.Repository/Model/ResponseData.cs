@@ -36,6 +36,8 @@ namespace ES.Repository.Model
 
 	public class QueryResult {
 		public string sql { get;set;}
-		public long stamp { get;set;} 
+		public long stamp { get;set;}
+	    public Guid Guid { get; set; }
+        public byte[] Blob { get; set; }
 	}
 }

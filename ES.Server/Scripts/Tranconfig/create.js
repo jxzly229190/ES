@@ -5,6 +5,7 @@
         var columns = '';
         var vd = '';
         var vf = '';
+        var dd = '';
         $('input:checked').each(function () {
             var col = $(this).val();
             var index = col.indexOf('(Blob)');
@@ -15,6 +16,7 @@
             columns += "[" + col + '],';
             if (index > 0) {
                 vd += "0xFF')+,";
+                dd += ',[' + col + '] as Blob';
                 $("#BlobColumn").val(col);
             } else {
                 vd += "'+dbo.bims_f_var_to_string(" + col + ")+',";
@@ -40,7 +42,7 @@
 
         var detail = "select top $rowCount$ 'insert #temp_" + table + "(" +
             columns + ") select " + vd +
-            " as sql,cast(timestamp as bigint) as stamp from [" + table + "] where [timestamp] > cast(cast($lastStamp$ as bigint) as timestamp) Order by [TimeStamp];";
+            " as sql,cast(timestamp as bigint) as stamp,[Guid]" + dd + " from [" + table + "] where [timestamp] > cast(cast($lastStamp$ as bigint) as timestamp) Order by [TimeStamp];";
 
         var footer = "Update b set "+vf+" from #temp_" + table + " a,[" + table + "] b  where a.Guid = b.Guid;" +
             "if @@error <> 0 begin raiserror 20001 '更新配置出错';  rollback return end;" +
