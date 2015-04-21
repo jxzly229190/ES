@@ -29,7 +29,7 @@ namespace ES.Client
         }
 
         /// <summary>
-        /// 创建Zip压缩文件
+        /// 创建Zip压缩文件 
         /// </summary>
         /// <param name="fileName">需要创建的文件名，包括“.zip"后缀。</param>
         /// <param name="directory">需要压缩的文件目录</param>
