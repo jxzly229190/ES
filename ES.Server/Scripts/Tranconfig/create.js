@@ -42,7 +42,9 @@
 
         var detail = "select top $rowCount$ 'insert #temp_" + table + "(" +
             columns + ") select " + vd +
-            " as sql,cast(timestamp as bigint) as stamp,[Guid]" + dd + " from [" + table + "] where [timestamp] > cast(cast($lastStamp$ as bigint) as timestamp) Order by [TimeStamp];";
+            " as sql,cast(timestamp as bigint) as stamp,[Guid] as Guid" + dd + " from [" + table + "]" +
+            " where [timestamp] > cast(cast($lastStamp$ as bigint) as timestamp) " +
+            "{templog: And [Guid] not in (Select [guid] from tranferTempLog where TransferNo = '$tranferNo$' and ConfigCode = '$configCode$') :templog} Order by [TimeStamp];";
 
         var footer = "Update b set "+vf+" from #temp_" + table + " a,[" + table + "] b  where a.Guid = b.Guid;" +
             "if @@error <> 0 begin raiserror 20001 '更新配置出错';  rollback return end;" +

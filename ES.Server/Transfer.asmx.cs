@@ -45,7 +45,7 @@ namespace ES.Server
 		/// <param name="paras">其他参数</param>
 		/// <returns></returns>
 		[WebMethod]
-        public ResponseData Get(string tranferCode, string clientCode, string varifyCode, long lastTimeStamp, int rowCount, string configGuid, params object[] paras)
+        public ResponseData Get(string tranferNo, string clientCode, string varifyCode, long lastTimeStamp, int rowCount, string configGuid, params object[] paras)
 		{
 			var client = db.Client.FirstOrDefault(c => c.Status == 0 && c.Code == clientCode);            
 
@@ -68,9 +68,15 @@ namespace ES.Server
 
 			var detailSql = config.DetailSql.Replace("$lastStamp$", lastTimeStamp.ToString()).Replace("$rowCount$", rowCount.ToString());
             //todo:将这句配置到网页去生成
-		    detailSql = detailSql.Replace("Order by",
-                " and [Guid] not in (Select [guid] from tranferTempLog where transferCode = '" + tranferCode + "' and tableName='" +
-		        config.Code + "') Order by");
+            //detailSql = detailSql.Replace("Where",
+            //    "Where [Guid] not in (Select [guid] from tranferTempLog where TransferNo = '" + tranferNo +
+            //    "' and ConfigCode='" +
+            //    config.Code + "') And");
+		    detailSql =
+		        detailSql.Replace("{templog:", "")
+		            .Replace(":templog}", "")
+		            .Replace("$tranferNo$", tranferNo)
+		            .Replace("$configCode$", config.Code);
 
 			if (paras != null && paras.Length > 0)
 			{
@@ -200,7 +206,7 @@ namespace ES.Server
                         StringBuilder tempSql=new StringBuilder();
                         foreach (var item in sqlData.BlobDatas)
                         {
-                            tempSql.Append("Insert into tranferTempLog([transferCode],[TableName],[guid]) select '")
+                            tempSql.Append("Insert into tranferTempLog([TransferNo],[ConfigCode],[Guid]) select '")
                                 .Append(tranferCode)
                                 .Append("','")
                                 .Append(config.Code)

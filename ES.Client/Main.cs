@@ -27,7 +27,7 @@ namespace ES.Client
         ServiceReference.TransferSoapClient _server = new ServiceReference.TransferSoapClient();
         dbDataContext _db = new dbDataContext();
         
-        private string tranferCode = string.Empty;
+        private string tranferNo = string.Empty;
 
         private void Main_Load(object sender, EventArgs e)
         {
@@ -151,7 +151,7 @@ namespace ES.Client
             SqlData sqlData = null;
             do
             {
-                var result = _server.Get(tranferCode, clientCode, Common.MD5(md5Pulickey + clientGuid), Convert.ToInt64(config.Sstamp), config.MaxCount, config.Guid.ToString(), null);
+                var result = _server.Get(tranferNo, clientCode, Common.MD5(md5Pulickey + clientGuid), Convert.ToInt64(config.Sstamp), config.MaxCount, config.Guid.ToString(), null);
 
                 TranLog log = null;
                 if (result.State != 0)
@@ -278,6 +278,18 @@ namespace ES.Client
                 var detailSql = config.DetailSql.Replace("$lastStamp$", lastStamp.ToString())
                     .Replace("$rowCount$", config.MaxCount.ToString());
 
+                if (detailSql.Contains("{templog:"))
+                {
+                    var sindex = detailSql.IndexOf("{templog:");
+                    var eindex = detailSql.IndexOf(":templog}");
+                    if (eindex <= -1)
+                    {
+                        ThrowException("数据解析错误，找不到结束符：:templog}");
+                    }
+
+                    detailSql = detailSql.Remove(sindex, eindex + 10 - sindex);
+                }
+
                 results = _db.ExecuteQuery<ES.Repository.Model.QueryResult>(detailSql).ToList();
 
                 if (results.Any())
@@ -300,7 +312,7 @@ namespace ES.Client
                         BlobDatas = blobData.ToArray()
                     };
 
-                    var response = _server.Post(tranferCode,clientCode, Common.MD5(md5Pulickey + clientGuid), sqlData);
+                    var response = _server.Post(tranferNo,clientCode, Common.MD5(md5Pulickey + clientGuid), sqlData);
 
                     var log = new TranLog()
                     {
@@ -356,7 +368,7 @@ namespace ES.Client
 
             var config = _db.TranConfigs.FirstOrDefault(c => c.Code == "PZSJ" && c.Status == 0);
 
-            var result = _server.GetTranConfigs(tranferCode, clientCode, Common.MD5(md5Pulickey + clientGuid), config == null ? 0 : Convert.ToInt64(config.Sstamp));
+            var result = _server.GetTranConfigs(tranferNo, clientCode, Common.MD5(md5Pulickey + clientGuid), config == null ? 0 : Convert.ToInt64(config.Sstamp));
 
             if (result == null)
             {
@@ -540,7 +552,7 @@ namespace ES.Client
                 return;
             }
 
-            tranferCode = Guid.NewGuid().ToString();
+            tranferNo = Guid.NewGuid().ToString();
 
             t = new Thread(new ParameterizedThreadStart(SyncData), 0) {IsBackground = true};
 

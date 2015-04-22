@@ -35,7 +35,7 @@ namespace ES.Server
             if (tables.Any())
             {
                 var TableNames = new List<SelectListItem>();
-                TableNames.Add(new SelectListItem() { Text = "--请选择--", Value = "-1" });
+                TableNames.Add(new SelectListItem() { Text = "--请选择--", Value = "" });
                 foreach (var table in tables)
                 {
                     TableNames.Add(new SelectListItem() { Text = table, Value = table });

@@ -37,14 +37,18 @@ namespace ES.Server
         public int Direct { get; set; }
         [Display(Name = "传输头")]
         [DataType(DataType.MultilineText)]
+        [Required(ErrorMessage = "传输头 不能为空")]
         public string HeaderSql { get; set; }
         [Display(Name = "传输体")]
         [DataType(DataType.MultilineText)]
+        [Required(ErrorMessage = "传输体 不能为空")]
         public string DetailSql { get; set; }
         [Display(Name = "传输脚")]
         [DataType(DataType.MultilineText)]
+        [Required(ErrorMessage = "传输脚 不能为空")]
         public string FooterSql { get; set; }
         [Display(Name = "传输表")]
+        [Required(ErrorMessage = "请选择传输表")]
         public string TableName { get; set; }
         [Display(Name = "传输字段")]
         public List<SelectListItem> ColumnList { get; set; }
