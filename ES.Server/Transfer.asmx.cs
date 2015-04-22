@@ -47,7 +47,7 @@ namespace ES.Server
 		[WebMethod]
         public ResponseData Get(string tranferCode, string clientCode, string varifyCode, long lastTimeStamp, int rowCount, string configGuid, params object[] paras)
 		{
-			var client = db.Client.FirstOrDefault(c => c.Status == 0 && c.Code == clientCode);
+			var client = db.Client.FirstOrDefault(c => c.Status == 0 && c.Code == clientCode);            
 
 			if (client == null)
 			{
@@ -67,9 +67,10 @@ namespace ES.Server
 			}
 
 			var detailSql = config.DetailSql.Replace("$lastStamp$", lastTimeStamp.ToString()).Replace("$rowCount$", rowCount.ToString());
+            //todo:将这句配置到网页去生成
 		    detailSql = detailSql.Replace("Order by",
                 " and [Guid] not in (Select [guid] from tranferTempLog where transferCode = '" + tranferCode + "' and tableName='" +
-		        config.TableName + "') Order by");
+		        config.Code + "') Order by");
 
 			if (paras != null && paras.Length > 0)
 			{
@@ -81,7 +82,7 @@ namespace ES.Server
                 var result = db.Database.SqlQuery<QueryResult>(detailSql);//db.ExecuteQuery<QueryResult>(detailSql).ToList();
                 List<BlobData> blobData = null;
 
-				string sql = "";
+				string sql = "";                
 
 			    if (result.Any())
 			    {
@@ -159,7 +160,10 @@ namespace ES.Server
 	            var blobs = sqlData.BlobDatas;
 	            paramters = new object[blobs.Count*2];
 	            for (var i = 0; i < blobs.Count; i++)
-	            {
+	            {   
+                    //todo:
+                    //1.#table 的名字：约定为主表的名字
+                    //2.Blob列的名字
 	                updateBlobSql.Append("Update ")
 	                    .Append("#temp_" + config.TableName)
 	                    .Append(" set ")
@@ -199,7 +203,7 @@ namespace ES.Server
                             tempSql.Append("Insert into tranferTempLog([transferCode],[TableName],[guid]) select '")
                                 .Append(tranferCode)
                                 .Append("','")
-                                .Append(config.TableName)
+                                .Append(config.Code)
                                 .Append("','")
                                 .Append(item.Guid).Append("';");
                         }
