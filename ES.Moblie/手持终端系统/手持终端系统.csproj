@@ -1,0 +1,172 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <ProjectGuid>{58390038-5892-4690-A494-FBAE40D36CD2}</ProjectGuid>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <OutputType>WinExe</OutputType>
+    <AssemblyName>手持终端系统</AssemblyName>
+    <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Platform)' == 'AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
+    <OutputPath>bin\Debug\</OutputPath>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
+    <OutputPath>bin\Release\</OutputPath>
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="System.Windows.Forms" />
+    <Reference Include="System" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.XML" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="WindowsMobile.Properties\Resources.cs" />
+    <Compile Include="WindowsMobile\DelCallBack.cs" />
+    <Compile Include="WindowsMobile\ForAdjustQuantity.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WindowsMobile\ForBarcodeUpdatecs.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WindowsMobile\ForError.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WindowsMobile\ForPositionAdjustment.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WindowsMobile\Forsupplyno.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WindowsMobile\FrmCheck.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WindowsMobile\FrmCheckManage.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WindowsMobile\FrmCheckSelect.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WindowsMobile\FrmCheckUpdate.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WindowsMobile\FrmGoodsSelect.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WindowsMobile\FrmJgmManage.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WindowsMobile\FrmJgmScan.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WindowsMobile\FrmJgmSet.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WindowsMobile\FrmKeyCheck.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WindowsMobile\FrmLogin.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WindowsMobile\FrmMain.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WindowsMobile\FrmSet.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WindowsMobile\FrmTest.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="WindowsMobile\FrmTmsm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Program.cs" />
+    <Compile Include="WindowsMobile\supplyaudit.cs">
+      <SubType>Form</SubType>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WindowsMobile.Properties\Resources.resources" />
+    <EmbeddedResource Include="WindowsMobile\ForAdjustQuantity.resources" />
+    <EmbeddedResource Include="WindowsMobile\ForBarcodeUpdatecs.resources" />
+    <EmbeddedResource Include="WindowsMobile\ForError.resources" />
+    <EmbeddedResource Include="WindowsMobile\ForPositionAdjustment.resources" />
+    <EmbeddedResource Include="WindowsMobile\Forsupplyno.resources" />
+    <EmbeddedResource Include="WindowsMobile\FrmCheck.resources" />
+    <EmbeddedResource Include="WindowsMobile\FrmCheckManage.resources" />
+    <EmbeddedResource Include="WindowsMobile\FrmCheckSelect.resources" />
+    <EmbeddedResource Include="WindowsMobile\FrmCheckUpdate.resources" />
+    <EmbeddedResource Include="WindowsMobile\FrmGoodsSelect.resources" />
+    <EmbeddedResource Include="WindowsMobile\FrmJgmManage.resources" />
+    <EmbeddedResource Include="WindowsMobile\FrmJgmScan.resources" />
+    <EmbeddedResource Include="WindowsMobile\FrmJgmSet.resources" />
+    <EmbeddedResource Include="WindowsMobile\FrmKeyCheck.resources" />
+    <EmbeddedResource Include="WindowsMobile\FrmLogin.resx">
+      <DependentUpon>FrmLogin.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WindowsMobile\FrmMain.resx">
+      <DependentUpon>FrmMain.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="WindowsMobile\FrmSet.resources" />
+    <EmbeddedResource Include="WindowsMobile\FrmTest.resources" />
+    <EmbeddedResource Include="WindowsMobile\FrmTmsm.resources" />
+    <EmbeddedResource Include="WindowsMobile\supplyaudit.resources" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="590c4b55ca.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\accessories-text-editor.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\go-home.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\document-new.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\bookmark-new.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\format-indent-less.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\format-indent-more.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\edit-find-replace.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\document-properties.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\edit-find.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\DataFactory\DataFactory.csproj">
+      <Project>{FF0B0B53-2E19-46FD-8B2C-5E099BC81511}</Project>
+      <Name>DataFactory</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>
