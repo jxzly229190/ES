@@ -227,7 +227,7 @@ namespace ES.Client
                 try
                 {
                     this.UpdateDbByResponse(sqlData, config.Guid.ToString(),config.TableName,config.BlobColumn);
-                    //config.Sstamp = sqlData.MaxTimeStamp;
+                    config.Sstamp = sqlData.MaxTimeStamp;
                     //_db.SubmitChanges();
                 }
                 catch (Exception ex)
