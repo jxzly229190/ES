@@ -9,8 +9,8 @@ SET QUOTED_IDENTIFIER ON
 GO
 
 CREATE TABLE [dbo].[tranferTempLog](
-	[tableName] [nvarchar](128) NOT NULL,
-	[transferCode] [uniqueidentifier] NOT NULL,
+	[ConfigCode] [nvarchar](128) NOT NULL,
+	[TransferNo] [uniqueidentifier] NOT NULL,
 	[Guid] [uniqueidentifier] NOT NULL
 ) ON [PRIMARY]
 

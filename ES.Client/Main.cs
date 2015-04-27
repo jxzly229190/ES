@@ -257,6 +257,7 @@ namespace ES.Client
                     {
                         ThrowException("本地更新数据库发生错误，详情：" + errorMsg);
                     }
+                    break;
                 }
             }
             while (sqlData.RowCount == config.MaxCount);
@@ -449,7 +450,7 @@ namespace ES.Client
             string errorMsg = null;
             try
             {
-                UpdateDbByResponse(sqlData, sqlData.ConfigGuid, null, null);
+                UpdateDbByResponse(sqlData, sqlData.ConfigGuid, config.TableName, config.BlobColumn);
             }
             catch (Exception ex)
             {
@@ -506,7 +507,7 @@ namespace ES.Client
                 .Append(";")
                 .Append(
                     string.Format(
-                        "Update tranconfig Set Sstamp={0},Cstamp=(Select CAST(max(timestamp) as bigint) From {1}) Where Guid='{2}'",
+                        "Update tranconfig Set Sstamp={0},Cstamp=(Select CAST(max(timestamp) as bigint) From [{1}]) Where Guid='{2}'",
                         sqlData.MaxTimeStamp, table, configGuid));
 
             if (paramters == null)

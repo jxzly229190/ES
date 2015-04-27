@@ -132,7 +132,7 @@ namespace ES.Server
 		}
 
 	    [WebMethod]
-	    public ResponseData Post(string tranferCode, string clientCode, string varifyCode, SqlData sqlData)
+        public ResponseData Post(string tranferNo, string clientCode, string varifyCode, SqlData sqlData)
 	    {
 	        var client = db.Client.FirstOrDefault(c => c.Status == 0 && c.Code == clientCode);
 
@@ -207,7 +207,7 @@ namespace ES.Server
                         foreach (var item in sqlData.BlobDatas)
                         {
                             tempSql.Append("Insert into tranferTempLog([TransferNo],[ConfigCode],[Guid]) select '")
-                                .Append(tranferCode)
+                                .Append(tranferNo)
                                 .Append("','")
                                 .Append(config.Code)
                                 .Append("','")
