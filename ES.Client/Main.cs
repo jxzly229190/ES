@@ -144,7 +144,7 @@ namespace ES.Client
             if (formObj != null)
             {
                 //formObj.ShowTranferName("推送" + config.Name);
-                _syncContext.Post(formObj.ShowTranferName, "推送" + config.Name);
+                _syncContext.Post(formObj.ShowTranferName, "上传 " + config.Name);
             }
 
             Post(md5Pulickey, clientCode, clientGuid, config);
@@ -156,7 +156,7 @@ namespace ES.Client
         {
             if (formObj != null)
             {
-                _syncContext.Post(formObj.ShowTranferName, "获取" + config.Name);
+                _syncContext.Post(formObj.ShowTranferName, "下载 " + config.Name);
                 Get(md5Pulickey, clientCode, clientGuid, config);
                 _syncContext.Post(formObj.ReloadLog, _db.TranLog.OrderByDescending(p => p.ID).Take(200).ToList());
             }
@@ -165,7 +165,7 @@ namespace ES.Client
         public void HandleError(object msg)
         {
             MessageBox.Show(msg.ToString(), "错误", MessageBoxButtons.OK, MessageBoxIcon.Error);
-            停止传输ToolStripMenuItem_Click(null, null);
+            this.FinishTransfer(null);
         }
 
         private void Get(string md5Pulickey, string clientCode, string clientGuid, TranConfig config)
@@ -646,6 +646,8 @@ namespace ES.Client
 
             开始传输ToolStripMenuItem.Enabled = true;
             停止传输ToolStripMenuItem.Enabled = false;
+
+            tl_tName.Text = "传输结束";
         }
 
         private void toolStripMenuItemConfig_Click(object sender, EventArgs e)
