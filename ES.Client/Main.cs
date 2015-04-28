@@ -8,6 +8,7 @@ using System.Windows.Forms;
 using ES.Repository;
 using ES.Client.ServiceReference;
 using System.Threading;
+using System.Data.Linq;
 
 namespace ES.Client
 {
@@ -79,25 +80,37 @@ namespace ES.Client
 
                     foreach (var config in configs)
                     {
-                        if (config.Direct == 0)
+                        try
                         {
-                            GetDataFromServer(formObj, config, md5Pulickey, clientCode, clientGuid);
-                        }
-                        else if (config.Direct == 1)
-                        {
-                            PostDataToServer(formObj, config, md5Pulickey, clientCode, clientGuid);
-                        }
-                        else if (config.Direct == 2)
-                        {
-                            //先提交再更新
-                            PostDataToServer(formObj, config, md5Pulickey, clientCode, clientGuid);
+                            if (config.Direct == 0)
+                            {
+                                GetDataFromServer(formObj, config, md5Pulickey, clientCode, clientGuid);
+                            }
+                            else if (config.Direct == 1)
+                            {
+                                PostDataToServer(formObj, config, md5Pulickey, clientCode, clientGuid);
+                            }
+                            else if (config.Direct == 2)
+                            {
+                                //先提交再更新
+                                PostDataToServer(formObj, config, md5Pulickey, clientCode, clientGuid);
 
-                            GetDataFromServer(formObj, config, md5Pulickey, clientCode, clientGuid);
+                                GetDataFromServer(formObj, config, md5Pulickey, clientCode, clientGuid);
+                            }
+                            else
+                            {
+                                _syncContext.Post(formObj.HandleError, "传输方向常异，无法处理。");
+                                return;
+                            }
                         }
-                        else
+                        catch (Exception ex)
                         {
-                            _syncContext.Post(formObj.HandleError, "传输方向常异，无法处理。");
-                            return;
+                            //只有重要传输才终断程序运行，否则继续。
+                            if (config.Import == 2) {
+                                _syncContext.Post(formObj.HandleError, ex.Message);
+                                return;
+                            }
+                            continue;
                         }
                     }
 
@@ -149,11 +162,12 @@ namespace ES.Client
         private void Get(string md5Pulickey, string clientCode, string clientGuid, TranConfig config)
         {
             SqlData sqlData = null;
+            TranLog log = null;
+            bool isError = false;
             do
             {
                 var result = _server.Get(tranferNo, clientCode, Common.MD5(md5Pulickey + clientGuid), Convert.ToInt64(config.Sstamp), config.MaxCount, config.Guid.ToString(), null);
 
-                TranLog log = null;
                 if (result.State != 0)
                 {
                     log = new TranLog()
@@ -169,15 +183,10 @@ namespace ES.Client
                         TranTime = DateTime.Now
                     };
 
-                    _db.TranLog.InsertOnSubmit(log);
-                    _db.SubmitChanges();
-                    if (config.Import == 2)
-                    {
-                        ThrowException("服务器出错了：" + result.Message);
-                    }
-                    return;
+                    isError = true;
+                    break;
                 }
-                
+
                 if (result.data == null)
                 {
                     log = new TranLog()
@@ -192,9 +201,7 @@ namespace ES.Client
                         Sort = config.Sort,
                         TranTime = DateTime.Now
                     };
-                    _db.TranLog.InsertOnSubmit(log);
-                    _db.SubmitChanges();
-                    return;
+                    break;
                 }
 
                 sqlData = result.data as SqlData;
@@ -214,19 +221,14 @@ namespace ES.Client
                         TranTime = DateTime.Now
                     };
 
-                    _db.TranLog.InsertOnSubmit(log);
-                    _db.SubmitChanges();
-                    if (config.Import == 2)
-                    {
-                        ThrowException("服务器返回异常，无法解析，结束传输。");
-                    }
-                    return;
+                    isError = true;
+                    break;
                 }
 
                 string errorMsg = null;
                 try
                 {
-                    this.UpdateDbByResponse(sqlData, config.Guid.ToString(),config.TableName,config.BlobColumn);
+                    this.UpdateDbByResponse(sqlData, config.Guid.ToString(), config.TableName, config.BlobColumn);
                     config.Sstamp = sqlData.MaxTimeStamp;
                     //_db.SubmitChanges();
                 }
@@ -250,27 +252,43 @@ namespace ES.Client
                         Remark = errorMsg
                     };
 
-                    _db.TranLog.InsertOnSubmit(log);
-                    _db.SubmitChanges();
-
-                    if (config.Import == 2)
-                    {
-                        ThrowException("本地更新数据库发生错误，详情：" + errorMsg);
-                    }
+                    isError = true;
                     break;
                 }
             }
-            while (sqlData.RowCount == config.MaxCount);
-        }
+            while (sqlData.RowCount >= config.MaxCount);
 
-        private void ThrowException(string errorMsg)
-        {
-            throw new Exception(errorMsg);
+            try
+            {
+                if(log==null){
+                    log=new TranLog(){
+                        Client = clientCode,
+                        ConfigCode = config.Code,
+                        ConfigName = config.Name,
+                        Count = sqlData.RowCount,
+                        Direct = 0,
+                        Result = "下载数据成功。",
+                        Sort = config.Sort,
+                        TranTime = DateTime.Now
+                    };
+                }
+                _db.TranLog.InsertOnSubmit(log);
+                _db.SubmitChanges();
+            }
+            catch (System.Data.Linq.ChangeConflictException conflictEx)
+            {
+                _db.ChangeConflicts.ResolveAll(RefreshMode.OverwriteCurrentValues);//保持原来的更新,放弃了当前的值.
+                _db.SubmitChanges();
+                if (isError)
+                    throw new Exception("获取数据发生异常，详情请查看传输日志。");
+            }
         }
 
         private void Post(string md5Pulickey, string clientCode, string clientGuid, TranConfig config)
         {
             List<ES.Repository.Model.QueryResult> results = null;
+            TranLog log = null;
+            bool isError = false;
             StringBuilder sql = new StringBuilder();
             long lastStamp = Convert.ToInt64(config.Cstamp);
 
@@ -285,7 +303,24 @@ namespace ES.Client
                     var eindex = detailSql.IndexOf(":templog}");
                     if (eindex <= -1)
                     {
-                        ThrowException("数据解析错误，找不到结束符：:templog}");
+                        log = new TranLog()
+                        {
+                            Client = clientCode,
+                            ConfigCode = config.Code,
+                            ConfigName = config.Name,
+                            Count = results.Count(),
+                            Direct = 0,
+                            Remark = "templog 标志异常，请检查“{templog:”与“{templog:”",
+                            Sort = config.Sort,
+                            Stamp = config.Cstamp,
+                            Header = config.HeaderSql,
+                            Detail = detailSql,
+                            Footer = config.FooterSql,
+                            TranTime = DateTime.Now
+                        };
+
+                        isError = true;
+                        break;
                     }
 
                     detailSql = detailSql.Remove(sindex, eindex + 10 - sindex);
@@ -300,7 +335,7 @@ namespace ES.Client
                     foreach (var result in results)
                     {
                         sql.Append(result.sql).Append(";");
-                        blobData.Add(new BlobData(){ Blob = result.Blob, Guid = result.Guid});
+                        blobData.Add(new BlobData() { Blob = result.Blob, Guid = result.Guid });
                     }
                     var sqlData = new ES.Client.ServiceReference.SqlData()
                     {
@@ -313,23 +348,7 @@ namespace ES.Client
                         BlobDatas = blobData.ToArray()
                     };
 
-                    var response = _server.Post(tranferNo,clientCode, Common.MD5(md5Pulickey + clientGuid), sqlData);
-
-                    var log = new TranLog()
-                    {
-                        Client = clientCode,
-                        ConfigCode = config.Code,
-                        ConfigName = config.Name,
-                        Count = results.Count(),
-                        Direct = 0,
-                        Remark = response.Message,
-                        Sort = config.Sort,
-                        Stamp = config.Cstamp,
-                        Header = config.HeaderSql,
-                        Detail = sql.ToString(),
-                        Footer = config.FooterSql,
-                        TranTime = DateTime.Now
-                    };
+                    var response = _server.Post(tranferNo, clientCode, Common.MD5(md5Pulickey + clientGuid), sqlData);
 
                     if (response.State == 0)
                     {
@@ -337,27 +356,60 @@ namespace ES.Client
                         var maxItem = results.OrderByDescending(c => c.stamp).FirstOrDefault();
                         lastStamp = maxItem == null ? 0 : maxItem.stamp;
                         _db.ExecuteCommand("Update tranconfig Set Cstamp={0} Where Guid={1}", lastStamp, config.Guid);
-
-                        log.Result = "提交数据成功";
-                        _db.TranLog.InsertOnSubmit(log);
-                        _db.SubmitChanges();
                     }
                     else
                     {
-                        log.Result = "提交数据出错";
-                        _db.TranLog.InsertOnSubmit(log);
-                        _db.SubmitChanges();
-
-                        if (config.Import == 2)
+                        log = new TranLog()
                         {
-                            ThrowException("提交数据出错，结束传输。");
-                        }
+                            Client = clientCode,
+                            ConfigCode = config.Code,
+                            ConfigName = config.Name,
+                            Count = results.Count(),
+                            Direct = 0,
+                            Remark = response.Message,
+                            Sort = config.Sort,
+                            Stamp = config.Cstamp,
+                            Header = config.HeaderSql,
+                            Detail = sql.ToString(),
+                            Footer = config.FooterSql,
+                            TranTime = DateTime.Now,
+                            Result = "提交数据出错"
+                        };
 
+                        isError = true;
                         //继续下一条配置数据传输
                         break;
                     }
                 }
-            } while (results.Count() == config.MaxCount);
+            } while (results.Count() >= config.MaxCount);
+
+            try
+            {
+                if (log == null && !isError)
+                {
+                    log = new TranLog()
+                    {
+                        Client = clientCode,
+                        ConfigCode = config.Code,
+                        ConfigName = config.Name,
+                        Count = results.Count(),
+                        Direct = 1,
+                        Result="上传数据成功",
+                        Sort = config.Sort,
+                        Stamp = config.Cstamp,
+                        TranTime = DateTime.Now
+                    };
+                }
+
+                _db.TranLog.InsertOnSubmit(log);
+                _db.SubmitChanges();
+            }
+            catch (System.Data.Linq.ChangeConflictException ex)
+            {
+                _db.ChangeConflicts.ResolveAll(RefreshMode.OverwriteCurrentValues);//保持原来的更新,放弃了当前的值.
+                if(isError)
+                    throw;
+            }
         }
 
         private void UpdateConfigs()
@@ -517,8 +569,6 @@ namespace ES.Client
             {
                 _db.ExecuteCommand(sql.ToString(), paramters);
             }
-
-            _db.SubmitChanges();
         }
 
         private string QueryCurrentClientGuid(out string clientCode)
