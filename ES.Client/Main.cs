@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Linq;
 using System.ServiceModel;
 using System.Text;
@@ -76,7 +75,9 @@ namespace ES.Client
                     string clientGuid = QueryCurrentClientGuid(out clientCode);
 
                     List<TranConfig> configs =
-                        _db.TranConfigs.Where(tranConfig => tranConfig.Status == 0 && tranConfig.Code != "PZSJ" && tranConfig.Sort >= 0).ToList();
+                        _db.TranConfigs.Where(
+                            tranConfig => tranConfig.Status == 0 && tranConfig.Code != "PZSJ" && tranConfig.Sort >= 0)
+                            .ToList();
 
                     foreach (var config in configs)
                     {
@@ -106,7 +107,8 @@ namespace ES.Client
                         catch (Exception ex)
                         {
                             //只有重要传输才终断程序运行，否则继续。
-                            if (config.Import == 2) {
+                            if (config.Import == 2)
+                            {
                                 _syncContext.Post(formObj.HandleError, ex.Message);
                                 return;
                             }
@@ -125,6 +127,13 @@ namespace ES.Client
                     if (formObj != null)
                     {
                         _syncContext.Post(formObj.HandleError, "错误原因：" + ex.Message);
+                    }
+                }
+                finally
+                {
+                    if (formObj != null)
+                    {
+                        _syncContext.Post(formObj.FinishTransfer, null);
                     }
                 }
             }
@@ -626,6 +635,17 @@ namespace ES.Client
             开始传输ToolStripMenuItem.Enabled = true;
             停止传输ToolStripMenuItem.Enabled = false;
             this.ShowTranferName("传输停止");
+        }
+
+        private void FinishTransfer(object o)
+        {
+            if (t != null && t.IsAlive)
+            {
+                t.Abort();
+            }
+
+            开始传输ToolStripMenuItem.Enabled = true;
+            停止传输ToolStripMenuItem.Enabled = false;
         }
 
         private void toolStripMenuItemConfig_Click(object sender, EventArgs e)
