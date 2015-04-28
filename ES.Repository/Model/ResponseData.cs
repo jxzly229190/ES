@@ -14,6 +14,8 @@ namespace ES.Repository.Model
 
         public string Message { get; set; }
 
+        public long MaxStamp { get; set; }
+
 		public object data { get;set;}
     }
 

@@ -201,6 +201,10 @@ namespace ES.Client
                         Sort = config.Sort,
                         TranTime = DateTime.Now
                     };
+
+                    _db.ExecuteCommand(string.Format(
+                        "Update tranconfig Set Sstamp={0} Where Guid='{1}'",
+                        result.MaxStamp, config.Guid));
                     break;
                 }
 

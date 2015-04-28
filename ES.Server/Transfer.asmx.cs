@@ -101,7 +101,9 @@ namespace ES.Server
 			    }
 			    else
 			    {
-			        return new ResponseData() {State = 0, Message = "没有数据了"};
+                    var maxStamp = db.Database.SqlQuery<long>("Select Cast(max([Timestamp]) as bigint) [Timestamp] From [" + config.TableName+"]").FirstOrDefault();
+                    
+                    return new ResponseData() { State = 0, Message = "没有数据了", MaxStamp = maxStamp };
 			    }
 
                 //获取最大时间戳

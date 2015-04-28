@@ -38,6 +38,8 @@ namespace ES.Client.ServiceReference {
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private string MessageField;
         
+        private long MaxStampField;
+        
         [System.Runtime.Serialization.OptionalFieldAttribute()]
         private object dataField;
         
@@ -77,7 +79,20 @@ namespace ES.Client.ServiceReference {
             }
         }
         
-        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=2)]
+        [System.Runtime.Serialization.DataMemberAttribute(IsRequired=true, Order=2)]
+        public long MaxStamp {
+            get {
+                return this.MaxStampField;
+            }
+            set {
+                if ((this.MaxStampField.Equals(value) != true)) {
+                    this.MaxStampField = value;
+                    this.RaisePropertyChanged("MaxStamp");
+                }
+            }
+        }
+        
+        [System.Runtime.Serialization.DataMemberAttribute(EmitDefaultValue=false, Order=3)]
         public object data {
             get {
                 return this.dataField;
