@@ -1,5 +1,5 @@
 ﻿$(function () {
-    $('#TableName').change(function () {
+    $('#SourceTableName').change(function () {
         if ($(this).children('option:selected').val() == "-1") {
             return;
         }

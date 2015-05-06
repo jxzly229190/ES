@@ -241,7 +241,7 @@ namespace ES.Client
                 string errorMsg = null;
                 try
                 {
-                    this.UpdateDbByResponse(sqlData, config.Guid.ToString(), config.TableName, config.BlobColumn);
+                    this.UpdateDbByResponse(sqlData, config.Guid.ToString(), config.SourceTableName, config.BlobColumn);
                     config.Sstamp = sqlData.MaxTimeStamp;
                     //_db.SubmitChanges();
                 }
@@ -515,7 +515,7 @@ namespace ES.Client
             string errorMsg = null;
             try
             {
-                UpdateDbByResponse(sqlData, sqlData.ConfigGuid, config.TableName, config.BlobColumn);
+                UpdateDbByResponse(sqlData, sqlData.ConfigGuid, config.TargetTableName, config.BlobColumn);
             }
             catch (Exception ex)
             {

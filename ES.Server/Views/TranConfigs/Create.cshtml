@@ -66,12 +66,21 @@
         </div>
         
         <div class="form-group">
-            @Html.LabelFor(model => model.TableName, htmlAttributes: new { @class = "control-label col-md-2" })
+            @Html.LabelFor(model => model.SourceTableName, htmlAttributes: new { @class = "control-label col-md-2" })
             <div class="col-md-10">
-                @Html.DropDownListFor(model => model.TableName, Tools.GetTableList(), new { htmlAttributes = new { @class = "form-control" } })
-                @Html.ValidationMessageFor(model => model.TableName, "", new { @class = "text-danger" })
+                @Html.DropDownListFor(model => model.SourceTableName, Tools.GetTableList(), new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.SourceTableName, "", new { @class = "text-danger" })
                 <br/>
                 <span>若有多表联合，请选择主表；若是Union联合，则选择第一个联合表。</span>
+            </div>
+        </div>
+        
+        <div class="form-group">
+            @Html.LabelFor(model => model.TargetTableName, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.DropDownListFor(model => model.SourceTableName, Tools.GetTableList(), new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.TargetTableName, "", new { @class = "text-danger" })
+                <br />
             </div>
         </div>
         

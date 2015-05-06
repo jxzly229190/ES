@@ -47,9 +47,12 @@ namespace ES.Server
         [DataType(DataType.MultilineText)]
         [Required(ErrorMessage = "传输脚 不能为空")]
         public string FooterSql { get; set; }
-        [Display(Name = "传输表")]
-        [Required(ErrorMessage = "请选择传输表")]
-        public string TableName { get; set; }
+        [Display(Name = "来源表")]
+        [Required(ErrorMessage = "请选择来源表")]
+        public string SourceTableName { get; set; }
+        [Display(Name = "目标表")]
+        [Required(ErrorMessage = "请选择目标表")]
+        public string TargetTableName { get; set; }
         [Display(Name = "传输字段")]
         public List<SelectListItem> ColumnList { get; set; }
         [DataType(DataType.MultilineText)]

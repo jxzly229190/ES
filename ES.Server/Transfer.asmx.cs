@@ -97,7 +97,7 @@ namespace ES.Server
 			    }
 			    else
 			    {
-                    var maxStamp = db.Database.SqlQuery<long>("Select Cast(max([Timestamp]) as bigint) [Timestamp] From [" + config.TableName+"]").FirstOrDefault();
+                    var maxStamp = db.Database.SqlQuery<long>("Select Cast(max([Timestamp]) as bigint) [Timestamp] From [" + config.SourceTableName+"]").FirstOrDefault();
                     
                     return new ResponseData() { State = 0, Message = "没有数据了", MaxStamp = maxStamp };
 			    }
@@ -169,7 +169,7 @@ namespace ES.Server
                     //1.#table 的名字：约定为主表的名字
                     //2.Blob列的名字
 	                updateBlobSql.Append("Update ")
-	                    .Append("#temp_" + config.TableName)
+	                    .Append("#temp_" + config.SourceTableName)
 	                    .Append(" set ")
 	                    .Append(config.BlobColumn + "= {" + (i*2) + "}")
 	                    .Append(" Where [Guid]=")

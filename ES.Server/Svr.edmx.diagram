@@ -4,7 +4,7 @@
   <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
     <!-- Diagram content (shape and connector positions) -->
     <edmx:Diagrams>
-      <Diagram DiagramId="d75d205e84fc40b09810fdccf38d4fe6" Name="Diagram1">
+      <Diagram DiagramId="d75d205e84fc40b09810fdccf38d4fe6" Name="Diagram1" ZoomLevel="88">
         <EntityTypeShape EntityType="ES.ServerModel.AspNetUsers" Width="1.5" PointX="0.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="ES.ServerModel.Client" Width="1.5" PointX="2.75" PointY="0.75" IsExpanded="true" />
         <EntityTypeShape EntityType="ES.ServerModel.TranConfig" Width="1.5" PointX="4.75" PointY="0.75" IsExpanded="true" />

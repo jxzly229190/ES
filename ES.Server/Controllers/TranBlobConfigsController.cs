@@ -47,7 +47,7 @@ namespace ES.Server.Controllers
         // more details see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,Guid,TableName,ColName,Sort,Direct,MaxCount,Cstamp,Sstamp,Timestamp,CreatedBy,CreatedTime")] TranBlobConfig tranBlobConfig)
+        public ActionResult Create([Bind(Include = "ID,Guid,SourceTableName,TargetTableName,ColName,Sort,Direct,MaxCount,Cstamp,Sstamp,Timestamp,CreatedBy,CreatedTime")] TranBlobConfig tranBlobConfig)
         {
             if (ModelState.IsValid)
             {

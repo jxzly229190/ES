@@ -30,7 +30,10 @@
             @Html.DisplayNameFor(model => model.Import)
         </th>
         <th>
-            @Html.DisplayNameFor(model => model.TableName)
+            @Html.DisplayNameFor(model => model.SourceTableName)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.TargetTableName)
         </th>
         <th>
             @Html.DisplayNameFor(model => model.BlobColumn)
@@ -71,7 +74,10 @@
             @Html.Raw(Tools.GetSelectedTextByTableColumn("TranConfig","Import",item.Import.ToString()))
         </td>
         <td>
-            @Html.DisplayFor(modelItem => item.TableName)
+            @Html.DisplayFor(modelItem => item.SourceTableName)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.TargetTableName)
         </td>
         <td>
             @Html.DisplayFor(modelItem => item.BlobColumn)
