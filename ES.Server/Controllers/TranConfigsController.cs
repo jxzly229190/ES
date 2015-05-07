@@ -136,6 +136,7 @@ namespace ES.Server.Controllers
                     original.Code = tranConfig.Code;
                     original.Name = tranConfig.Name;
                     original.SourceTableName = tranConfig.SourceTableName;
+                    original.TargetTableName = tranConfig.TargetTableName;
                     original.BlobColumn = tranConfig.BlobColumn;
                     original.Sort = tranConfig.Sort;
                     original.MaxCount = tranConfig.MaxCount;
