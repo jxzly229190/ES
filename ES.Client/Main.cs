@@ -172,7 +172,9 @@ namespace ES.Client
         {
             SqlData sqlData = null;
             TranLog log = null;
+            string sql = string.Empty;
             bool isError = false;
+            int times = -1;
             do
             {
                 var result = _server.Get(tranferNo, clientCode, Common.MD5(md5Pulickey + clientGuid), Convert.ToInt64(config.Sstamp), config.MaxCount, config.Guid.ToString(), null);
@@ -241,7 +243,8 @@ namespace ES.Client
                 string errorMsg = null;
                 try
                 {
-                    this.UpdateDbByResponse(sqlData, config.Guid.ToString(), config.SourceTableName, config.BlobColumn);
+                    this.UpdateDbByResponse(sqlData, config.Guid.ToString(), config.TargetTableName, config.BlobColumn,
+                        out sql);
                     config.Sstamp = sqlData.MaxTimeStamp;
                     //_db.SubmitChanges();
                 }
@@ -258,9 +261,7 @@ namespace ES.Client
                         Direct = 0,
                         Result = "更新出错，详情见备注。",
                         Sort = config.Sort,
-                        Header = sqlData.HeaderSql,
-                        Detail = sqlData.DetailSql,
-                        Footer = sqlData.FooterSql,
+                        Detail = sql,
                         TranTime = DateTime.Now,
                         Remark = errorMsg
                     };
@@ -268,17 +269,21 @@ namespace ES.Client
                     isError = true;
                     break;
                 }
+
+                times += 1;
             }
             while (sqlData.RowCount >= config.MaxCount);
 
             try
             {
-                if(log==null){
-                    log=new TranLog(){
+                if(log==null)
+                {
+                    log = new TranLog()
+                    {
                         Client = clientCode,
                         ConfigCode = config.Code,
                         ConfigName = config.Name,
-                        Count = sqlData.RowCount,
+                        Count = (times*config.MaxCount) + sqlData.RowCount,
                         Direct = 0,
                         Result = "下载数据成功。",
                         Sort = config.Sort,
@@ -430,6 +435,7 @@ namespace ES.Client
             var md5Pulickey = Common.MD5(Common.PublicKey);
             string clientCode;
             string clientGuid = QueryCurrentClientGuid(out clientCode);
+            string sql = string.Empty;
             TranLog log = null;
 
             var config = _db.TranConfigs.FirstOrDefault(c => c.Code == "PZSJ" && c.Status == 0);
@@ -515,7 +521,7 @@ namespace ES.Client
             string errorMsg = null;
             try
             {
-                UpdateDbByResponse(sqlData, sqlData.ConfigGuid, config.TargetTableName, config.BlobColumn);
+                UpdateDbByResponse(sqlData, sqlData.ConfigGuid, config.TargetTableName, config.BlobColumn,out sql);
             }
             catch (Exception ex)
             {
@@ -532,17 +538,21 @@ namespace ES.Client
                 Result = errorMsg == null ? "更新数据成功" : "更新出错，详情见备注。",
                 Sort = -1,
                 Stamp = sqlData.MaxTimeStamp,
-                Header = sqlData.HeaderSql,
-                Detail = sqlData.DetailSql,
-                Footer = sqlData.FooterSql,
+                Detail = sql,
                 TranTime = DateTime.Now,
                 Remark = errorMsg
             };
+
             _db.TranLog.InsertOnSubmit(log);
             _db.SubmitChanges();
+
+            if (!string.IsNullOrWhiteSpace(errorMsg))
+            {
+                throw new Exception("更新TranConfig失败。");
+            }
         }
 
-        private void UpdateDbByResponse(SqlData sqlData, string configGuid, string table, string bloblColumn)
+        private void UpdateDbByResponse(SqlData sqlData, string configGuid, string table, string bloblColumn, out string execSql)
         {
             StringBuilder sql = new StringBuilder(sqlData.HeaderSql + ";" + sqlData.DetailSql + ";");
             StringBuilder updateBlobSql=new StringBuilder();
@@ -575,12 +585,14 @@ namespace ES.Client
                         "Update tranconfig Set Sstamp={0},Cstamp=(Select CAST(max(timestamp) as bigint) From [{1}]) Where Guid='{2}'",
                         sqlData.MaxTimeStamp, table, configGuid));
 
+            execSql = sql.ToString();
+
             if (paramters == null)
             {
-                _db.ExecuteCommand(sql.ToString());
+                _db.ExecuteCommand(execSql);
             }else
             {
-                _db.ExecuteCommand(sql.ToString(), paramters);
+                _db.ExecuteCommand(execSql, paramters);
             }
         }
 
