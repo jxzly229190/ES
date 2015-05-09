@@ -71,7 +71,7 @@
             this.q退出ToolStripMenuItem});
             this.ms_main.Location = new System.Drawing.Point(0, 0);
             this.ms_main.Name = "ms_main";
-            this.ms_main.Size = new System.Drawing.Size(719, 25);
+            this.ms_main.Size = new System.Drawing.Size(930, 25);
             this.ms_main.TabIndex = 0;
             this.ms_main.Text = "menuStrip1";
             // 
@@ -87,13 +87,13 @@
             // 客户端注册ToolStripMenuItem
             // 
             this.客户端注册ToolStripMenuItem.Name = "客户端注册ToolStripMenuItem";
-            this.客户端注册ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.客户端注册ToolStripMenuItem.Size = new System.Drawing.Size(148, 22);
             this.客户端注册ToolStripMenuItem.Text = "客户端注册";
             // 
             // toolStripMenuItemConfig
             // 
             this.toolStripMenuItemConfig.Name = "toolStripMenuItemConfig";
-            this.toolStripMenuItemConfig.Size = new System.Drawing.Size(152, 22);
+            this.toolStripMenuItemConfig.Size = new System.Drawing.Size(148, 22);
             this.toolStripMenuItemConfig.Text = "总部服务配置";
             this.toolStripMenuItemConfig.Click += new System.EventHandler(this.toolStripMenuItemConfig_Click);
             // 
@@ -109,14 +109,14 @@
             // 开始传输ToolStripMenuItem
             // 
             this.开始传输ToolStripMenuItem.Name = "开始传输ToolStripMenuItem";
-            this.开始传输ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.开始传输ToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
             this.开始传输ToolStripMenuItem.Text = "开始传输";
             this.开始传输ToolStripMenuItem.Click += new System.EventHandler(this.开始传输ToolStripMenuItem_Click);
             // 
             // 停止传输ToolStripMenuItem
             // 
             this.停止传输ToolStripMenuItem.Name = "停止传输ToolStripMenuItem";
-            this.停止传输ToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.停止传输ToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
             this.停止传输ToolStripMenuItem.Text = "停止传输";
             this.停止传输ToolStripMenuItem.Click += new System.EventHandler(this.停止传输ToolStripMenuItem_Click);
             // 
@@ -129,6 +129,8 @@
             // 
             // dgv_log
             // 
+            this.dgv_log.AllowUserToAddRows = false;
+            this.dgv_log.AllowUserToDeleteRows = false;
             this.dgv_log.AutoGenerateColumns = false;
             this.dgv_log.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.dgv_log.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
@@ -151,8 +153,9 @@
             this.dgv_log.Dock = System.Windows.Forms.DockStyle.Fill;
             this.dgv_log.Location = new System.Drawing.Point(0, 25);
             this.dgv_log.Name = "dgv_log";
+            this.dgv_log.ReadOnly = true;
             this.dgv_log.RowTemplate.Height = 23;
-            this.dgv_log.Size = new System.Drawing.Size(719, 434);
+            this.dgv_log.Size = new System.Drawing.Size(930, 445);
             this.dgv_log.TabIndex = 1;
             // 
             // iDDataGridViewTextBoxColumn
@@ -160,30 +163,35 @@
             this.iDDataGridViewTextBoxColumn.DataPropertyName = "ID";
             this.iDDataGridViewTextBoxColumn.HeaderText = "编号";
             this.iDDataGridViewTextBoxColumn.Name = "iDDataGridViewTextBoxColumn";
+            this.iDDataGridViewTextBoxColumn.ReadOnly = true;
             // 
             // configNameDataGridViewTextBoxColumn
             // 
             this.configNameDataGridViewTextBoxColumn.DataPropertyName = "ConfigName";
             this.configNameDataGridViewTextBoxColumn.HeaderText = "传输项目名称";
             this.configNameDataGridViewTextBoxColumn.Name = "configNameDataGridViewTextBoxColumn";
+            this.configNameDataGridViewTextBoxColumn.ReadOnly = true;
             // 
             // configCodeDataGridViewTextBoxColumn
             // 
             this.configCodeDataGridViewTextBoxColumn.DataPropertyName = "ConfigCode";
             this.configCodeDataGridViewTextBoxColumn.HeaderText = "传输项目代号";
             this.configCodeDataGridViewTextBoxColumn.Name = "configCodeDataGridViewTextBoxColumn";
+            this.configCodeDataGridViewTextBoxColumn.ReadOnly = true;
             // 
             // directDataGridViewTextBoxColumn
             // 
             this.directDataGridViewTextBoxColumn.DataPropertyName = "Direct";
             this.directDataGridViewTextBoxColumn.HeaderText = "传输方向";
             this.directDataGridViewTextBoxColumn.Name = "directDataGridViewTextBoxColumn";
+            this.directDataGridViewTextBoxColumn.ReadOnly = true;
             // 
             // clientDataGridViewTextBoxColumn
             // 
             this.clientDataGridViewTextBoxColumn.DataPropertyName = "Client";
             this.clientDataGridViewTextBoxColumn.HeaderText = "Client";
             this.clientDataGridViewTextBoxColumn.Name = "clientDataGridViewTextBoxColumn";
+            this.clientDataGridViewTextBoxColumn.ReadOnly = true;
             this.clientDataGridViewTextBoxColumn.Visible = false;
             // 
             // targetDataGridViewTextBoxColumn
@@ -191,6 +199,7 @@
             this.targetDataGridViewTextBoxColumn.DataPropertyName = "Target";
             this.targetDataGridViewTextBoxColumn.HeaderText = "目标";
             this.targetDataGridViewTextBoxColumn.Name = "targetDataGridViewTextBoxColumn";
+            this.targetDataGridViewTextBoxColumn.ReadOnly = true;
             this.targetDataGridViewTextBoxColumn.Visible = false;
             // 
             // sortDataGridViewTextBoxColumn
@@ -198,36 +207,42 @@
             this.sortDataGridViewTextBoxColumn.DataPropertyName = "Sort";
             this.sortDataGridViewTextBoxColumn.HeaderText = "顺序";
             this.sortDataGridViewTextBoxColumn.Name = "sortDataGridViewTextBoxColumn";
+            this.sortDataGridViewTextBoxColumn.ReadOnly = true;
             // 
             // headerDataGridViewTextBoxColumn
             // 
             this.headerDataGridViewTextBoxColumn.DataPropertyName = "Header";
             this.headerDataGridViewTextBoxColumn.HeaderText = "数据头";
             this.headerDataGridViewTextBoxColumn.Name = "headerDataGridViewTextBoxColumn";
+            this.headerDataGridViewTextBoxColumn.ReadOnly = true;
             // 
             // detailDataGridViewTextBoxColumn
             // 
             this.detailDataGridViewTextBoxColumn.DataPropertyName = "Detail";
             this.detailDataGridViewTextBoxColumn.HeaderText = "数据体";
             this.detailDataGridViewTextBoxColumn.Name = "detailDataGridViewTextBoxColumn";
+            this.detailDataGridViewTextBoxColumn.ReadOnly = true;
             // 
             // footerDataGridViewTextBoxColumn
             // 
             this.footerDataGridViewTextBoxColumn.DataPropertyName = "Footer";
             this.footerDataGridViewTextBoxColumn.HeaderText = "数据尾";
             this.footerDataGridViewTextBoxColumn.Name = "footerDataGridViewTextBoxColumn";
+            this.footerDataGridViewTextBoxColumn.ReadOnly = true;
             // 
             // countDataGridViewTextBoxColumn
             // 
             this.countDataGridViewTextBoxColumn.DataPropertyName = "Count";
             this.countDataGridViewTextBoxColumn.HeaderText = "数据行数";
             this.countDataGridViewTextBoxColumn.Name = "countDataGridViewTextBoxColumn";
+            this.countDataGridViewTextBoxColumn.ReadOnly = true;
             // 
             // stampDataGridViewTextBoxColumn
             // 
             this.stampDataGridViewTextBoxColumn.DataPropertyName = "Stamp";
             this.stampDataGridViewTextBoxColumn.HeaderText = "最大时间戳";
             this.stampDataGridViewTextBoxColumn.Name = "stampDataGridViewTextBoxColumn";
+            this.stampDataGridViewTextBoxColumn.ReadOnly = true;
             this.stampDataGridViewTextBoxColumn.Visible = false;
             // 
             // resultDataGridViewTextBoxColumn
@@ -235,18 +250,21 @@
             this.resultDataGridViewTextBoxColumn.DataPropertyName = "Result";
             this.resultDataGridViewTextBoxColumn.HeaderText = "处理结果";
             this.resultDataGridViewTextBoxColumn.Name = "resultDataGridViewTextBoxColumn";
+            this.resultDataGridViewTextBoxColumn.ReadOnly = true;
             // 
             // remarkDataGridViewTextBoxColumn
             // 
             this.remarkDataGridViewTextBoxColumn.DataPropertyName = "Remark";
             this.remarkDataGridViewTextBoxColumn.HeaderText = "说明";
             this.remarkDataGridViewTextBoxColumn.Name = "remarkDataGridViewTextBoxColumn";
+            this.remarkDataGridViewTextBoxColumn.ReadOnly = true;
             // 
             // tranTimeDataGridViewTextBoxColumn
             // 
             this.tranTimeDataGridViewTextBoxColumn.DataPropertyName = "TranTime";
             this.tranTimeDataGridViewTextBoxColumn.HeaderText = "传输时间";
             this.tranTimeDataGridViewTextBoxColumn.Name = "tranTimeDataGridViewTextBoxColumn";
+            this.tranTimeDataGridViewTextBoxColumn.ReadOnly = true;
             // 
             // tranLogBindingSource
             // 
@@ -257,9 +275,9 @@
             this.ss_main.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.tl_pName,
             this.tl_tName});
-            this.ss_main.Location = new System.Drawing.Point(0, 437);
+            this.ss_main.Location = new System.Drawing.Point(0, 448);
             this.ss_main.Name = "ss_main";
-            this.ss_main.Size = new System.Drawing.Size(719, 22);
+            this.ss_main.Size = new System.Drawing.Size(930, 22);
             this.ss_main.TabIndex = 2;
             this.ss_main.Text = "statusStrip1";
             // 
@@ -280,7 +298,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 12F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(719, 459);
+            this.ClientSize = new System.Drawing.Size(930, 470);
             this.Controls.Add(this.ss_main);
             this.Controls.Add(this.dgv_log);
             this.Controls.Add(this.ms_main);
@@ -328,7 +346,7 @@
 		private System.Windows.Forms.DataGridViewTextBoxColumn tranTimeDataGridViewTextBoxColumn;
 		private System.Windows.Forms.ToolStripMenuItem 操作ToolStripMenuItem;
 		private System.Windows.Forms.ToolStripMenuItem 开始传输ToolStripMenuItem;
-		private System.Windows.Forms.ToolStripMenuItem 停止传输ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 停止传输ToolStripMenuItem;
 
 
 	}

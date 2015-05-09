@@ -17,25 +17,6 @@
       <Column Name="ModifiedTime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
     </Type>
   </Table>
-  <Table Name="dbo.TranLog" Member="TranLog">
-    <Type Name="TranLog">
-      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
-      <Column Name="Client" Type="System.String" DbType="VarChar(32)" CanBeNull="true" />
-      <Column Name="Target" Type="System.String" DbType="VarChar(32)" CanBeNull="true" />
-      <Column Name="Sort" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="ConfigCode" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
-      <Column Name="ConfigName" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
-      <Column Name="Direct" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="Header" Type="System.String" DbType="NVarChar(4000)" CanBeNull="true" />
-      <Column Name="Detail" Type="System.String" DbType="Text" CanBeNull="true" UpdateCheck="Never" />
-      <Column Name="Footer" Type="System.String" DbType="NVarChar(4000)" CanBeNull="true" />
-      <Column Name="Count" Type="System.Int32" DbType="Int" CanBeNull="true" />
-      <Column Name="Stamp" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
-      <Column Name="Result" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
-      <Column Name="Remark" Type="System.String" DbType="NVarChar(2000)" CanBeNull="true" />
-      <Column Name="TranTime" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
-    </Type>
-  </Table>
   <Table Name="dbo.TranConfig" Member="TranConfigs">
     <Type Name="TranConfig">
       <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
@@ -61,6 +42,27 @@
       <Column Name="CreatedBy" Type="System.String" DbType="VarChar(64)" CanBeNull="true" />
       <Column Name="ModifiedTime" Type="System.DateTime" DbType="DateTime" CanBeNull="true" />
       <Column Name="ModifiedBy" Type="System.String" DbType="VarChar(64)" CanBeNull="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.TranLog" Member="TranLog">
+    <Type Name="TranLog">
+      <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Client" Type="System.String" DbType="VarChar(32)" CanBeNull="true" />
+      <Column Name="Target" Type="System.String" DbType="VarChar(32)" CanBeNull="true" />
+      <Column Name="Sort" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="ConfigCode" Type="System.String" DbType="NVarChar(50)" CanBeNull="true" />
+      <Column Name="ConfigName" Type="System.String" DbType="NVarChar(100)" CanBeNull="true" />
+      <Column Name="Direct" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="TransferNo" Type="System.String" DbType="VarChar(50)" CanBeNull="true" />
+      <Column Name="IsSuccess" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Column Name="Header" Type="System.String" DbType="NVarChar(4000)" CanBeNull="true" />
+      <Column Name="Detail" Type="System.String" DbType="NVarChar(4000)" CanBeNull="true" />
+      <Column Name="Footer" Type="System.String" DbType="NVarChar(4000)" CanBeNull="true" />
+      <Column Name="Count" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="Stamp" Type="System.Int64" DbType="BigInt" CanBeNull="true" />
+      <Column Name="Result" Type="System.String" DbType="NVarChar(500)" CanBeNull="true" />
+      <Column Name="Remark" Type="System.String" DbType="NVarChar(2000)" CanBeNull="true" />
+      <Column Name="TranTime" Type="System.DateTime" DbType="DateTime NOT NULL" CanBeNull="false" />
     </Type>
   </Table>
 </Database>

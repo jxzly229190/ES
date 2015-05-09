@@ -1,40 +1,40 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
+using System.Data.Linq;
 using System.ServiceModel;
 using System.Text;
-using System.Windows.Forms;
-using ES.Repository;
-using ES.Client.ServiceReference;
+using System.Linq;
 using System.Threading;
-using System.Data.Linq;
+using System.Windows.Forms;
+using DevExpress.XtraBars;
+using DevExpress.XtraBars.Helpers;
+using ES.Client.ServiceReference;
+using ES.Repository;
 
 namespace ES.Client
 {
-    public partial class Main : Form
-    {
+    public partial class XtraFrmMain : DevExpress.XtraEditors.XtraForm{
         private readonly object _lockFlag = new object();
         readonly SynchronizationContext _syncContext = null;
-
-        public Main()
-        {
-            InitializeComponent();
-
-            _syncContext = SynchronizationContext.Current;
-            dgv_log.ReadOnly = true;
-        }
-
         ServiceReference.TransferSoapClient _server = new ServiceReference.TransferSoapClient();
         dbDataContext _db = new dbDataContext();
-        
         private string tranferNo = string.Empty;
+        Thread t = null;
 
-        private void Main_Load(object sender, EventArgs e)
+        public XtraFrmMain()
         {
-            //ReloadLog(null);
-            //_db.ObjectTrackingEnabled = false;
-            tl_pName.Text = "传输状态：";
-            tl_tName.Text = "准备";
+            InitializeComponent();
+            _syncContext = SynchronizationContext.Current;
+
+            SkinHelper.InitSkinGallery(ribbonGalleryBarItem1, true);
+
+            BindData();
+        }
+
+        private void BindData()
+        {
+            var logs = _db.TranLog.ToList();
+            gridLog.DataSource = logs;
         }
 
         private bool LoadServiceAddress()
@@ -51,25 +51,24 @@ namespace ES.Client
 
         public void ShowTranferName(object name)
         {
-            tl_tName.Text = name.ToString();
+            barStaticItemStatus.Caption = name.ToString();
         }
 
         public void ReloadLog(object listData)
         {
-            dgv_log.DataSource = listData;
+            gridLog.DataSource = listData;
         }
 
         private void SyncData(object form)
         {
-            var formObj = form as Main;
-            _db=new dbDataContext();
+            XtraFrmMain formObj = form as XtraFrmMain;
+            _db = new dbDataContext();
 
             lock (_lockFlag)
             {
                 try
                 {
                     UpdateConfigs();
-
                     var md5Pulickey = Common.MD5(Common.PublicKey);
                     string clientCode;
                     string clientGuid = QueryCurrentClientGuid(out clientCode);
@@ -139,7 +138,7 @@ namespace ES.Client
             }
         }
 
-        private void PostDataToServer(Main formObj, TranConfig config, string md5Pulickey, string clientCode, string clientGuid)
+        private void PostDataToServer(XtraFrmMain formObj, TranConfig config, string md5Pulickey, string clientCode, string clientGuid)
         {
             if (formObj != null)
             {
@@ -152,7 +151,7 @@ namespace ES.Client
                 _syncContext.Post(formObj.ReloadLog, _db.TranLog.OrderByDescending(p => p.ID).Take(200).ToList());
         }
 
-        private void GetDataFromServer(Main formObj, TranConfig config, string md5Pulickey, string clientCode, string clientGuid)
+        private void GetDataFromServer(XtraFrmMain formObj, TranConfig config, string md5Pulickey, string clientCode, string clientGuid)
         {
             if (formObj != null)
             {
@@ -276,14 +275,14 @@ namespace ES.Client
 
             try
             {
-                if(log==null)
+                if (log == null)
                 {
                     log = new TranLog()
                     {
                         Client = clientCode,
                         ConfigCode = config.Code,
                         ConfigName = config.Name,
-                        Count = (times*config.MaxCount) + sqlData.RowCount,
+                        Count = (times * config.MaxCount) + sqlData.RowCount,
                         Direct = 0,
                         Result = "下载数据成功。",
                         Sort = config.Sort,
@@ -412,7 +411,7 @@ namespace ES.Client
                         ConfigName = config.Name,
                         Count = results.Count(),
                         Direct = 1,
-                        Result="上传数据成功",
+                        Result = "上传数据成功",
                         Sort = config.Sort,
                         Stamp = config.Cstamp,
                         TranTime = DateTime.Now
@@ -425,7 +424,7 @@ namespace ES.Client
             catch (System.Data.Linq.ChangeConflictException ex)
             {
                 _db.ChangeConflicts.ResolveAll(RefreshMode.OverwriteCurrentValues);//保持原来的更新,放弃了当前的值.
-                if(isError)
+                if (isError)
                     throw;
             }
         }
@@ -521,7 +520,7 @@ namespace ES.Client
             string errorMsg = null;
             try
             {
-                UpdateDbByResponse(sqlData, sqlData.ConfigGuid, config.TargetTableName, config.BlobColumn,out sql);
+                UpdateDbByResponse(sqlData, sqlData.ConfigGuid, config.TargetTableName, config.BlobColumn, out sql);
             }
             catch (Exception ex)
             {
@@ -555,25 +554,25 @@ namespace ES.Client
         private void UpdateDbByResponse(SqlData sqlData, string configGuid, string table, string bloblColumn, out string execSql)
         {
             StringBuilder sql = new StringBuilder(sqlData.HeaderSql + ";" + sqlData.DetailSql + ";");
-            StringBuilder updateBlobSql=new StringBuilder();
+            StringBuilder updateBlobSql = new StringBuilder();
             object[] paramters = null;
 
             if (!string.IsNullOrEmpty(bloblColumn))
             {
                 var blobs = sqlData.BlobDatas;
-                paramters = new object[blobs.Length*2];
+                paramters = new object[blobs.Length * 2];
                 for (var i = 0; i < blobs.Length; i++)
                 {
                     updateBlobSql.Append("Update ")
                         .Append("#temp_" + table)
                         .Append(" set ")
-                        .Append(bloblColumn + "= {" + (i*2) + "}")
+                        .Append(bloblColumn + "= {" + (i * 2) + "}")
                         .Append(" Where [Guid]=")
-                        .Append("{" + (i*2 + 1) + "}")
+                        .Append("{" + (i * 2 + 1) + "}")
                         .Append(";");
 
-                    paramters[i*2] = blobs[i].Blob;
-                    paramters[i*2 + 1] = blobs[i].Guid;
+                    paramters[i * 2] = blobs[i].Blob;
+                    paramters[i * 2 + 1] = blobs[i].Guid;
                 }
             }
 
@@ -590,7 +589,8 @@ namespace ES.Client
             if (paramters == null)
             {
                 _db.ExecuteCommand(execSql);
-            }else
+            }
+            else
             {
                 _db.ExecuteCommand(execSql, paramters);
             }
@@ -610,21 +610,25 @@ namespace ES.Client
             return client.GUID.ToString();
         }
 
-        private void toolStripStatusLabel2_Click(object sender, EventArgs e)
+        private void FinishTransfer(object o)
         {
+            if (t != null && t.IsAlive)
+            {
+                t.Abort();
+            }
 
+            barBtnStart.Enabled = true;
+            barBtnStop.Enabled = false;
+
+            barStaticItemStatus.Caption = "传输结束";
         }
 
-        private void q退出ToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            if (MessageBox.Show("您确定退出吗？", "提示", MessageBoxButtons.OKCancel, MessageBoxIcon.Question) == DialogResult.OK)
-                this.Close();
-        }
+        #region 事件开始
 
-        Thread t = null;
-        private void 开始传输ToolStripMenuItem_Click(object sender, EventArgs e)
+        private void barBtnStart_ItemClick(object sender, ItemClickEventArgs e)
         {
-            if (!LoadServiceAddress()) {
+            if (!LoadServiceAddress())
+            {
                 return;
             }
 
@@ -634,37 +638,16 @@ namespace ES.Client
 
             t.Start(this);
 
-            开始传输ToolStripMenuItem.Enabled = false;
+            barBtnStop.Enabled = true;
+            barBtnStart.Enabled = false;
         }
 
-        private void 停止传输ToolStripMenuItem_Click(object sender, EventArgs e)
+        private void barBtnStop_ItemClick(object sender, ItemClickEventArgs e)
         {
-            if (t != null && t.IsAlive)
-            {
-                t.Abort();
-            }
-
-            开始传输ToolStripMenuItem.Enabled = true;
-            停止传输ToolStripMenuItem.Enabled = false;
-            this.ShowTranferName("传输停止");
+            FinishTransfer(null);
         }
 
-        private void FinishTransfer(object o)
-        {
-            if (t != null && t.IsAlive)
-            {
-                t.Abort();
-            }
-            开始传输ToolStripMenuItem.Enabled = true;
-            停止传输ToolStripMenuItem.Enabled = false;
+        #endregion 事件结束
 
-            tl_tName.Text = "传输结束";
-        }
-
-        private void toolStripMenuItemConfig_Click(object sender, EventArgs e)
-        {
-            var configForm=new ServiceConfig();
-            configForm.ShowDialog();
-        }
     }
 }
