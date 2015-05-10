@@ -29,14 +29,14 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(XtraFrmMain));
-            DevExpress.Utils.SuperToolTip superToolTip1 = new DevExpress.Utils.SuperToolTip();
-            DevExpress.Utils.ToolTipItem toolTipItem1 = new DevExpress.Utils.ToolTipItem();
-            DevExpress.Utils.SuperToolTip superToolTip2 = new DevExpress.Utils.SuperToolTip();
-            DevExpress.Utils.ToolTipItem toolTipItem2 = new DevExpress.Utils.ToolTipItem();
-            DevExpress.Utils.SuperToolTip superToolTip3 = new DevExpress.Utils.SuperToolTip();
-            DevExpress.Utils.ToolTipItem toolTipItem3 = new DevExpress.Utils.ToolTipItem();
             DevExpress.Utils.SuperToolTip superToolTip4 = new DevExpress.Utils.SuperToolTip();
             DevExpress.Utils.ToolTipItem toolTipItem4 = new DevExpress.Utils.ToolTipItem();
+            DevExpress.Utils.SuperToolTip superToolTip8 = new DevExpress.Utils.SuperToolTip();
+            DevExpress.Utils.ToolTipItem toolTipItem8 = new DevExpress.Utils.ToolTipItem();
+            DevExpress.Utils.SuperToolTip superToolTip9 = new DevExpress.Utils.SuperToolTip();
+            DevExpress.Utils.ToolTipItem toolTipItem9 = new DevExpress.Utils.ToolTipItem();
+            DevExpress.Utils.SuperToolTip superToolTip7 = new DevExpress.Utils.SuperToolTip();
+            DevExpress.Utils.ToolTipItem toolTipItem7 = new DevExpress.Utils.ToolTipItem();
             this.ribbonControl1 = new DevExpress.XtraBars.Ribbon.RibbonControl();
             this.barBtnStart = new DevExpress.XtraBars.BarButtonItem();
             this.barBtnStop = new DevExpress.XtraBars.BarButtonItem();
@@ -147,9 +147,9 @@
             this.barBtnStart.Id = 5;
             this.barBtnStart.LargeGlyph = ((System.Drawing.Image)(resources.GetObject("barBtnStart.LargeGlyph")));
             this.barBtnStart.Name = "barBtnStart";
-            toolTipItem1.Text = "开始传输";
-            superToolTip1.Items.Add(toolTipItem1);
-            this.barBtnStart.SuperTip = superToolTip1;
+            toolTipItem4.Text = "开始传输";
+            superToolTip4.Items.Add(toolTipItem4);
+            this.barBtnStart.SuperTip = superToolTip4;
             this.barBtnStart.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barBtnStart_ItemClick);
             // 
             // barBtnStop
@@ -159,9 +159,9 @@
             this.barBtnStop.Id = 6;
             this.barBtnStop.LargeGlyph = ((System.Drawing.Image)(resources.GetObject("barBtnStop.LargeGlyph")));
             this.barBtnStop.Name = "barBtnStop";
-            toolTipItem2.Text = "停止传输";
-            superToolTip2.Items.Add(toolTipItem2);
-            this.barBtnStop.SuperTip = superToolTip2;
+            toolTipItem8.Text = "停止传输";
+            superToolTip8.Items.Add(toolTipItem8);
+            this.barBtnStop.SuperTip = superToolTip8;
             this.barBtnStop.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barBtnStop_ItemClick);
             // 
             // ribbonGalleryBarItem1
@@ -177,6 +177,7 @@
             this.barBtnAddClient.Id = 9;
             this.barBtnAddClient.LargeGlyph = ((System.Drawing.Image)(resources.GetObject("barBtnAddClient.LargeGlyph")));
             this.barBtnAddClient.Name = "barBtnAddClient";
+            this.barBtnAddClient.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barBtnAddClient_ItemClick);
             // 
             // barBtnAddServer
             // 
@@ -185,6 +186,7 @@
             this.barBtnAddServer.Id = 10;
             this.barBtnAddServer.LargeGlyph = ((System.Drawing.Image)(resources.GetObject("barBtnAddServer.LargeGlyph")));
             this.barBtnAddServer.Name = "barBtnAddServer";
+            this.barBtnAddServer.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barBtnAddServer_ItemClick);
             // 
             // barEditItemStart
             // 
@@ -193,9 +195,9 @@
             this.barEditItemStart.EditValue = true;
             this.barEditItemStart.Id = 11;
             this.barEditItemStart.Name = "barEditItemStart";
-            toolTipItem3.Text = "是否开机启动";
-            superToolTip3.Items.Add(toolTipItem3);
-            this.barEditItemStart.SuperTip = superToolTip3;
+            toolTipItem9.Text = "是否开机启动";
+            superToolTip9.Items.Add(toolTipItem9);
+            this.barEditItemStart.SuperTip = superToolTip9;
             // 
             // repositoryItemCheckBox1
             // 
@@ -210,9 +212,9 @@
             this.barEditItemTimeSpan.EditValue = 10;
             this.barEditItemTimeSpan.Id = 14;
             this.barEditItemTimeSpan.Name = "barEditItemTimeSpan";
-            toolTipItem4.Text = "传输执行间隔时间（分钟）";
-            superToolTip4.Items.Add(toolTipItem4);
-            this.barEditItemTimeSpan.SuperTip = superToolTip4;
+            toolTipItem7.Text = "传输执行间隔时间（分钟）";
+            superToolTip7.Items.Add(toolTipItem7);
+            this.barEditItemTimeSpan.SuperTip = superToolTip7;
             // 
             // repositoryItemSpinEdit1
             // 

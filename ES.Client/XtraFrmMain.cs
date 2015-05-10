@@ -221,13 +221,14 @@ namespace ES.Client
 
                 if (result.State != 0)
                 {
-                    log = new TranLog()
-                    {
+                    log = new TranLog(){
                         Client = clientCode,
+                        TransferNo = tranferNo,
                         ConfigCode = config.Code,
                         ConfigName = config.Name,
                         Count = 0,
                         Direct = 0,
+                        IsSuccess = false,
                         Remark = result.Message,
                         Result = "服务器出错了",
                         Sort = config.Sort,
@@ -243,10 +244,12 @@ namespace ES.Client
                     log = new TranLog()
                     {
                         Client = clientCode,
+                        TransferNo = tranferNo,
                         ConfigCode = config.Code,
                         ConfigName = config.Name,
                         Count = 0,
                         Direct = 0,
+                        IsSuccess = true,
                         Result = "没有返回数据",
                         Remark = "已经是最新数据",
                         Sort = config.Sort,
@@ -267,9 +270,11 @@ namespace ES.Client
                     {
                         Client = clientCode,
                         ConfigCode = config.Code,
+                        TransferNo = tranferNo,
                         ConfigName = config.Name,
                         Count = 0,
                         Direct = 0,
+                        IsSuccess = false,
                         Remark = "SqlData 为 Null",
                         Result = "SqlData转换出错",
                         Sort = config.Sort,
@@ -296,9 +301,11 @@ namespace ES.Client
                     {
                         Client = clientCode,
                         ConfigCode = config.Code,
+                        TransferNo = tranferNo,
                         ConfigName = config.Name,
-                        Count = sqlData.RowCount,
+                        Count = 0,
                         Direct = 0,
+                        IsSuccess = false,
                         Result = "更新出错，详情见备注。",
                         Sort = config.Sort,
                         Detail = sql,
@@ -323,14 +330,15 @@ namespace ES.Client
                         Client = clientCode,
                         ConfigCode = config.Code,
                         ConfigName = config.Name,
+                        TransferNo = tranferNo,
                         Count = (times * config.MaxCount) + sqlData.RowCount,
                         Direct = 0,
+                        IsSuccess = true,
                         Result = "下载数据成功。",
                         Sort = config.Sort,
                         TranTime = DateTime.Now
                     };
-                }
-                _db.TranLog.InsertOnSubmit(log);
+                }_db.TranLog.InsertOnSubmit(log);
                 _db.SubmitChanges();
             }
             catch (System.Data.Linq.ChangeConflictException conflictEx)
@@ -366,8 +374,10 @@ namespace ES.Client
                             Client = clientCode,
                             ConfigCode = config.Code,
                             ConfigName = config.Name,
-                            Count = results.Count(),
+                            TransferNo = tranferNo,
+                            Count = 0,
                             Direct = 0,
+                            IsSuccess = false,
                             Remark = "templog 标志异常，请检查“{templog:”与“{templog:”",
                             Sort = config.Sort,
                             Stamp = config.Cstamp,
@@ -422,8 +432,10 @@ namespace ES.Client
                             Client = clientCode,
                             ConfigCode = config.Code,
                             ConfigName = config.Name,
-                            Count = results.Count(),
+                            TransferNo = tranferNo,
+                            Count = 0,
                             Direct = 0,
+                            IsSuccess = false,
                             Remark = response.Message,
                             Sort = config.Sort,
                             Stamp = config.Cstamp,
@@ -450,8 +462,10 @@ namespace ES.Client
                         Client = clientCode,
                         ConfigCode = config.Code,
                         ConfigName = config.Name,
+                        TransferNo = tranferNo,
                         Count = results.Count(),
                         Direct = 1,
+                        IsSuccess = true,
                         Result = "上传数据成功",
                         Sort = config.Sort,
                         Stamp = config.Cstamp,
@@ -489,8 +503,11 @@ namespace ES.Client
                     Client = clientCode,
                     ConfigCode = "PZSJ",
                     ConfigName = "传输配置数据",
+                    TransferNo = tranferNo,
                     Direct = 0,
+                    Count = 0,
                     Result = "返回数据出错",
+                    IsSuccess = false,
                     Sort = -1,
                     Stamp = config == null ? 0 : config.Sstamp,
                     TranTime = DateTime.Now
@@ -507,12 +524,15 @@ namespace ES.Client
                 log = new TranLog()
                 {
                     Client = clientCode,
+                    TransferNo = tranferNo,
                     ConfigCode = "PZSJ",
                     ConfigName = "传输配置数据",
                     Direct = 0,
+                    Count = 0,
                     Result = "服务器发生错误",
                     Remark = result.Message,
                     Sort = -1,
+                    IsSuccess = false,
                     Stamp = config == null ? 0 : config.Sstamp,
                     TranTime = DateTime.Now
                 };
@@ -529,12 +549,15 @@ namespace ES.Client
                 log = new TranLog()
                 {
                     Client = clientCode,
+                    TransferNo = tranferNo,
                     ConfigCode = "PZSJ",
                     ConfigName = "传输配置数据",
                     Direct = 0,
+                    Count = 0,
                     Result = "没有返回数据",
                     Remark = "已经是最新数据",
                     Sort = -1,
+                    IsSuccess = true,
                     Stamp = config == null ? 0 : config.Sstamp,
                     TranTime = DateTime.Now
                 };
@@ -571,11 +594,13 @@ namespace ES.Client
             log = new TranLog()
             {
                 Client = clientCode,
+                TransferNo = tranferNo,
                 ConfigCode = "PZSJ",
                 ConfigName = "传输配置数据",
                 Direct = 0,
-                Count = sqlData.RowCount,
+                Count = errorMsg == null ?sqlData.RowCount:0,
                 Result = errorMsg == null ? "更新数据成功" : "更新出错，详情见备注。",
+                IsSuccess = errorMsg==null,
                 Sort = -1,
                 Stamp = sqlData.MaxTimeStamp,
                 Detail = sql,
@@ -761,10 +786,10 @@ namespace ES.Client
                 htmlText.Append("<h4>传输时间：").Append(log.TranTime).Append("<h4/>");
                 htmlText.Append("<h4>传输方向：").Append(log.Direct == 0 ? "总部到门店" : log.Direct == 1 ? "门店到总部" : "双向传输").Append("<h4/>");
                 htmlText.Append("<h4>处理结果：").Append(log.Result).Append("<h4/>");
+                htmlText.Append("<h4>备注：").Append(log.Remark).Append("<h4/>");
 
                 if (log.IsSuccess == false)
                 {
-                    htmlText.Append("<h4>错误备注：").Append(log.Remark).Append("<h4/>");
                     htmlText.Append("<h4>Sql</h4>").Append("<p>Header: ").AppendLine(log.Header).Append("</p><p>Detail: ").AppendLine(log.Detail).Append("</p><p>Footer: ").AppendLine(log.Footer).Append("<p/>");
                 }
 
@@ -871,6 +896,16 @@ namespace ES.Client
         private void repositoryItemSpinEdit1_EditValueChanged(object sender, EventArgs e)
         {
             lastTransferTime = DateTime.Now;
+        }
+
+        private void barBtnAddClient_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            MessageBox.Show("本功能尚未添加，请手动在数据库配置。");
+        }
+
+        private void barBtnAddServer_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            MessageBox.Show("本功能尚未添加，请手动在App.config文件中注册。");
         }
 
         #endregion 事件结束
