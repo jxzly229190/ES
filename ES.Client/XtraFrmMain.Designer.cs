@@ -29,14 +29,14 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(XtraFrmMain));
-            DevExpress.Utils.SuperToolTip superToolTip1 = new DevExpress.Utils.SuperToolTip();
-            DevExpress.Utils.ToolTipItem toolTipItem1 = new DevExpress.Utils.ToolTipItem();
-            DevExpress.Utils.SuperToolTip superToolTip2 = new DevExpress.Utils.SuperToolTip();
-            DevExpress.Utils.ToolTipItem toolTipItem2 = new DevExpress.Utils.ToolTipItem();
             DevExpress.Utils.SuperToolTip superToolTip3 = new DevExpress.Utils.SuperToolTip();
             DevExpress.Utils.ToolTipItem toolTipItem3 = new DevExpress.Utils.ToolTipItem();
-            DevExpress.Utils.SuperToolTip superToolTip4 = new DevExpress.Utils.SuperToolTip();
-            DevExpress.Utils.ToolTipItem toolTipItem4 = new DevExpress.Utils.ToolTipItem();
+            DevExpress.Utils.SuperToolTip superToolTip10 = new DevExpress.Utils.SuperToolTip();
+            DevExpress.Utils.ToolTipItem toolTipItem10 = new DevExpress.Utils.ToolTipItem();
+            DevExpress.Utils.SuperToolTip superToolTip11 = new DevExpress.Utils.SuperToolTip();
+            DevExpress.Utils.ToolTipItem toolTipItem11 = new DevExpress.Utils.ToolTipItem();
+            DevExpress.Utils.SuperToolTip superToolTip9 = new DevExpress.Utils.SuperToolTip();
+            DevExpress.Utils.ToolTipItem toolTipItem9 = new DevExpress.Utils.ToolTipItem();
             this.ribbonControl1 = new DevExpress.XtraBars.Ribbon.RibbonControl();
             this.barBtnStart = new DevExpress.XtraBars.BarButtonItem();
             this.barBtnStop = new DevExpress.XtraBars.BarButtonItem();
@@ -63,11 +63,14 @@
             this.gridLog = new DevExpress.XtraGrid.GridControl();
             this.gridView1 = new DevExpress.XtraGrid.Views.Grid.GridView();
             this.gridColumnIcon = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.repositoryItemPictureEdit1 = new DevExpress.XtraEditors.Repository.RepositoryItemPictureEdit();
             this.gridColumnConfigName = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gridColumnDirect = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.gridColumnIsSuccess = new DevExpress.XtraGrid.Columns.GridColumn();
             this.gridColumnTime = new DevExpress.XtraGrid.Columns.GridColumn();
-            this.groupControlLogDetail = new DevExpress.XtraEditors.GroupControl();
+            this.gcIsSuccess = new DevExpress.XtraGrid.Columns.GridColumn();
+            this.repositoryItemImageEdit1 = new DevExpress.XtraEditors.Repository.RepositoryItemImageEdit();
+            this.gcLogDetail = new DevExpress.XtraEditors.GroupControl();
+            this.recLogDetail = new DevExpress.XtraRichEdit.RichEditControl();
             ((System.ComponentModel.ISupportInitialize)(this.ribbonControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemCheckEdit1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemSpinEdit1)).BeginInit();
@@ -77,7 +80,10 @@
             this.splitContainerControl1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridLog)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView1)).BeginInit();
-            ((System.ComponentModel.ISupportInitialize)(this.groupControlLogDetail)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemPictureEdit1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemImageEdit1)).BeginInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gcLogDetail)).BeginInit();
+            this.gcLogDetail.SuspendLayout();
             this.SuspendLayout();
             // 
             // ribbonControl1
@@ -116,9 +122,9 @@
             this.barBtnStart.Id = 5;
             this.barBtnStart.LargeGlyph = ((System.Drawing.Image)(resources.GetObject("barBtnStart.LargeGlyph")));
             this.barBtnStart.Name = "barBtnStart";
-            toolTipItem1.Text = "开始传输";
-            superToolTip1.Items.Add(toolTipItem1);
-            this.barBtnStart.SuperTip = superToolTip1;
+            toolTipItem3.Text = "开始传输";
+            superToolTip3.Items.Add(toolTipItem3);
+            this.barBtnStart.SuperTip = superToolTip3;
             this.barBtnStart.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barBtnStart_ItemClick);
             // 
             // barBtnStop
@@ -128,9 +134,9 @@
             this.barBtnStop.Id = 6;
             this.barBtnStop.LargeGlyph = ((System.Drawing.Image)(resources.GetObject("barBtnStop.LargeGlyph")));
             this.barBtnStop.Name = "barBtnStop";
-            toolTipItem2.Text = "停止传输";
-            superToolTip2.Items.Add(toolTipItem2);
-            this.barBtnStop.SuperTip = superToolTip2;
+            toolTipItem10.Text = "停止传输";
+            superToolTip10.Items.Add(toolTipItem10);
+            this.barBtnStop.SuperTip = superToolTip10;
             this.barBtnStop.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barBtnStop_ItemClick);
             // 
             // ribbonGalleryBarItem1
@@ -161,9 +167,9 @@
             this.barEditItemStart.Edit = this.repositoryItemCheckEdit1;
             this.barEditItemStart.Id = 11;
             this.barEditItemStart.Name = "barEditItemStart";
-            toolTipItem3.Text = "是否开机启动";
-            superToolTip3.Items.Add(toolTipItem3);
-            this.barEditItemStart.SuperTip = superToolTip3;
+            toolTipItem11.Text = "是否开机启动";
+            superToolTip11.Items.Add(toolTipItem11);
+            this.barEditItemStart.SuperTip = superToolTip11;
             // 
             // repositoryItemCheckEdit1
             // 
@@ -177,9 +183,9 @@
             this.barEditItem1.Edit = this.repositoryItemSpinEdit1;
             this.barEditItem1.Id = 14;
             this.barEditItem1.Name = "barEditItem1";
-            toolTipItem4.Text = "传输执行间隔时间（分钟）";
-            superToolTip4.Items.Add(toolTipItem4);
-            this.barEditItem1.SuperTip = superToolTip4;
+            toolTipItem9.Text = "传输执行间隔时间（分钟）";
+            superToolTip9.Items.Add(toolTipItem9);
+            this.barEditItem1.SuperTip = superToolTip9;
             // 
             // repositoryItemSpinEdit1
             // 
@@ -285,7 +291,7 @@
             this.splitContainerControl1.Name = "splitContainerControl1";
             this.splitContainerControl1.Panel1.Controls.Add(this.gridLog);
             this.splitContainerControl1.Panel1.Text = "Panel1";
-            this.splitContainerControl1.Panel2.Controls.Add(this.groupControlLogDetail);
+            this.splitContainerControl1.Panel2.Controls.Add(this.gcLogDetail);
             this.splitContainerControl1.Panel2.Text = "Panel2";
             this.splitContainerControl1.Size = new System.Drawing.Size(988, 357);
             this.splitContainerControl1.SplitterPosition = 319;
@@ -299,6 +305,9 @@
             this.gridLog.MainView = this.gridView1;
             this.gridLog.MenuManager = this.ribbonControl1;
             this.gridLog.Name = "gridLog";
+            this.gridLog.RepositoryItems.AddRange(new DevExpress.XtraEditors.Repository.RepositoryItem[] {
+            this.repositoryItemImageEdit1,
+            this.repositoryItemPictureEdit1});
             this.gridLog.Size = new System.Drawing.Size(319, 357);
             this.gridLog.TabIndex = 3;
             this.gridLog.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
@@ -310,19 +319,34 @@
             this.gridColumnIcon,
             this.gridColumnConfigName,
             this.gridColumnDirect,
-            this.gridColumnIsSuccess,
-            this.gridColumnTime});
+            this.gridColumnTime,
+            this.gcIsSuccess});
             this.gridView1.GridControl = this.gridLog;
+            this.gridView1.IndicatorWidth = 30;
             this.gridView1.Name = "gridView1";
             this.gridView1.OptionsBehavior.Editable = false;
             this.gridView1.OptionsBehavior.ReadOnly = true;
+            this.gridView1.OptionsView.ShowGroupPanel = false;
+            this.gridView1.CustomDrawRowIndicator += new DevExpress.XtraGrid.Views.Grid.RowIndicatorCustomDrawEventHandler(this.gridView1_CustomDrawRowIndicator);
+            this.gridView1.CustomDrawCell += new DevExpress.XtraGrid.Views.Base.RowCellCustomDrawEventHandler(this.gridView1_CustomDrawCell);
+            this.gridView1.FocusedRowChanged += new DevExpress.XtraGrid.Views.Base.FocusedRowChangedEventHandler(this.gridView1_FocusedRowChanged);
+            this.gridView1.CustomUnboundColumnData += new DevExpress.XtraGrid.Views.Base.CustomColumnDataEventHandler(this.gridView1_CustomUnboundColumnData);
             // 
             // gridColumnIcon
             // 
-            this.gridColumnIcon.Image = ((System.Drawing.Image)(resources.GetObject("gridColumnIcon.Image")));
+            this.gridColumnIcon.Caption = "成功？";
+            this.gridColumnIcon.ColumnEdit = this.repositoryItemPictureEdit1;
+            this.gridColumnIcon.FieldName = "icon";
+            this.gridColumnIcon.FilterMode = DevExpress.XtraGrid.ColumnFilterMode.DisplayText;
+            this.gridColumnIcon.ImageAlignment = System.Drawing.StringAlignment.Center;
             this.gridColumnIcon.Name = "gridColumnIcon";
+            this.gridColumnIcon.UnboundType = DevExpress.Data.UnboundColumnType.Object;
             this.gridColumnIcon.Visible = true;
             this.gridColumnIcon.VisibleIndex = 0;
+            // 
+            // repositoryItemPictureEdit1
+            // 
+            this.repositoryItemPictureEdit1.Name = "repositoryItemPictureEdit1";
             // 
             // gridColumnConfigName
             // 
@@ -336,17 +360,10 @@
             // 
             this.gridColumnDirect.Caption = "方向";
             this.gridColumnDirect.FieldName = "Direct";
+            this.gridColumnDirect.FilterMode = DevExpress.XtraGrid.ColumnFilterMode.DisplayText;
             this.gridColumnDirect.Name = "gridColumnDirect";
             this.gridColumnDirect.Visible = true;
             this.gridColumnDirect.VisibleIndex = 2;
-            // 
-            // gridColumnIsSuccess
-            // 
-            this.gridColumnIsSuccess.Caption = "成功？";
-            this.gridColumnIsSuccess.FieldName = "IsSuccess";
-            this.gridColumnIsSuccess.Name = "gridColumnIsSuccess";
-            this.gridColumnIsSuccess.Visible = true;
-            this.gridColumnIsSuccess.VisibleIndex = 3;
             // 
             // gridColumnTime
             // 
@@ -354,16 +371,42 @@
             this.gridColumnTime.FieldName = "TranTime";
             this.gridColumnTime.Name = "gridColumnTime";
             this.gridColumnTime.Visible = true;
-            this.gridColumnTime.VisibleIndex = 4;
+            this.gridColumnTime.VisibleIndex = 3;
             // 
-            // groupControlLogDetail
+            // gcIsSuccess
             // 
-            this.groupControlLogDetail.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.groupControlLogDetail.Location = new System.Drawing.Point(0, 0);
-            this.groupControlLogDetail.Name = "groupControlLogDetail";
-            this.groupControlLogDetail.Size = new System.Drawing.Size(664, 357);
-            this.groupControlLogDetail.TabIndex = 0;
-            this.groupControlLogDetail.Text = "详情";
+            this.gcIsSuccess.Caption = "是否成功";
+            this.gcIsSuccess.FieldName = "IsSuccess";
+            this.gcIsSuccess.Name = "gcIsSuccess";
+            // 
+            // repositoryItemImageEdit1
+            // 
+            this.repositoryItemImageEdit1.AutoHeight = false;
+            this.repositoryItemImageEdit1.Buttons.AddRange(new DevExpress.XtraEditors.Controls.EditorButton[] {
+            new DevExpress.XtraEditors.Controls.EditorButton(DevExpress.XtraEditors.Controls.ButtonPredefines.Combo)});
+            this.repositoryItemImageEdit1.Name = "repositoryItemImageEdit1";
+            // 
+            // gcLogDetail
+            // 
+            this.gcLogDetail.Controls.Add(this.recLogDetail);
+            this.gcLogDetail.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.gcLogDetail.Location = new System.Drawing.Point(0, 0);
+            this.gcLogDetail.Name = "gcLogDetail";
+            this.gcLogDetail.Size = new System.Drawing.Size(664, 357);
+            this.gcLogDetail.TabIndex = 0;
+            this.gcLogDetail.Text = "详情";
+            // 
+            // recLogDetail
+            // 
+            this.recLogDetail.ActiveViewType = DevExpress.XtraRichEdit.RichEditViewType.Simple;
+            this.recLogDetail.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.recLogDetail.Location = new System.Drawing.Point(2, 22);
+            this.recLogDetail.MenuManager = this.ribbonControl1;
+            this.recLogDetail.Name = "recLogDetail";
+            this.recLogDetail.Options.Fields.UseCurrentCultureDateTimeFormat = false;
+            this.recLogDetail.Options.MailMerge.KeepLastParagraph = false;
+            this.recLogDetail.Size = new System.Drawing.Size(660, 333);
+            this.recLogDetail.TabIndex = 0;
             // 
             // XtraFrmMain
             // 
@@ -384,7 +427,10 @@
             this.splitContainerControl1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.gridLog)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gridView1)).EndInit();
-            ((System.ComponentModel.ISupportInitialize)(this.groupControlLogDetail)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemPictureEdit1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.repositoryItemImageEdit1)).EndInit();
+            ((System.ComponentModel.ISupportInitialize)(this.gcLogDetail)).EndInit();
+            this.gcLogDetail.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -417,10 +463,13 @@
         private DevExpress.XtraGrid.Views.Grid.GridView gridView1;
         private DevExpress.XtraGrid.Columns.GridColumn gridColumnConfigName;
         private DevExpress.XtraGrid.Columns.GridColumn gridColumnDirect;
-        private DevExpress.XtraGrid.Columns.GridColumn gridColumnIsSuccess;
         private DevExpress.XtraGrid.Columns.GridColumn gridColumnTime;
-        private DevExpress.XtraEditors.GroupControl groupControlLogDetail;
+        private DevExpress.XtraEditors.GroupControl gcLogDetail;
         private DevExpress.XtraGrid.Columns.GridColumn gridColumnIcon;
         private DevExpress.XtraBars.BarStaticItem barStaticItemStatus;
+        private DevExpress.XtraRichEdit.RichEditControl recLogDetail;
+        private DevExpress.XtraEditors.Repository.RepositoryItemImageEdit repositoryItemImageEdit1;
+        private DevExpress.XtraEditors.Repository.RepositoryItemPictureEdit repositoryItemPictureEdit1;
+        private DevExpress.XtraGrid.Columns.GridColumn gcIsSuccess;
     }
 }

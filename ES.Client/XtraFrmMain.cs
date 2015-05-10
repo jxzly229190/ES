@@ -1,13 +1,17 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.Linq;
+using System.Drawing;
 using System.ServiceModel;
 using System.Text;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
+using DevExpress.Utils;
 using DevExpress.XtraBars;
 using DevExpress.XtraBars.Helpers;
+using DevExpress.XtraGrid.Views.Grid;
 using ES.Client.ServiceReference;
 using ES.Repository;
 
@@ -29,6 +33,14 @@ namespace ES.Client
             SkinHelper.InitSkinGallery(ribbonGalleryBarItem1, true);
 
             BindData();
+
+            //ShowLogDetail();
+        }
+
+        private void ShowLogDetail(string html)
+        {
+            //recLogDetail.Enabled = false;
+            recLogDetail.Document.HtmlText = html;
         }
 
         private void BindData()
@@ -649,5 +661,84 @@ namespace ES.Client
 
         #endregion 事件结束
 
+        private void gridView1_FocusedRowChanged(object sender, DevExpress.XtraGrid.Views.Base.FocusedRowChangedEventArgs e)
+        {
+            if (e.FocusedRowHandle <0)
+            {
+                return;
+            }
+
+            List<TranLog> data = gridView1.DataSource as List<TranLog>;
+
+            if (data != null && data.Count > 0)
+            {
+                var log = data[gridView1.GetDataSourceRowIndex(e.FocusedRowHandle)];
+
+                StringBuilder htmlText=new StringBuilder();
+
+                htmlText.Append("<h3>传输项目：").Append(log.ConfigName).Append("<h3/>");
+                htmlText.Append("<h4>项目代码：").Append(log.ConfigCode).Append("<h4/>");
+                htmlText.Append("<h4>是否成功：").Append(log.IsSuccess == true ? "是" : "否");
+
+                if (log.IsSuccess == true)
+                {
+                    htmlText.Append("&nbsp;&nbsp;&nbsp;&nbsp;").Append("传输行数：").Append(log.Count);
+                }
+                htmlText.Append("<h4/>");
+                htmlText.Append("<h4>传输时间：").Append(log.TranTime.ToLocalTime()).Append("<h4/>");
+                htmlText.Append("<h4>传输方向：").Append(log.Direct == 0 ? "总部到门店" :log.Direct == 1 ? "门店到总部":"双向传输").Append("<h4/>");
+                htmlText.Append("<h4>处理结果：").Append(log.Result).Append("<h4/>");
+
+                if (log.IsSuccess == false)
+                {
+                    htmlText.Append("<h4>错误备注：").Append(log.Remark).Append("<h4/>");
+                    htmlText.Append("<h4>Sql</h4>").Append("<p>Header: ").AppendLine(log.Header).Append("</p><p>Detail: ").AppendLine(log.Detail).Append("</p><p>Footer: ").AppendLine(log.Footer).Append("<p/>");
+                }
+
+                ShowLogDetail(htmlText.ToString());
+            }
+        }
+
+        private void gridView1_CustomUnboundColumnData(object sender, DevExpress.XtraGrid.Views.Base.CustomColumnDataEventArgs e)
+        {
+            if (e.Column.FieldName == "icon" && e.IsGetData)
+            {
+                GridView view = sender as GridView;
+                var log = e.Row as TranLog;
+                if (log != null)
+                {
+                    try
+                    {
+                        string fileName = log.IsSuccess == true ? "success.png" : "fail.png";
+                        string filePath = DevExpress.Utils.FilesHelper.FindingFileName(Application.StartupPath, "images/" + fileName, false);
+                        var img = Image.FromFile(filePath);
+                        //Images.Add(img, fileName);
+                        e.Value = img;
+                    }
+                    catch { }
+                }
+            }
+        }
+
+        private void gridView1_CustomDrawCell(object sender, DevExpress.XtraGrid.Views.Base.RowCellCustomDrawEventArgs e)
+        {
+            if (e.Column.FieldName == "Direct")
+            {
+                if (e.CellValue.Equals(0))
+                {
+                    e.DisplayText = "下载";
+                }
+                else
+                {
+                    e.DisplayText = "上传";
+                }}
+        }
+
+        private void gridView1_CustomDrawRowIndicator(object sender, RowIndicatorCustomDrawEventArgs e)
+        {
+            if (e.Info.IsRowIndicator && e.RowHandle >= 0)
+            {
+                e.Info.DisplayText = (e.RowHandle + 1).ToString();
+            }}
     }
 }
