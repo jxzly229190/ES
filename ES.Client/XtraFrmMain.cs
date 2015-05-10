@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data;
 using System.Data.Linq;
 using System.Drawing;
 using System.ServiceModel;
@@ -8,7 +7,6 @@ using System.Text;
 using System.Linq;
 using System.Threading;
 using System.Windows.Forms;
-using DevExpress.Utils;
 using DevExpress.XtraBars;
 using DevExpress.XtraBars.Helpers;
 using DevExpress.XtraGrid.Views.Grid;
@@ -17,24 +15,52 @@ using ES.Repository;
 
 namespace ES.Client
 {
-    public partial class XtraFrmMain : DevExpress.XtraEditors.XtraForm{
+    public partial class XtraFrmMain : DevExpress.XtraEditors.XtraForm
+    {
+        private bool timerIsStart = false;
+        private DateTime lastTransferTime;
         private readonly object _lockFlag = new object();
         readonly SynchronizationContext _syncContext = null;
         ServiceReference.TransferSoapClient _server = new ServiceReference.TransferSoapClient();
         dbDataContext _db = new dbDataContext();
         private string tranferNo = string.Empty;
         Thread t = null;
+        private System.Windows.Forms.Timer timer = null;
 
         public XtraFrmMain()
         {
             InitializeComponent();
             _syncContext = SynchronizationContext.Current;
+            InitComponents();
+
+            LoadGridData();
+        }
+
+        private void InitComponents()
+        {
+            timer = new System.Windows.Forms.Timer();
+            lastTransferTime = DateTime.Now;
+            timer.Interval = 1000;//Convert.ToInt32(barEditItemTimeSpan.EditValue)*60*1000;
+            timer.Tick += timer_Tick;
 
             SkinHelper.InitSkinGallery(ribbonGalleryBarItem1, true);
 
-            BindData();
+            barBtnStop.Enabled = false;
+            barButtonItemRestart.Enabled = false;
+            //repositoryItemComboBoxDays.Editable = false;
+            //repositoryItemComboBox1.Items.AddRange(new int[5] {50, 100, 150, 200, 500});
+        }
 
-            //ShowLogDetail();
+        void timer_Tick(object sender, EventArgs e)
+        {
+            var mins = Convert.ToInt32(barEditItemTimeSpan.EditValue);
+            var minSpan = mins*60 - (DateTime.Now - lastTransferTime).TotalSeconds;
+            barStaticItemStatus.Caption = string.Format("距离下次传输还有 {0}分{1}秒", (int) minSpan/60, (int) minSpan%60);
+
+            if (minSpan<=0){
+                this.StartTransfer();
+            }
+            //throw new NotImplementedException();
         }
 
         private void ShowLogDetail(string html)
@@ -43,9 +69,12 @@ namespace ES.Client
             recLogDetail.Document.HtmlText = html;
         }
 
-        private void BindData()
+        private void LoadGridData()
         {
-            var logs = _db.TranLog.ToList();
+            var count = Convert.ToInt16(barCboxRowCount.EditValue);
+            var days = Convert.ToInt16(barEditItemDays.EditValue) + 1;
+
+            var logs = _db.TranLog.Where(l => l.TranTime >= DateTime.Now.AddDays(-days)).OrderByDescending(l=>l.ID).Take(count).ToList();
             gridLog.DataSource = logs;
         }
 
@@ -629,10 +658,52 @@ namespace ES.Client
                 t.Abort();
             }
 
-            barBtnStart.Enabled = true;
-            barBtnStop.Enabled = false;
-
             barStaticItemStatus.Caption = "传输结束";
+            barEditItemProgress.Visibility = BarItemVisibility.Never;
+
+            this.timer.Start();
+            timerIsStart = true;
+            lastTransferTime = DateTime.Now;
+
+            SetActions();
+        }
+
+        private void SetActions()
+        {
+            if (timerIsStart)
+            {
+                barBtnStart.Enabled = false;
+                barBtnStop.Enabled = true;
+                barButtonItemRestart.Enabled = true;
+            }
+            else
+            {
+                barBtnStart.Enabled = true;
+                barBtnStop.Enabled = false;
+                barButtonItemRestart.Enabled = false;
+            }
+        }
+
+        private void StartTransfer()
+        {
+            this.timer.Stop();
+            timerIsStart = false;
+
+            tranferNo = Guid.NewGuid().ToString();
+
+            if (t != null && t.IsAlive)
+            {
+                t.Abort();
+            }
+
+            t = new Thread(new ParameterizedThreadStart(SyncData), 0) {IsBackground = true};
+
+            t.Start(this);
+
+            barStaticItemStatus.Caption = "开始传输";
+            barEditItemProgress.Visibility = BarItemVisibility.Always;
+
+            SetActions();
         }
 
         #region 事件开始
@@ -644,26 +715,28 @@ namespace ES.Client
                 return;
             }
 
-            tranferNo = Guid.NewGuid().ToString();
+            StartTransfer();
+        }
 
-            t = new Thread(new ParameterizedThreadStart(SyncData), 0) {IsBackground = true};
-
-            t.Start(this);
-
-            barBtnStop.Enabled = true;
-            barBtnStart.Enabled = false;
+        private void barButtonItemRestart_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            StartTransfer();
         }
 
         private void barBtnStop_ItemClick(object sender, ItemClickEventArgs e)
         {
             FinishTransfer(null);
-        }
+            
+            this.timer.Stop();
+            timerIsStart = false;
+            barStaticItemStatus.Caption = "传输结束";
+            SetActions();
 
-        #endregion 事件结束
+        }
 
         private void gridView1_FocusedRowChanged(object sender, DevExpress.XtraGrid.Views.Base.FocusedRowChangedEventArgs e)
         {
-            if (e.FocusedRowHandle <0)
+            if (e.FocusedRowHandle < 0)
             {
                 return;
             }
@@ -674,7 +747,7 @@ namespace ES.Client
             {
                 var log = data[gridView1.GetDataSourceRowIndex(e.FocusedRowHandle)];
 
-                StringBuilder htmlText=new StringBuilder();
+                StringBuilder htmlText = new StringBuilder();
 
                 htmlText.Append("<h3>传输项目：").Append(log.ConfigName).Append("<h3/>");
                 htmlText.Append("<h4>项目代码：").Append(log.ConfigCode).Append("<h4/>");
@@ -685,8 +758,8 @@ namespace ES.Client
                     htmlText.Append("&nbsp;&nbsp;&nbsp;&nbsp;").Append("传输行数：").Append(log.Count);
                 }
                 htmlText.Append("<h4/>");
-                htmlText.Append("<h4>传输时间：").Append(log.TranTime.ToLocalTime()).Append("<h4/>");
-                htmlText.Append("<h4>传输方向：").Append(log.Direct == 0 ? "总部到门店" :log.Direct == 1 ? "门店到总部":"双向传输").Append("<h4/>");
+                htmlText.Append("<h4>传输时间：").Append(log.TranTime).Append("<h4/>");
+                htmlText.Append("<h4>传输方向：").Append(log.Direct == 0 ? "总部到门店" : log.Direct == 1 ? "门店到总部" : "双向传输").Append("<h4/>");
                 htmlText.Append("<h4>处理结果：").Append(log.Result).Append("<h4/>");
 
                 if (log.IsSuccess == false)
@@ -731,7 +804,8 @@ namespace ES.Client
                 else
                 {
                     e.DisplayText = "上传";
-                }}
+                }
+            }
         }
 
         private void gridView1_CustomDrawRowIndicator(object sender, RowIndicatorCustomDrawEventArgs e)
@@ -739,6 +813,66 @@ namespace ES.Client
             if (e.Info.IsRowIndicator && e.RowHandle >= 0)
             {
                 e.Info.DisplayText = (e.RowHandle + 1).ToString();
-            }}
+            }
+        }
+
+        private void barBtnRefresh_ItemClick(object sender, ItemClickEventArgs e)
+        {
+            LoadGridData();
+        }
+
+        private void repositoryItemComboBoxDays_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            //if (barEditItemDays.EditValue == null || Convert.ToInt32(barEditItemDays.EditValue) <= 0)
+            //{
+            //    barEditItemDays.EditValue = 0;
+            //}
+
+            //LoadGridData();
+        }
+
+        private void repositoryItemComboBoxDays_EditValueChanged(object sender, EventArgs e)
+        {
+            //int days = 0;
+            //if (int.TryParse(barEditItemDays.EditValue.ToString(),out days))
+            //{
+            //    MessageBox.Show("请输入数字。");
+            //    return;
+            //}
+
+            //if (barEditItemDays.EditValue == null || days <= 0)
+            //{
+            //    barEditItemDays.EditValue = 0;
+            //}
+
+            //LoadGridData();
+        }
+
+        private void repositoryItemComboBox1_SelectedValueChanged(object sender, EventArgs e)
+        {
+            //if (barCboxRowCount.EditValue == null || Convert.ToInt32(barCboxRowCount.EditValue) <= 0)
+            //{
+            //    barCboxRowCount.EditValue = 0;
+            //}
+
+            //LoadGridData();
+        }
+
+        private void repositoryItemComboBox1_EditValueChanged(object sender, EventArgs e)
+        {
+            //if (barCboxRowCount.EditValue == null || Convert.ToInt32(barCboxRowCount.EditValue) <= 0)
+            //{
+            //    barCboxRowCount.EditValue = 0;
+            //}
+
+            //LoadGridData();
+        }
+
+        private void repositoryItemSpinEdit1_EditValueChanged(object sender, EventArgs e)
+        {
+            lastTransferTime = DateTime.Now;
+        }
+
+        #endregion 事件结束
     }
 }
