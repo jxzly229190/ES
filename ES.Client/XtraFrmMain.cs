@@ -72,9 +72,9 @@ namespace ES.Client
         private void LoadGridData()
         {
             var count = Convert.ToInt16(barCboxRowCount.EditValue);
-            var days = Convert.ToInt16(barEditItemDays.EditValue) + 1;
+            var days = Convert.ToInt16(barEditItemDays.EditValue);
 
-            var logs = _db.TranLog.Where(l => l.TranTime >= DateTime.Now.AddDays(-days)).OrderByDescending(l=>l.ID).Take(count).ToList();
+            var logs = _db.TranLog.Where(l => l.TranTime >= DateTime.Now.Date.AddDays(-days)).OrderByDescending(l=>l.ID).Take(count).ToList();
             gridLog.DataSource = logs;
         }
 
