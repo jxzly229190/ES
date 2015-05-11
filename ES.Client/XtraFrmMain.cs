@@ -97,7 +97,14 @@ namespace ES.Client
 
         public void ReloadLog(object listData)
         {
-            gridLog.DataSource = listData;
+            LoadGridData();
+        }
+
+        public void InsertLogToGrid(object log) {
+            var logs = gridLog.DataSource as List<TranLog>;
+            if (logs != null) {
+                logs.Insert(0, log as TranLog);
+            }
         }
 
         private void SyncData(object form)
@@ -187,9 +194,10 @@ namespace ES.Client
                 _syncContext.Post(formObj.ShowTranferName, "上传 " + config.Name);
             }
 
-            Post(md5Pulickey, clientCode, clientGuid, config);
-            if (formObj != null)
-                _syncContext.Post(formObj.ReloadLog, _db.TranLog.OrderByDescending(p => p.ID).Take(200).ToList());
+            Post(formObj, md5Pulickey, clientCode, clientGuid, config);
+
+            //if (formObj != null)
+            //    _syncContext.Post(formObj.ReloadLog, _db.TranLog.OrderByDescending(p => p.ID).Take(200).ToList());
         }
 
         private void GetDataFromServer(XtraFrmMain formObj, TranConfig config, string md5Pulickey, string clientCode, string clientGuid)
@@ -197,8 +205,8 @@ namespace ES.Client
             if (formObj != null)
             {
                 _syncContext.Post(formObj.ShowTranferName, "下载 " + config.Name);
-                Get(md5Pulickey, clientCode, clientGuid, config);
-                _syncContext.Post(formObj.ReloadLog, _db.TranLog.OrderByDescending(p => p.ID).Take(200).ToList());
+                Get(formObj, md5Pulickey, clientCode, clientGuid, config);
+                //_syncContext.Post(formObj.ReloadLog, _db.TranLog.OrderByDescending(p => p.ID).Take(200).ToList());
             }
         }
 
@@ -208,7 +216,7 @@ namespace ES.Client
             this.FinishTransfer(null);
         }
 
-        private void Get(string md5Pulickey, string clientCode, string clientGuid, TranConfig config)
+        private void Get(XtraFrmMain formObj, string md5Pulickey, string clientCode, string clientGuid, TranConfig config)
         {
             SqlData sqlData = null;
             TranLog log = null;
@@ -338,8 +346,12 @@ namespace ES.Client
                         Sort = config.Sort,
                         TranTime = DateTime.Now
                     };
-                }_db.TranLog.InsertOnSubmit(log);
+                }
+                _db.TranLog.InsertOnSubmit(log);
                 _db.SubmitChanges();
+
+                if (formObj != null)
+                    _syncContext.Post(formObj.InsertLogToGrid, log);
             }
             catch (System.Data.Linq.ChangeConflictException conflictEx)
             {
@@ -350,13 +362,14 @@ namespace ES.Client
             }
         }
 
-        private void Post(string md5Pulickey, string clientCode, string clientGuid, TranConfig config)
+        private void Post(XtraFrmMain formObj, string md5Pulickey, string clientCode, string clientGuid, TranConfig config)
         {
             List<ES.Repository.Model.QueryResult> results = null;
             TranLog log = null;
             bool isError = false;
             StringBuilder sql = new StringBuilder();
             long lastStamp = Convert.ToInt64(config.Cstamp);
+            int times = -1;
 
             do
             {
@@ -451,6 +464,7 @@ namespace ES.Client
                         break;
                     }
                 }
+                times += 1;
             } while (results.Count() >= config.MaxCount);
 
             try
@@ -463,7 +477,7 @@ namespace ES.Client
                         ConfigCode = config.Code,
                         ConfigName = config.Name,
                         TransferNo = tranferNo,
-                        Count = results.Count(),
+                        Count = times*config.MaxCount + results.Count(),
                         Direct = 1,
                         IsSuccess = true,
                         Result = "上传数据成功",
@@ -475,6 +489,9 @@ namespace ES.Client
 
                 _db.TranLog.InsertOnSubmit(log);
                 _db.SubmitChanges();
+
+                if (formObj != null)
+                    _syncContext.Post(formObj.InsertLogToGrid, log);
             }
             catch (System.Data.Linq.ChangeConflictException ex)
             {
