@@ -29,14 +29,14 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(XtraFrmMain));
-            DevExpress.Utils.SuperToolTip superToolTip4 = new DevExpress.Utils.SuperToolTip();
-            DevExpress.Utils.ToolTipItem toolTipItem4 = new DevExpress.Utils.ToolTipItem();
-            DevExpress.Utils.SuperToolTip superToolTip8 = new DevExpress.Utils.SuperToolTip();
-            DevExpress.Utils.ToolTipItem toolTipItem8 = new DevExpress.Utils.ToolTipItem();
             DevExpress.Utils.SuperToolTip superToolTip9 = new DevExpress.Utils.SuperToolTip();
             DevExpress.Utils.ToolTipItem toolTipItem9 = new DevExpress.Utils.ToolTipItem();
-            DevExpress.Utils.SuperToolTip superToolTip7 = new DevExpress.Utils.SuperToolTip();
-            DevExpress.Utils.ToolTipItem toolTipItem7 = new DevExpress.Utils.ToolTipItem();
+            DevExpress.Utils.SuperToolTip superToolTip14 = new DevExpress.Utils.SuperToolTip();
+            DevExpress.Utils.ToolTipItem toolTipItem14 = new DevExpress.Utils.ToolTipItem();
+            DevExpress.Utils.SuperToolTip superToolTip15 = new DevExpress.Utils.SuperToolTip();
+            DevExpress.Utils.ToolTipItem toolTipItem15 = new DevExpress.Utils.ToolTipItem();
+            DevExpress.Utils.SuperToolTip superToolTip13 = new DevExpress.Utils.SuperToolTip();
+            DevExpress.Utils.ToolTipItem toolTipItem13 = new DevExpress.Utils.ToolTipItem();
             this.ribbonControl1 = new DevExpress.XtraBars.Ribbon.RibbonControl();
             this.barBtnStart = new DevExpress.XtraBars.BarButtonItem();
             this.barBtnStop = new DevExpress.XtraBars.BarButtonItem();
@@ -147,9 +147,9 @@
             this.barBtnStart.Id = 5;
             this.barBtnStart.LargeGlyph = ((System.Drawing.Image)(resources.GetObject("barBtnStart.LargeGlyph")));
             this.barBtnStart.Name = "barBtnStart";
-            toolTipItem4.Text = "开始传输";
-            superToolTip4.Items.Add(toolTipItem4);
-            this.barBtnStart.SuperTip = superToolTip4;
+            toolTipItem9.Text = "开始传输";
+            superToolTip9.Items.Add(toolTipItem9);
+            this.barBtnStart.SuperTip = superToolTip9;
             this.barBtnStart.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barBtnStart_ItemClick);
             // 
             // barBtnStop
@@ -159,9 +159,9 @@
             this.barBtnStop.Id = 6;
             this.barBtnStop.LargeGlyph = ((System.Drawing.Image)(resources.GetObject("barBtnStop.LargeGlyph")));
             this.barBtnStop.Name = "barBtnStop";
-            toolTipItem8.Text = "停止传输";
-            superToolTip8.Items.Add(toolTipItem8);
-            this.barBtnStop.SuperTip = superToolTip8;
+            toolTipItem14.Text = "停止传输";
+            superToolTip14.Items.Add(toolTipItem14);
+            this.barBtnStop.SuperTip = superToolTip14;
             this.barBtnStop.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barBtnStop_ItemClick);
             // 
             // ribbonGalleryBarItem1
@@ -195,9 +195,9 @@
             this.barEditItemStart.EditValue = true;
             this.barEditItemStart.Id = 11;
             this.barEditItemStart.Name = "barEditItemStart";
-            toolTipItem9.Text = "是否开机启动";
-            superToolTip9.Items.Add(toolTipItem9);
-            this.barEditItemStart.SuperTip = superToolTip9;
+            toolTipItem15.Text = "是否开机启动";
+            superToolTip15.Items.Add(toolTipItem15);
+            this.barEditItemStart.SuperTip = superToolTip15;
             // 
             // repositoryItemCheckBox1
             // 
@@ -212,9 +212,9 @@
             this.barEditItemTimeSpan.EditValue = 10;
             this.barEditItemTimeSpan.Id = 14;
             this.barEditItemTimeSpan.Name = "barEditItemTimeSpan";
-            toolTipItem7.Text = "传输执行间隔时间（分钟）";
-            superToolTip7.Items.Add(toolTipItem7);
-            this.barEditItemTimeSpan.SuperTip = superToolTip7;
+            toolTipItem13.Text = "传输执行间隔时间（分钟）";
+            superToolTip13.Items.Add(toolTipItem13);
+            this.barEditItemTimeSpan.SuperTip = superToolTip13;
             // 
             // repositoryItemSpinEdit1
             // 
@@ -565,6 +565,7 @@
             this.Controls.Add(this.splitContainerControl1);
             this.Controls.Add(this.ribbonStatusBar1);
             this.Controls.Add(this.ribbonControl1);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "XtraFrmMain";
             this.Text = "XtraForm1";
             ((System.ComponentModel.ISupportInitialize)(this.ribbonControl1)).EndInit();

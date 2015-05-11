@@ -17,7 +17,7 @@ namespace ES.Client
 {
     public partial class XtraFrmMain : DevExpress.XtraEditors.XtraForm
     {
-        private bool timerIsStart = false;
+        private bool isStart = false;
         private DateTime lastTransferTime;
         private readonly object _lockFlag = new object();
         readonly SynchronizationContext _syncContext = null;
@@ -95,6 +95,7 @@ namespace ES.Client
             var logs = gridView1.DataSource as List<TranLog>;
             if (logs != null) {
                 logs.Insert(0, log as TranLog);
+                gridView1.RefreshData();
             }
         }
 
@@ -689,7 +690,6 @@ namespace ES.Client
             barEditItemProgress.Visibility = BarItemVisibility.Never;
 
             this.timer.Start();
-            timerIsStart = true;
             lastTransferTime = DateTime.Now;
 
             SetActions();
@@ -697,7 +697,7 @@ namespace ES.Client
 
         private void SetActions()
         {
-            if (timerIsStart)
+            if (isStart)
             {
                 barBtnStart.Enabled = false;
                 barBtnStop.Enabled = true;
@@ -714,7 +714,6 @@ namespace ES.Client
         private void StartTransfer()
         {
             this.timer.Stop();
-            timerIsStart = false;
 
             tranferNo = Guid.NewGuid().ToString();
 
@@ -742,6 +741,7 @@ namespace ES.Client
                 return;
             }
 
+            isStart = true;
             StartTransfer();
         }
 
@@ -755,7 +755,7 @@ namespace ES.Client
             FinishTransfer(null);
             
             this.timer.Stop();
-            timerIsStart = false;
+            isStart = false;
             barStaticItemStatus.Caption = "传输结束";
             SetActions();
 
