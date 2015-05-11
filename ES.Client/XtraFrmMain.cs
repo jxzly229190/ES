@@ -40,15 +40,13 @@ namespace ES.Client
         {
             timer = new System.Windows.Forms.Timer();
             lastTransferTime = DateTime.Now;
-            timer.Interval = 1000;//Convert.ToInt32(barEditItemTimeSpan.EditValue)*60*1000;
+            timer.Interval = 1000;
             timer.Tick += timer_Tick;
 
             SkinHelper.InitSkinGallery(ribbonGalleryBarItem1, true);
 
             barBtnStop.Enabled = false;
             barButtonItemRestart.Enabled = false;
-            //repositoryItemComboBoxDays.Editable = false;
-            //repositoryItemComboBox1.Items.AddRange(new int[5] {50, 100, 150, 200, 500});
         }
 
         void timer_Tick(object sender, EventArgs e)
@@ -60,12 +58,10 @@ namespace ES.Client
             if (minSpan<=0){
                 this.StartTransfer();
             }
-            //throw new NotImplementedException();
         }
 
         private void ShowLogDetail(string html)
         {
-            //recLogDetail.Enabled = false;
             recLogDetail.Document.HtmlText = html;
         }
 
@@ -95,13 +91,8 @@ namespace ES.Client
             barStaticItemStatus.Caption = name.ToString();
         }
 
-        public void ReloadLog(object listData)
-        {
-            LoadGridData();
-        }
-
         public void InsertLogToGrid(object log) {
-            var logs = gridLog.DataSource as List<TranLog>;
+            var logs = gridView1.DataSource as List<TranLog>;
             if (logs != null) {
                 logs.Insert(0, log as TranLog);
             }
@@ -165,8 +156,7 @@ namespace ES.Client
 
                     if (formObj != null)
                     {
-                        formObj.ShowTranferName("数据更新完成");
-                        _syncContext.Post(formObj.ReloadLog, _db.TranLog.OrderByDescending(p => p.ID).Take(200).ToList());
+                        _syncContext.Post(formObj.ShowTranferName, "数据更新完成");
                     }
                 }
                 catch (Exception ex)
@@ -190,14 +180,10 @@ namespace ES.Client
         {
             if (formObj != null)
             {
-                //formObj.ShowTranferName("推送" + config.Name);
                 _syncContext.Post(formObj.ShowTranferName, "上传 " + config.Name);
             }
 
             Post(formObj, md5Pulickey, clientCode, clientGuid, config);
-
-            //if (formObj != null)
-            //    _syncContext.Post(formObj.ReloadLog, _db.TranLog.OrderByDescending(p => p.ID).Take(200).ToList());
         }
 
         private void GetDataFromServer(XtraFrmMain formObj, TranConfig config, string md5Pulickey, string clientCode, string clientGuid)
@@ -206,7 +192,6 @@ namespace ES.Client
             {
                 _syncContext.Post(formObj.ShowTranferName, "下载 " + config.Name);
                 Get(formObj, md5Pulickey, clientCode, clientGuid, config);
-                //_syncContext.Post(formObj.ReloadLog, _db.TranLog.OrderByDescending(p => p.ID).Take(200).ToList());
             }
         }
 
