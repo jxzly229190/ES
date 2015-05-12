@@ -129,102 +129,97 @@ namespace ES.Server
 			}
 		}
 
-	    [WebMethod]
+        [WebMethod]
         public ResponseData Post(string tranferNo, string clientCode, string varifyCode, SqlData sqlData)
-	    {
-	        var client = db.Client.FirstOrDefault(c => c.Status == 0 && c.Code == clientCode);
+        {
+            var client = db.Client.FirstOrDefault(c => c.Status == 0 && c.Code == clientCode);
 
-	        if (client == null)
-	        {
-	            return new ResponseData() {State = 1, Message = "客户端不存在"};
-	        }
+            if (client == null)
+            {
+                return new ResponseData() { State = 1, Message = "客户端不存在" };
+            }
 
-	        if (!VarifyClient(client.GUID.ToString(), varifyCode))
-	        {
-	            return new ResponseData() {State = 2, Message = "非法请求"};
-	        }
+            if (!VarifyClient(client.GUID.ToString(), varifyCode))
+            {
+                return new ResponseData() { State = 2, Message = "非法请求" };
+            }
 
-	        var config =
-	            db.TranConfig.FirstOrDefault(
-	                t => t.Status == 0 && t.Guid.ToString().Equals(sqlData.ConfigGuid, StringComparison.OrdinalIgnoreCase));
+            var config =
+                db.TranConfig.FirstOrDefault(
+                    t => t.Status == 0 && t.Guid.ToString().Equals(sqlData.ConfigGuid, StringComparison.OrdinalIgnoreCase));
 
-	        if (config == null)
-	        {
-	            return new ResponseData() {State = 3, Message = "配置不存在或者已经停用，无法完成数据同步。"};
-	        }
+            if (config == null)
+            {
+                return new ResponseData() { State = 3, Message = "配置不存在或者已经停用，无法完成数据同步。" };
+            }
 
-	        //var sql = data.HeaderSql + ";" + data.DetailSql + ";" + data.FooterSql;
+            //var sql = data.HeaderSql + ";" + data.DetailSql + ";" + data.FooterSql;
 
-	        StringBuilder sql = new StringBuilder(sqlData.HeaderSql + ";" + sqlData.DetailSql + ";");
-	        StringBuilder updateBlobSql = new StringBuilder();
-	        object[] paramters = null;
+            StringBuilder sql = new StringBuilder(sqlData.HeaderSql + ";" + sqlData.DetailSql + ";");
+            StringBuilder updateBlobSql = new StringBuilder();
+            object[] paramters = null;
 
-	        if (!string.IsNullOrEmpty(config.BlobColumn))
-	        {
-	            var blobs = sqlData.BlobDatas;
-	            paramters = new object[blobs.Count*2];
-	            for (var i = 0; i < blobs.Count; i++)
-	            {   
+            if (!string.IsNullOrEmpty(config.BlobColumn))
+            {
+                var blobs = sqlData.BlobDatas;
+                paramters = new object[blobs.Count * 2];
+                for (var i = 0; i < blobs.Count; i++)
+                {
                     //todo:
                     //1.#table 的名字：约定为主表的名字
                     //2.Blob列的名字
-	                updateBlobSql.Append("Update ")
-	                    .Append("#temp_" + config.SourceTableName)
-	                    .Append(" set ")
-	                    .Append(config.BlobColumn + "= {" + (i*2) + "}")
-	                    .Append(" Where [Guid]=")
-	                    .Append("{" + (i*2 + 1) + "}")
-	                    .Append(";");
+                    updateBlobSql.Append("Update ")
+                        .Append("#temp_" + config.SourceTableName)
+                        .Append(" set ")
+                        .Append(config.BlobColumn + "= {" + (i * 2) + "}")
+                        .Append(" Where [Guid]=")
+                        .Append("{" + (i * 2 + 1) + "}")
+                        .Append(";");
 
-	                paramters[i*2] = blobs[i].Blob;
-	                paramters[i*2 + 1] = blobs[i].Guid;
-	            }
-	        }
+                    paramters[i * 2] = blobs[i].Blob;
+                    paramters[i * 2 + 1] = blobs[i].Guid;
+                }
+            }
 
-	        sql.Append(updateBlobSql)
-	            .Append(sqlData.FooterSql)
-	            .Append(";");
+            sql.Append(updateBlobSql)
+                .Append(sqlData.FooterSql)
+                .Append(";");
 
-	        using (var dbContextTransaction = db.Database.BeginTransaction())
-	        {
-	            try
-	            {
+            if (config.Direct == 2)
+            {
+                StringBuilder tempSql = new StringBuilder();
+                foreach (var item in sqlData.BlobDatas)
+                {
+                    tempSql.Append("Insert into tranferTempLog([TransferNo],[ConfigCode],[Guid]) select '")
+                        .Append(tranferNo)
+                        .Append("','")
+                        .Append(config.Code)
+                        .Append("','")
+                        .Append(item.Guid).Append("';");
+                }
+                //db.Database.ExecuteSqlCommand(tempSql.ToString());
+                sql.Append(tempSql.ToString());
+            }
 
-	                if (paramters == null)
-	                {
-                        db.Database.ExecuteSqlCommand(TransactionalBehavior.EnsureTransaction, sql.ToString());
-	                }
-	                else
-	                {
-	                    db.Database.ExecuteSqlCommand(TransactionalBehavior.EnsureTransaction, sql.ToString(), paramters);
-	                }
+            try
+            {
 
-                    if (config.Direct == 2)
-                    {
-                        StringBuilder tempSql=new StringBuilder();
-                        foreach (var item in sqlData.BlobDatas)
-                        {
-                            tempSql.Append("Insert into tranferTempLog([TransferNo],[ConfigCode],[Guid]) select '")
-                                .Append(tranferNo)
-                                .Append("','")
-                                .Append(config.Code)
-                                .Append("','")
-                                .Append(item.Guid).Append("';");
-                        }
+                if (paramters == null)
+                {
+                    db.Database.ExecuteSqlCommand(TransactionalBehavior.EnsureTransaction, sql.ToString());
+                }
+                else
+                {
+                    db.Database.ExecuteSqlCommand(TransactionalBehavior.EnsureTransaction, sql.ToString(), paramters);
+                }
+            }
+            catch (Exception ex)
+            {
+                return new ResponseData() { State = 100, Message = ex.Message };
+            }
 
-                        db.Database.ExecuteSqlCommand(tempSql.ToString());
-                    }
-                    dbContextTransaction.Commit();
-	            }
-	            catch (Exception ex)
-	            {
-                    dbContextTransaction.Rollback();
-	                return new ResponseData() {State = 100, Message = ex.Message};
-	            }
-	        }
-
-	        return new ResponseData() { State = 0, Message = "执行成功" };
-	    }
+            return new ResponseData() { State = 0, Message = "执行成功" };
+        }
 
 	    /// <summary>
 		/// 获取传输配置
