@@ -75,6 +75,12 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>db.dbml</DependentUpon>
     </Compile>
+    <Compile Include="FrmClientRegister.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FrmClientRegister.Designer.cs">
+      <DependentUpon>FrmClientRegister.cs</DependentUpon>
+    </Compile>
     <Compile Include="Main.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -101,6 +107,9 @@
     <Compile Include="XtraFrmMain.Designer.cs">
       <DependentUpon>XtraFrmMain.cs</DependentUpon>
     </Compile>
+    <EmbeddedResource Include="FrmClientRegister.resx">
+      <DependentUpon>FrmClientRegister.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Main.resx">
       <DependentUpon>Main.cs</DependentUpon>
       <SubType>Designer</SubType>

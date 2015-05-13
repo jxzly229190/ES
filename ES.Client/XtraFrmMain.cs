@@ -736,11 +736,6 @@ namespace ES.Client
 
         private void barBtnStart_ItemClick(object sender, ItemClickEventArgs e)
         {
-            if (!LoadServiceAddress())
-            {
-                return;
-            }
-
             isStart = true;
             StartTransfer();
         }
@@ -902,14 +897,26 @@ namespace ES.Client
 
         private void barBtnAddClient_ItemClick(object sender, ItemClickEventArgs e)
         {
-            MessageBox.Show("本功能尚未添加，请手动在数据库配置。");
+            //MessageBox.Show("本功能尚未添加，请手动在数据库配置。");
+            var frm = new FrmClientRegister();
+            frm.ShowDialog();
         }
 
         private void barBtnAddServer_ItemClick(object sender, ItemClickEventArgs e)
         {
             MessageBox.Show("本功能尚未添加，请手动在App.config文件中注册。");
         }
+        private void XtraFrmMain_FormClosing(object sender, FormClosingEventArgs e)
+        {
+            if (isStart)
+            {
+                if (MessageBox.Show("程序正在运行，您确定要退出吗？", "提示", MessageBoxButtons.YesNo) == DialogResult.No)
+                {
+                    e.Cancel = true;
+                }
+            }
+        }
 
-        #endregion 事件结束
+        #endregion 事件结束        
     }
 }

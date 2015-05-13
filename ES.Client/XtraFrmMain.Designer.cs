@@ -29,14 +29,14 @@
         private void InitializeComponent()
         {
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(XtraFrmMain));
-            DevExpress.Utils.SuperToolTip superToolTip9 = new DevExpress.Utils.SuperToolTip();
-            DevExpress.Utils.ToolTipItem toolTipItem9 = new DevExpress.Utils.ToolTipItem();
-            DevExpress.Utils.SuperToolTip superToolTip14 = new DevExpress.Utils.SuperToolTip();
-            DevExpress.Utils.ToolTipItem toolTipItem14 = new DevExpress.Utils.ToolTipItem();
-            DevExpress.Utils.SuperToolTip superToolTip15 = new DevExpress.Utils.SuperToolTip();
-            DevExpress.Utils.ToolTipItem toolTipItem15 = new DevExpress.Utils.ToolTipItem();
-            DevExpress.Utils.SuperToolTip superToolTip13 = new DevExpress.Utils.SuperToolTip();
-            DevExpress.Utils.ToolTipItem toolTipItem13 = new DevExpress.Utils.ToolTipItem();
+            DevExpress.Utils.SuperToolTip superToolTip5 = new DevExpress.Utils.SuperToolTip();
+            DevExpress.Utils.ToolTipItem toolTipItem5 = new DevExpress.Utils.ToolTipItem();
+            DevExpress.Utils.SuperToolTip superToolTip6 = new DevExpress.Utils.SuperToolTip();
+            DevExpress.Utils.ToolTipItem toolTipItem6 = new DevExpress.Utils.ToolTipItem();
+            DevExpress.Utils.SuperToolTip superToolTip7 = new DevExpress.Utils.SuperToolTip();
+            DevExpress.Utils.ToolTipItem toolTipItem7 = new DevExpress.Utils.ToolTipItem();
+            DevExpress.Utils.SuperToolTip superToolTip3 = new DevExpress.Utils.SuperToolTip();
+            DevExpress.Utils.ToolTipItem toolTipItem3 = new DevExpress.Utils.ToolTipItem();
             this.ribbonControl1 = new DevExpress.XtraBars.Ribbon.RibbonControl();
             this.barBtnStart = new DevExpress.XtraBars.BarButtonItem();
             this.barBtnStop = new DevExpress.XtraBars.BarButtonItem();
@@ -137,7 +137,7 @@
             this.repositoryItemComboBox1,
             this.repositoryItemComboBoxDays,
             this.repositoryItemMarqueeProgressBar1});
-            this.ribbonControl1.Size = new System.Drawing.Size(988, 145);
+            this.ribbonControl1.Size = new System.Drawing.Size(890, 142);
             this.ribbonControl1.StatusBar = this.ribbonStatusBar1;
             // 
             // barBtnStart
@@ -147,9 +147,9 @@
             this.barBtnStart.Id = 5;
             this.barBtnStart.LargeGlyph = ((System.Drawing.Image)(resources.GetObject("barBtnStart.LargeGlyph")));
             this.barBtnStart.Name = "barBtnStart";
-            toolTipItem9.Text = "开始传输";
-            superToolTip9.Items.Add(toolTipItem9);
-            this.barBtnStart.SuperTip = superToolTip9;
+            toolTipItem5.Text = "开始传输";
+            superToolTip5.Items.Add(toolTipItem5);
+            this.barBtnStart.SuperTip = superToolTip5;
             this.barBtnStart.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barBtnStart_ItemClick);
             // 
             // barBtnStop
@@ -159,9 +159,9 @@
             this.barBtnStop.Id = 6;
             this.barBtnStop.LargeGlyph = ((System.Drawing.Image)(resources.GetObject("barBtnStop.LargeGlyph")));
             this.barBtnStop.Name = "barBtnStop";
-            toolTipItem14.Text = "停止传输";
-            superToolTip14.Items.Add(toolTipItem14);
-            this.barBtnStop.SuperTip = superToolTip14;
+            toolTipItem6.Text = "停止传输";
+            superToolTip6.Items.Add(toolTipItem6);
+            this.barBtnStop.SuperTip = superToolTip6;
             this.barBtnStop.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barBtnStop_ItemClick);
             // 
             // ribbonGalleryBarItem1
@@ -186,6 +186,7 @@
             this.barBtnAddServer.Id = 10;
             this.barBtnAddServer.LargeGlyph = ((System.Drawing.Image)(resources.GetObject("barBtnAddServer.LargeGlyph")));
             this.barBtnAddServer.Name = "barBtnAddServer";
+            this.barBtnAddServer.Visibility = DevExpress.XtraBars.BarItemVisibility.Never;
             this.barBtnAddServer.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barBtnAddServer_ItemClick);
             // 
             // barEditItemStart
@@ -195,9 +196,9 @@
             this.barEditItemStart.EditValue = true;
             this.barEditItemStart.Id = 11;
             this.barEditItemStart.Name = "barEditItemStart";
-            toolTipItem15.Text = "是否开机启动";
-            superToolTip15.Items.Add(toolTipItem15);
-            this.barEditItemStart.SuperTip = superToolTip15;
+            toolTipItem7.Text = "是否开机启动";
+            superToolTip7.Items.Add(toolTipItem7);
+            this.barEditItemStart.SuperTip = superToolTip7;
             // 
             // repositoryItemCheckBox1
             // 
@@ -212,9 +213,9 @@
             this.barEditItemTimeSpan.EditValue = 10;
             this.barEditItemTimeSpan.Id = 14;
             this.barEditItemTimeSpan.Name = "barEditItemTimeSpan";
-            toolTipItem13.Text = "传输执行间隔时间（分钟）";
-            superToolTip13.Items.Add(toolTipItem13);
-            this.barEditItemTimeSpan.SuperTip = superToolTip13;
+            toolTipItem3.Text = "传输执行间隔时间（分钟）";
+            superToolTip3.Items.Add(toolTipItem3);
+            this.barEditItemTimeSpan.SuperTip = superToolTip3;
             // 
             // repositoryItemSpinEdit1
             // 
@@ -428,21 +429,21 @@
             this.ribbonStatusBar1.ItemLinks.Add(this.barStaticItem2);
             this.ribbonStatusBar1.ItemLinks.Add(this.barStaticItemStatus);
             this.ribbonStatusBar1.ItemLinks.Add(this.barEditItemProgress);
-            this.ribbonStatusBar1.Location = new System.Drawing.Point(0, 502);
+            this.ribbonStatusBar1.Location = new System.Drawing.Point(0, 479);
             this.ribbonStatusBar1.Name = "ribbonStatusBar1";
             this.ribbonStatusBar1.Ribbon = this.ribbonControl1;
-            this.ribbonStatusBar1.Size = new System.Drawing.Size(988, 27);
+            this.ribbonStatusBar1.Size = new System.Drawing.Size(890, 27);
             // 
             // splitContainerControl1
             // 
             this.splitContainerControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainerControl1.Location = new System.Drawing.Point(0, 145);
+            this.splitContainerControl1.Location = new System.Drawing.Point(0, 142);
             this.splitContainerControl1.Name = "splitContainerControl1";
             this.splitContainerControl1.Panel1.Controls.Add(this.gridLog);
             this.splitContainerControl1.Panel1.Text = "Panel1";
             this.splitContainerControl1.Panel2.Controls.Add(this.gcLogDetail);
             this.splitContainerControl1.Panel2.Text = "Panel2";
-            this.splitContainerControl1.Size = new System.Drawing.Size(988, 357);
+            this.splitContainerControl1.Size = new System.Drawing.Size(890, 337);
             this.splitContainerControl1.SplitterPosition = 319;
             this.splitContainerControl1.TabIndex = 7;
             this.splitContainerControl1.Text = "splitContainerControl1";
@@ -457,7 +458,7 @@
             this.gridLog.RepositoryItems.AddRange(new DevExpress.XtraEditors.Repository.RepositoryItem[] {
             this.repositoryItemImageEdit1,
             this.repositoryItemPictureEdit1});
-            this.gridLog.Size = new System.Drawing.Size(319, 357);
+            this.gridLog.Size = new System.Drawing.Size(319, 337);
             this.gridLog.TabIndex = 3;
             this.gridLog.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.gridView1});
@@ -541,7 +542,7 @@
             this.gcLogDetail.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gcLogDetail.Location = new System.Drawing.Point(0, 0);
             this.gcLogDetail.Name = "gcLogDetail";
-            this.gcLogDetail.Size = new System.Drawing.Size(664, 357);
+            this.gcLogDetail.Size = new System.Drawing.Size(566, 337);
             this.gcLogDetail.TabIndex = 0;
             this.gcLogDetail.Text = "详情";
             // 
@@ -549,25 +550,26 @@
             // 
             this.recLogDetail.ActiveViewType = DevExpress.XtraRichEdit.RichEditViewType.Simple;
             this.recLogDetail.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.recLogDetail.Location = new System.Drawing.Point(2, 22);
+            this.recLogDetail.Location = new System.Drawing.Point(2, 21);
             this.recLogDetail.MenuManager = this.ribbonControl1;
             this.recLogDetail.Name = "recLogDetail";
             this.recLogDetail.Options.Fields.UseCurrentCultureDateTimeFormat = false;
             this.recLogDetail.Options.MailMerge.KeepLastParagraph = false;
-            this.recLogDetail.Size = new System.Drawing.Size(660, 333);
+            this.recLogDetail.Size = new System.Drawing.Size(562, 314);
             this.recLogDetail.TabIndex = 0;
             // 
             // XtraFrmMain
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(988, 529);
+            this.ClientSize = new System.Drawing.Size(890, 506);
             this.Controls.Add(this.splitContainerControl1);
             this.Controls.Add(this.ribbonStatusBar1);
             this.Controls.Add(this.ribbonControl1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.Name = "XtraFrmMain";
             this.Text = "XtraForm1";
+            this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.XtraFrmMain_FormClosing);
             ((System.ComponentModel.ISupportInitialize)(this.ribbonControl1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemCheckBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemSpinEdit1)).EndInit();
