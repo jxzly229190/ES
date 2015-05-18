@@ -12,6 +12,7 @@ using DevExpress.XtraBars.Helpers;
 using DevExpress.XtraGrid.Views.Grid;
 using ES.Client.ServiceReference;
 using ES.Repository;
+using Microsoft.Win32;
 
 namespace ES.Client
 {
@@ -47,6 +48,38 @@ namespace ES.Client
 
             barBtnStop.Enabled = false;
             barButtonItemRestart.Enabled = false;
+        }
+
+        /// <summary>         
+        /// 开机启动项        
+        /// </summary>       
+        /// <param name="Started">是否启动</param>         
+        /// <param name="name">启动值的名称</param>          
+        /// <param name="path">启动程序的路径</param>         
+        public void RunWhenStart(bool Started, string name, string path)
+        {
+            RegistryKey HKLM = Registry.LocalMachine;
+            RegistryKey Run = HKLM.CreateSubKey(@"SOFTWARE/Microsoft/Windows/CurrentVersion/Run");
+            if (Started == true)
+            {
+                try
+                {
+                    Run.SetValue(name, path);
+                    HKLM.Close();
+                }
+                catch//没有权限会异常            
+                { }
+            }
+            else
+            {
+                try
+                {
+                    Run.DeleteValue(name);
+                    HKLM.Close();
+                }
+                catch//没有权限会异常 
+                { }
+            }
         }
 
         void timer_Tick(object sender, EventArgs e)
@@ -918,5 +951,13 @@ namespace ES.Client
         }
 
         #endregion 事件结束        
+
+        private void repositoryItemCheckBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            //if ((bool)barEditItemStart.EditValue)
+            //{
+            //    this.RunWhenStart(true, "es.client", Application.StartupPath + "ES.Client.exe");
+            //}
+        }
     }
 }
