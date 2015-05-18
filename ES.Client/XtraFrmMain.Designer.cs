@@ -28,15 +28,16 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(XtraFrmMain));
-            DevExpress.Utils.SuperToolTip superToolTip1 = new DevExpress.Utils.SuperToolTip();
-            DevExpress.Utils.ToolTipItem toolTipItem1 = new DevExpress.Utils.ToolTipItem();
-            DevExpress.Utils.SuperToolTip superToolTip2 = new DevExpress.Utils.SuperToolTip();
-            DevExpress.Utils.ToolTipItem toolTipItem2 = new DevExpress.Utils.ToolTipItem();
-            DevExpress.Utils.SuperToolTip superToolTip3 = new DevExpress.Utils.SuperToolTip();
-            DevExpress.Utils.ToolTipItem toolTipItem3 = new DevExpress.Utils.ToolTipItem();
             DevExpress.Utils.SuperToolTip superToolTip4 = new DevExpress.Utils.SuperToolTip();
             DevExpress.Utils.ToolTipItem toolTipItem4 = new DevExpress.Utils.ToolTipItem();
+            DevExpress.Utils.SuperToolTip superToolTip8 = new DevExpress.Utils.SuperToolTip();
+            DevExpress.Utils.ToolTipItem toolTipItem8 = new DevExpress.Utils.ToolTipItem();
+            DevExpress.Utils.SuperToolTip superToolTip9 = new DevExpress.Utils.SuperToolTip();
+            DevExpress.Utils.ToolTipItem toolTipItem9 = new DevExpress.Utils.ToolTipItem();
+            DevExpress.Utils.SuperToolTip superToolTip7 = new DevExpress.Utils.SuperToolTip();
+            DevExpress.Utils.ToolTipItem toolTipItem7 = new DevExpress.Utils.ToolTipItem();
             this.ribbonControl1 = new DevExpress.XtraBars.Ribbon.RibbonControl();
             this.barBtnStart = new DevExpress.XtraBars.BarButtonItem();
             this.barBtnStop = new DevExpress.XtraBars.BarButtonItem();
@@ -82,6 +83,12 @@
             this.repositoryItemImageEdit1 = new DevExpress.XtraEditors.Repository.RepositoryItemImageEdit();
             this.gcLogDetail = new DevExpress.XtraEditors.GroupControl();
             this.recLogDetail = new DevExpress.XtraRichEdit.RichEditControl();
+            this.notifyIcon1 = new System.Windows.Forms.NotifyIcon(this.components);
+            this.contextMenuStripNotify = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.显示ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.开始ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.停止ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.退出ToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.ribbonControl1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemCheckBox1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemSpinEdit1)).BeginInit();
@@ -99,6 +106,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemImageEdit1)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.gcLogDetail)).BeginInit();
             this.gcLogDetail.SuspendLayout();
+            this.contextMenuStripNotify.SuspendLayout();
             this.SuspendLayout();
             // 
             // ribbonControl1
@@ -137,7 +145,7 @@
             this.repositoryItemComboBox1,
             this.repositoryItemComboBoxDays,
             this.repositoryItemMarqueeProgressBar1});
-            this.ribbonControl1.Size = new System.Drawing.Size(890, 142);
+            this.ribbonControl1.Size = new System.Drawing.Size(1038, 145);
             this.ribbonControl1.StatusBar = this.ribbonStatusBar1;
             // 
             // barBtnStart
@@ -147,9 +155,9 @@
             this.barBtnStart.Id = 5;
             this.barBtnStart.LargeGlyph = ((System.Drawing.Image)(resources.GetObject("barBtnStart.LargeGlyph")));
             this.barBtnStart.Name = "barBtnStart";
-            toolTipItem1.Text = "开始传输";
-            superToolTip1.Items.Add(toolTipItem1);
-            this.barBtnStart.SuperTip = superToolTip1;
+            toolTipItem4.Text = "开始传输";
+            superToolTip4.Items.Add(toolTipItem4);
+            this.barBtnStart.SuperTip = superToolTip4;
             this.barBtnStart.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barBtnStart_ItemClick);
             // 
             // barBtnStop
@@ -159,9 +167,9 @@
             this.barBtnStop.Id = 6;
             this.barBtnStop.LargeGlyph = ((System.Drawing.Image)(resources.GetObject("barBtnStop.LargeGlyph")));
             this.barBtnStop.Name = "barBtnStop";
-            toolTipItem2.Text = "停止传输";
-            superToolTip2.Items.Add(toolTipItem2);
-            this.barBtnStop.SuperTip = superToolTip2;
+            toolTipItem8.Text = "停止传输";
+            superToolTip8.Items.Add(toolTipItem8);
+            this.barBtnStop.SuperTip = superToolTip8;
             this.barBtnStop.ItemClick += new DevExpress.XtraBars.ItemClickEventHandler(this.barBtnStop_ItemClick);
             // 
             // ribbonGalleryBarItem1
@@ -196,9 +204,9 @@
             this.barEditItemStart.EditValue = true;
             this.barEditItemStart.Id = 11;
             this.barEditItemStart.Name = "barEditItemStart";
-            toolTipItem3.Text = "是否开机启动";
-            superToolTip3.Items.Add(toolTipItem3);
-            this.barEditItemStart.SuperTip = superToolTip3;
+            toolTipItem9.Text = "是否开机启动";
+            superToolTip9.Items.Add(toolTipItem9);
+            this.barEditItemStart.SuperTip = superToolTip9;
             // 
             // repositoryItemCheckBox1
             // 
@@ -214,9 +222,9 @@
             this.barEditItemTimeSpan.EditValue = 10;
             this.barEditItemTimeSpan.Id = 14;
             this.barEditItemTimeSpan.Name = "barEditItemTimeSpan";
-            toolTipItem4.Text = "传输执行间隔时间（分钟）";
-            superToolTip4.Items.Add(toolTipItem4);
-            this.barEditItemTimeSpan.SuperTip = superToolTip4;
+            toolTipItem7.Text = "传输执行间隔时间（分钟）";
+            superToolTip7.Items.Add(toolTipItem7);
+            this.barEditItemTimeSpan.SuperTip = superToolTip7;
             // 
             // repositoryItemSpinEdit1
             // 
@@ -430,21 +438,21 @@
             this.ribbonStatusBar1.ItemLinks.Add(this.barStaticItem2);
             this.ribbonStatusBar1.ItemLinks.Add(this.barStaticItemStatus);
             this.ribbonStatusBar1.ItemLinks.Add(this.barEditItemProgress);
-            this.ribbonStatusBar1.Location = new System.Drawing.Point(0, 479);
+            this.ribbonStatusBar1.Location = new System.Drawing.Point(0, 518);
             this.ribbonStatusBar1.Name = "ribbonStatusBar1";
             this.ribbonStatusBar1.Ribbon = this.ribbonControl1;
-            this.ribbonStatusBar1.Size = new System.Drawing.Size(890, 27);
+            this.ribbonStatusBar1.Size = new System.Drawing.Size(1038, 27);
             // 
             // splitContainerControl1
             // 
             this.splitContainerControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.splitContainerControl1.Location = new System.Drawing.Point(0, 142);
+            this.splitContainerControl1.Location = new System.Drawing.Point(0, 145);
             this.splitContainerControl1.Name = "splitContainerControl1";
             this.splitContainerControl1.Panel1.Controls.Add(this.gridLog);
             this.splitContainerControl1.Panel1.Text = "Panel1";
             this.splitContainerControl1.Panel2.Controls.Add(this.gcLogDetail);
             this.splitContainerControl1.Panel2.Text = "Panel2";
-            this.splitContainerControl1.Size = new System.Drawing.Size(890, 337);
+            this.splitContainerControl1.Size = new System.Drawing.Size(1038, 373);
             this.splitContainerControl1.SplitterPosition = 319;
             this.splitContainerControl1.TabIndex = 7;
             this.splitContainerControl1.Text = "splitContainerControl1";
@@ -459,7 +467,7 @@
             this.gridLog.RepositoryItems.AddRange(new DevExpress.XtraEditors.Repository.RepositoryItem[] {
             this.repositoryItemImageEdit1,
             this.repositoryItemPictureEdit1});
-            this.gridLog.Size = new System.Drawing.Size(319, 337);
+            this.gridLog.Size = new System.Drawing.Size(319, 373);
             this.gridLog.TabIndex = 3;
             this.gridLog.ViewCollection.AddRange(new DevExpress.XtraGrid.Views.Base.BaseView[] {
             this.gridView1});
@@ -543,7 +551,7 @@
             this.gcLogDetail.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gcLogDetail.Location = new System.Drawing.Point(0, 0);
             this.gcLogDetail.Name = "gcLogDetail";
-            this.gcLogDetail.Size = new System.Drawing.Size(566, 337);
+            this.gcLogDetail.Size = new System.Drawing.Size(714, 373);
             this.gcLogDetail.TabIndex = 0;
             this.gcLogDetail.Text = "详情";
             // 
@@ -551,19 +559,65 @@
             // 
             this.recLogDetail.ActiveViewType = DevExpress.XtraRichEdit.RichEditViewType.Simple;
             this.recLogDetail.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.recLogDetail.Location = new System.Drawing.Point(2, 21);
+            this.recLogDetail.Location = new System.Drawing.Point(2, 22);
             this.recLogDetail.MenuManager = this.ribbonControl1;
             this.recLogDetail.Name = "recLogDetail";
             this.recLogDetail.Options.Fields.UseCurrentCultureDateTimeFormat = false;
             this.recLogDetail.Options.MailMerge.KeepLastParagraph = false;
-            this.recLogDetail.Size = new System.Drawing.Size(562, 314);
+            this.recLogDetail.Size = new System.Drawing.Size(710, 349);
             this.recLogDetail.TabIndex = 0;
+            // 
+            // notifyIcon1
+            // 
+            this.notifyIcon1.BalloonTipIcon = System.Windows.Forms.ToolTipIcon.Info;
+            this.notifyIcon1.ContextMenuStrip = this.contextMenuStripNotify;
+            this.notifyIcon1.Icon = ((System.Drawing.Icon)(resources.GetObject("notifyIcon1.Icon")));
+            this.notifyIcon1.Text = "ES.Transfer";
+            this.notifyIcon1.DoubleClick += new System.EventHandler(this.notifyIcon1_DoubleClick);
+            // 
+            // contextMenuStripNotify
+            // 
+            this.contextMenuStripNotify.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.显示ToolStripMenuItem,
+            this.开始ToolStripMenuItem,
+            this.停止ToolStripMenuItem,
+            this.退出ToolStripMenuItem});
+            this.contextMenuStripNotify.Name = "contextMenuStripNotify";
+            this.contextMenuStripNotify.Size = new System.Drawing.Size(125, 92);
+            // 
+            // 显示ToolStripMenuItem
+            // 
+            this.显示ToolStripMenuItem.Name = "显示ToolStripMenuItem";
+            this.显示ToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
+            this.显示ToolStripMenuItem.Text = "显示";
+            this.显示ToolStripMenuItem.Click += new System.EventHandler(this.显示ToolStripMenuItem_Click);
+            // 
+            // 开始ToolStripMenuItem
+            // 
+            this.开始ToolStripMenuItem.Name = "开始ToolStripMenuItem";
+            this.开始ToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
+            this.开始ToolStripMenuItem.Text = "开始传输";
+            this.开始ToolStripMenuItem.Click += new System.EventHandler(this.开始ToolStripMenuItem_Click);
+            // 
+            // 停止ToolStripMenuItem
+            // 
+            this.停止ToolStripMenuItem.Name = "停止ToolStripMenuItem";
+            this.停止ToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
+            this.停止ToolStripMenuItem.Text = "停止传输";
+            this.停止ToolStripMenuItem.Click += new System.EventHandler(this.停止ToolStripMenuItem_Click);
+            // 
+            // 退出ToolStripMenuItem
+            // 
+            this.退出ToolStripMenuItem.Name = "退出ToolStripMenuItem";
+            this.退出ToolStripMenuItem.Size = new System.Drawing.Size(124, 22);
+            this.退出ToolStripMenuItem.Text = "退出";
+            this.退出ToolStripMenuItem.Click += new System.EventHandler(this.退出ToolStripMenuItem_Click);
             // 
             // XtraFrmMain
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 14F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(890, 506);
+            this.ClientSize = new System.Drawing.Size(1038, 545);
             this.Controls.Add(this.splitContainerControl1);
             this.Controls.Add(this.ribbonStatusBar1);
             this.Controls.Add(this.ribbonControl1);
@@ -571,6 +625,7 @@
             this.Name = "XtraFrmMain";
             this.Text = "XtraForm1";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.XtraFrmMain_FormClosing);
+            this.SizeChanged += new System.EventHandler(this.XtraFrmMain_SizeChanged);
             ((System.ComponentModel.ISupportInitialize)(this.ribbonControl1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemCheckBox1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemSpinEdit1)).EndInit();
@@ -588,6 +643,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.repositoryItemImageEdit1)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.gcLogDetail)).EndInit();
             this.gcLogDetail.ResumeLayout(false);
+            this.contextMenuStripNotify.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -639,5 +695,11 @@
         private DevExpress.XtraBars.BarEditItem barEditItemProgress;
         private DevExpress.XtraEditors.Repository.RepositoryItemMarqueeProgressBar repositoryItemMarqueeProgressBar1;
         private DevExpress.XtraBars.BarButtonItem barButtonItemRestart;
+        private System.Windows.Forms.NotifyIcon notifyIcon1;
+        private System.Windows.Forms.ContextMenuStrip contextMenuStripNotify;
+        private System.Windows.Forms.ToolStripMenuItem 显示ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 开始ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 停止ToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem 退出ToolStripMenuItem;
     }
 }

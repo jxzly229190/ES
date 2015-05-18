@@ -59,7 +59,8 @@ namespace ES.Client
         public void RunWhenStart(bool Started, string name, string path)
         {
             RegistryKey HKLM = Registry.LocalMachine;
-            RegistryKey Run = HKLM.CreateSubKey(@"SOFTWARE/Microsoft/Windows/CurrentVersion/Run");
+            RegistryKey Run = HKLM.CreateSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run",
+                RegistryKeyPermissionCheck.ReadWriteSubTree);
             if (Started == true)
             {
                 try
@@ -735,12 +736,16 @@ namespace ES.Client
                 barBtnStart.Enabled = false;
                 barBtnStop.Enabled = true;
                 barButtonItemRestart.Enabled = true;
+                开始ToolStripMenuItem.Enabled = false;
+                停止ToolStripMenuItem.Enabled = true;
             }
             else
             {
                 barBtnStart.Enabled = true;
                 barBtnStop.Enabled = false;
                 barButtonItemRestart.Enabled = false;
+                开始ToolStripMenuItem.Enabled = true;
+                停止ToolStripMenuItem.Enabled = false;
             }
         }
 
@@ -765,6 +770,16 @@ namespace ES.Client
             SetActions();
         }
 
+        private void ShowFrom()
+        {
+            if (this.WindowState == FormWindowState.Minimized)
+            {
+                this.ShowInTaskbar = true; //显示在系统任务栏
+                this.WindowState = FormWindowState.Normal; //还原窗体
+                notifyIcon1.Visible = false; //托盘图标隐藏
+            }
+        }
+
         #region 事件开始
 
         private void barBtnStart_ItemClick(object sender, ItemClickEventArgs e)
@@ -780,13 +795,17 @@ namespace ES.Client
 
         private void barBtnStop_ItemClick(object sender, ItemClickEventArgs e)
         {
+            StopTransfer();
+        }
+
+        private void StopTransfer()
+        {
             FinishTransfer(null);
-            
+
             this.timer.Stop();
             isStart = false;
             barStaticItemStatus.Caption = "传输结束";
             SetActions();
-
         }
 
         private void gridView1_FocusedRowChanged(object sender, DevExpress.XtraGrid.Views.Base.FocusedRowChangedEventArgs e)
@@ -939,6 +958,7 @@ namespace ES.Client
         {
             MessageBox.Show("本功能尚未添加，请手动在App.config文件中注册。");
         }
+
         private void XtraFrmMain_FormClosing(object sender, FormClosingEventArgs e)
         {
             if (isStart)
@@ -950,14 +970,61 @@ namespace ES.Client
             }
         }
 
-        #endregion 事件结束        
-
         private void repositoryItemCheckBox1_CheckedChanged(object sender, EventArgs e)
         {
-            //if ((bool)barEditItemStart.EditValue)
-            //{
-            //    this.RunWhenStart(true, "es.client", Application.StartupPath + "ES.Client.exe");
-            //}
+            if ((bool)barEditItemStart.EditValue)
+            {
+                this.RunWhenStart(true, "es.client", Application.StartupPath + "ES.Client.exe");
+            }
         }
+
+        private void XtraFrmMain_SizeChanged(object sender, EventArgs e)
+        {
+            if (this.WindowState == FormWindowState.Minimized)
+            {
+                this.ShowInTaskbar = false;  //不显示在系统任务栏
+                notifyIcon1.Visible = true;  //托盘图标可见
+            }
+        }
+
+        private void notifyIcon1_DoubleClick(object sender, EventArgs e)
+        {
+            ShowFrom();
+        }
+
+        private void 显示ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ShowFrom();
+        }
+
+        private void 开始ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            StartTransfer();
+        }
+
+        private void 停止ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            StopTransfer();
+        }
+
+        private void 退出ToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (isStart)
+            {
+                if (MessageBox.Show("程序正在运行，您确定要退出吗？", "提示", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    this.Close();
+                }
+            }
+            else
+            {
+                if (MessageBox.Show("您确定要退出吗？", "提示", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    this.Close();
+                }
+            }
+        }
+
+        #endregion 事件结束
     }
 }
