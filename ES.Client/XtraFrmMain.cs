@@ -999,6 +999,7 @@ namespace ES.Client
 
         private void 开始ToolStripMenuItem_Click(object sender, EventArgs e)
         {
+            isStart = true;
             StartTransfer();
         }
 
