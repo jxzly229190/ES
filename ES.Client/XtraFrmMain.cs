@@ -34,7 +34,7 @@ namespace ES.Client
             _syncContext = SynchronizationContext.Current;
             InitComponents();
 
-            LoadGridData();
+            //LoadGridData();
         }
 
         private void InitComponents()
