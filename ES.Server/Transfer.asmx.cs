@@ -43,6 +43,8 @@ namespace ES.Server
 		[WebMethod]
         public ResponseData Get(string tranferNo, string clientCode, string varifyCode, long lastTimeStamp, int rowCount, string configGuid, params object[] paras)
 		{
+            string detailSql = string.Empty;
+
 			var client = db.Client.FirstOrDefault(c => c.Status == 0 && c.Code == clientCode);            
 
 			if (client == null)
@@ -62,7 +64,7 @@ namespace ES.Server
 				return new ResponseData() { State = 3, Message = "没有找到相应的配置" };
 			}
 
-			var detailSql = config.DetailSql.Replace("$lastStamp$", lastTimeStamp.ToString()).Replace("$rowCount$", rowCount.ToString());
+			detailSql = config.DetailSql.Replace("$lastStamp$", lastTimeStamp.ToString()).Replace("$rowCount$", rowCount.ToString());
             //todo:将这句配置到网页去生成
             //detailSql = detailSql.Replace("Where",
             //    "Where [Guid] not in (Select [guid] from tranferTempLog where TransferNo = '" + tranferNo +
@@ -97,7 +99,7 @@ namespace ES.Server
 			    }
 			    else
 			    {
-                    var maxStamp = db.Database.SqlQuery<long>("Select Cast(max([Timestamp]) as bigint) [Timestamp] From [" + config.SourceTableName+"]").FirstOrDefault();
+                    var maxStamp = db.Database.SqlQuery<long>("Select Cast(isnull(max([Timestamp]),0) as bigint) [Timestamp] From [" + config.SourceTableName+"]").FirstOrDefault();
                     
                     return new ResponseData() { State = 0, Message = "没有数据了", MaxStamp = maxStamp };
 			    }
@@ -125,6 +127,26 @@ namespace ES.Server
 			}
 			catch (Exception ex)
 			{
+                TranLog log = new TranLog() {
+                    Client=clientCode,                    
+                    TransferNo=tranferNo,
+                    IsSuccess=false,
+                    Direct=config.Direct,
+                    Detail=detailSql,                    
+                    Result=ex.Message,
+                    Remark=ex.InnerException==null?"":ex.InnerException.Message,
+                    TranTime=DateTime.Now
+                };
+
+                if (config != null) { 
+                    log.ConfigCode=config.Code;
+                    log.ConfigName = config.Name;
+                    log.Header=config.HeaderSql;
+                    log.Footer = config.FooterSql;
+                }
+                db.Entry<TranLog>(log).State=EntityState.Added;
+                db.SaveChanges();
+
 				return new ResponseData() { State = 100, Message = ex.Message };
 			}
 		}

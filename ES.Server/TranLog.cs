@@ -29,5 +29,7 @@ namespace ES.Server
         public string Result { get; set; }
         public string Remark { get; set; }
         public System.DateTime TranTime { get; set; }
+        public string TransferNo { get; set; }
+        public Nullable<bool> IsSuccess { get; set; }
     }
 }

@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="ES.ServerModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="ES.ServerModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="AspNetUsers">
           <Key>
             <PropertyRef Name="Id" />
@@ -87,9 +87,10 @@
           <Property Name="Code" Type="nvarchar" MaxLength="50" />
           <Property Name="Sort" Type="int" Nullable="false" />
           <Property Name="MaxCount" Type="int" Nullable="false" />
-          <Property Name="Sstamp" Type="bigint" />
           <Property Name="Cstamp" Type="bigint" />
+          <Property Name="Sstamp" Type="bigint" />
           <Property Name="Direct" Type="int" Nullable="false" />
+          <Property Name="Import" Type="int" />
           <Property Name="SourceTableName" Type="nvarchar" MaxLength="128" />
           <Property Name="TargetTableName" Type="nvarchar" MaxLength="128" />
           <Property Name="BlobColumn" Type="nvarchar" MaxLength="128" />
@@ -98,7 +99,6 @@
           <Property Name="FooterSql" Type="nvarchar" MaxLength="4000" />
           <Property Name="Remark" Type="nvarchar" MaxLength="4000" />
           <Property Name="Status" Type="int" Nullable="false" />
-          <Property Name="Import" Type="int" />
           <Property Name="Timestamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="CreatedTime" Type="datetime" Nullable="false" />
           <Property Name="CreatedBy" Type="varchar" MaxLength="64" />
@@ -115,9 +115,11 @@
           <Property Name="Sort" Type="int" />
           <Property Name="ConfigCode" Type="nvarchar" MaxLength="50" />
           <Property Name="ConfigName" Type="nvarchar" MaxLength="100" />
+          <Property Name="TransferNo" Type="nvarchar" MaxLength="50" />
+          <Property Name="IsSuccess" Type="bit" />
           <Property Name="Direct" Type="int" />
           <Property Name="Header" Type="nvarchar" MaxLength="4000" />
-          <Property Name="Detail" Type="nvarchar" MaxLength="4000" />
+          <Property Name="Detail" Type="text" />
           <Property Name="Footer" Type="nvarchar" MaxLength="4000" />
           <Property Name="Count" Type="int" />
           <Property Name="Stamp" Type="bigint" />
@@ -213,13 +215,15 @@
           <Property Name="ConfigName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="Direct" Type="Int32" />
           <Property Name="Header" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
-          <Property Name="Detail" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
+          <Property Name="Detail" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
           <Property Name="Footer" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
           <Property Name="Count" Type="Int32" />
           <Property Name="Stamp" Type="Int64" />
           <Property Name="Result" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="Remark" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
           <Property Name="TranTime" Type="DateTime" Nullable="false" Precision="3" />
+          <Property Name="TransferNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="IsSuccess" Type="Boolean" />
         </EntityType>
         <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" />
@@ -342,6 +346,8 @@
           <EntitySetMapping Name="TranLog">
             <EntityTypeMapping TypeName="ES.ServerModel.TranLog">
               <MappingFragment StoreEntitySet="TranLog">
+                <ScalarProperty Name="IsSuccess" ColumnName="IsSuccess" />
+                <ScalarProperty Name="TransferNo" ColumnName="TransferNo" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="Client" ColumnName="Client" />
                 <ScalarProperty Name="Target" ColumnName="Target" />

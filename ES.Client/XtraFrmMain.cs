@@ -48,6 +48,8 @@ namespace ES.Client
 
             barBtnStop.Enabled = false;
             barButtonItemRestart.Enabled = false;
+
+            gridLog.DataSource = new List<TranLog>();
         }
 
         /// <summary>         
@@ -142,7 +144,7 @@ namespace ES.Client
             {
                 try
                 {
-                    UpdateConfigs();
+                    UpdateConfigs(formObj);
                     var md5Pulickey = Common.MD5(Common.PublicKey);
                     string clientCode;
                     string clientGuid = QueryCurrentClientGuid(out clientCode);
@@ -521,7 +523,7 @@ namespace ES.Client
             }
         }
 
-        private void UpdateConfigs()
+        private void UpdateConfigs(XtraFrmMain formObj)
         {
             var md5Pulickey = Common.MD5(Common.PublicKey);
             string clientCode;
@@ -529,129 +531,137 @@ namespace ES.Client
             string sql = string.Empty;
             TranLog log = null;
 
-            var config = _db.TranConfigs.FirstOrDefault(c => c.Code == "PZSJ" && c.Status == 0);
-
-            var result = _server.GetTranConfigs(tranferNo, clientCode, Common.MD5(md5Pulickey + clientGuid), config == null ? 0 : Convert.ToInt64(config.Sstamp));
-
-            if (result == null)
-            {
-                log = new TranLog()
-                {
-                    Client = clientCode,
-                    ConfigCode = "PZSJ",
-                    ConfigName = "传输配置数据",
-                    TransferNo = tranferNo,
-                    Direct = 0,
-                    Count = 0,
-                    Result = "返回数据出错",
-                    IsSuccess = false,
-                    Sort = -1,
-                    Stamp = config == null ? 0 : config.Sstamp,
-                    TranTime = DateTime.Now
-                };
-
-                _db.TranLog.InsertOnSubmit(log);
-                _db.SubmitChanges();
-
-                throw new Exception("返回数据出错");
-            }
-
-            if (result.State != 0)
-            {
-                log = new TranLog()
-                {
-                    Client = clientCode,
-                    TransferNo = tranferNo,
-                    ConfigCode = "PZSJ",
-                    ConfigName = "传输配置数据",
-                    Direct = 0,
-                    Count = 0,
-                    Result = "服务器发生错误",
-                    Remark = result.Message,
-                    Sort = -1,
-                    IsSuccess = false,
-                    Stamp = config == null ? 0 : config.Sstamp,
-                    TranTime = DateTime.Now
-                };
-
-                _db.TranLog.InsertOnSubmit(log);
-                _db.SubmitChanges();
-
-                throw new Exception("返回值异常,错误信息：" + result.Message);
-            }
-
-            //判断是否获取到数据
-            if (result.data == null)
-            {
-                log = new TranLog()
-                {
-                    Client = clientCode,
-                    TransferNo = tranferNo,
-                    ConfigCode = "PZSJ",
-                    ConfigName = "传输配置数据",
-                    Direct = 0,
-                    Count = 0,
-                    Result = "没有返回数据",
-                    Remark = "已经是最新数据",
-                    Sort = -1,
-                    IsSuccess = true,
-                    Stamp = config == null ? 0 : config.Sstamp,
-                    TranTime = DateTime.Now
-                };
-
-                _db.TranLog.InsertOnSubmit(log);
-                _db.SubmitChanges();
-
-                //没有获取到数据,直接返回
-                return;
-            }
-
-            if (config == null)
-            {
-                config = _db.TranConfigs.FirstOrDefault(c => c.Code == "PZSJ" && c.Status == 0);
-            }
-
-            var sqlData = result.data as SqlData;
-
-            if (sqlData == null)
-            {
-                throw new Exception("转换出错");
-            }
-
-            string errorMsg = null;
             try
             {
-                UpdateDbByResponse(sqlData, sqlData.ConfigGuid, config.TargetTableName, config.BlobColumn, out sql);
-            }
-            catch (Exception ex)
-            {
-                errorMsg = ex.Message;
-            }
+                var config = _db.TranConfigs.FirstOrDefault(c => c.Code == "PZSJ" && c.Status == 0);
 
-            log = new TranLog()
-            {
-                Client = clientCode,
-                TransferNo = tranferNo,
-                ConfigCode = "PZSJ",
-                ConfigName = "传输配置数据",
-                Direct = 0,
-                Count = errorMsg == null ?sqlData.RowCount:0,
-                Result = errorMsg == null ? "更新数据成功" : "更新出错，详情见备注。",
-                IsSuccess = errorMsg==null,
-                Sort = -1,
-                Stamp = sqlData.MaxTimeStamp,
-                Detail = sql,
-                TranTime = DateTime.Now,
-                Remark = errorMsg
-            };
+                var result = _server.GetTranConfigs(tranferNo, clientCode, Common.MD5(md5Pulickey + clientGuid), config == null ? 0 : Convert.ToInt64(config.Sstamp));
 
-            _db.TranLog.InsertOnSubmit(log);
-            _db.SubmitChanges();
+                if (result == null)
+                {
+                    log = new TranLog()
+                    {
+                        Client = clientCode,
+                        ConfigCode = "PZSJ",
+                        ConfigName = "传输配置数据",
+                        TransferNo = tranferNo,
+                        Direct = 0,
+                        Count = 0,
+                        Result = "返回数据出错",
+                        IsSuccess = false,
+                        Sort = -1,
+                        Stamp = config == null ? 0 : config.Sstamp,
+                        TranTime = DateTime.Now
+                    };
 
-            if (!string.IsNullOrWhiteSpace(errorMsg))
-            {
-                throw new Exception("更新TranConfig失败。");
+                    _db.TranLog.InsertOnSubmit(log);
+                    _db.SubmitChanges();
+
+                    throw new Exception("返回数据出错");
+                }
+
+                if (result.State != 0)
+                {
+                    log = new TranLog()
+                    {
+                        Client = clientCode,
+                        TransferNo = tranferNo,
+                        ConfigCode = "PZSJ",
+                        ConfigName = "传输配置数据",
+                        Direct = 0,
+                        Count = 0,
+                        Result = "服务器发生错误",
+                        Remark = result.Message,
+                        Sort = -1,
+                        IsSuccess = false,
+                        Stamp = config == null ? 0 : config.Sstamp,
+                        TranTime = DateTime.Now
+                    };
+
+                    _db.TranLog.InsertOnSubmit(log);
+                    _db.SubmitChanges();
+
+                    throw new Exception("返回值异常,错误信息：" + result.Message);
+                }
+
+                //判断是否获取到数据
+                if (result.data == null)
+                {
+                    log = new TranLog()
+                    {
+                        Client = clientCode,
+                        TransferNo = tranferNo,
+                        ConfigCode = "PZSJ",
+                        ConfigName = "传输配置数据",
+                        Direct = 0,
+                        Count = 0,
+                        Result = "没有返回数据",
+                        Remark = "已经是最新数据",
+                        Sort = -1,
+                        IsSuccess = true,
+                        Stamp = config == null ? 0 : config.Sstamp,
+                        TranTime = DateTime.Now
+                    };
+
+                    _db.TranLog.InsertOnSubmit(log);
+                    _db.SubmitChanges();
+
+                    //没有获取到数据,直接返回
+                    return;
+                }
+
+                if (config == null)
+                {
+                    config = _db.TranConfigs.FirstOrDefault(c => c.Code == "PZSJ" && c.Status == 0);
+                }
+
+                var sqlData = result.data as SqlData;
+
+                if (sqlData == null)
+                {
+                    throw new Exception("转换出错");
+                }
+
+                string errorMsg = null;
+                try
+                {
+                    UpdateDbByResponse(sqlData, sqlData.ConfigGuid, config.TargetTableName, config.BlobColumn, out sql);
+                }
+                catch (Exception ex)
+                {
+                    errorMsg = ex.Message;
+                }
+
+                log = new TranLog()
+                {
+                    Client = clientCode,
+                    TransferNo = tranferNo,
+                    ConfigCode = "PZSJ",
+                    ConfigName = "传输配置数据",
+                    Direct = 0,
+                    Count = errorMsg == null ? sqlData.RowCount : 0,
+                    Result = errorMsg == null ? "更新数据成功" : "更新出错，详情见备注。",
+                    IsSuccess = errorMsg == null,
+                    Sort = -1,
+                    Stamp = sqlData.MaxTimeStamp,
+                    Detail = sql,
+                    TranTime = DateTime.Now,
+                    Remark = errorMsg
+                };
+
+                _db.TranLog.InsertOnSubmit(log);
+                _db.SubmitChanges();
+
+                if (!string.IsNullOrWhiteSpace(errorMsg))
+                {
+                    throw new Exception("更新TranConfig失败。");
+                }
             }
+            finally
+            {
+                if (formObj != null)
+                    _syncContext.Post(formObj.InsertLogToGrid, log);
+            }     
         }
 
         private void UpdateDbByResponse(SqlData sqlData, string configGuid, string table, string bloblColumn, out string execSql)
