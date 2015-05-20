@@ -831,6 +831,10 @@ namespace ES.Client
             {
                 var log = data[gridView1.GetDataSourceRowIndex(e.FocusedRowHandle)];
 
+                if (log == null) {
+                    return;
+                }
+
                 StringBuilder htmlText = new StringBuilder();
 
                 htmlText.Append("<h3>传输项目：").Append(log.ConfigName).Append("<h3/>");
