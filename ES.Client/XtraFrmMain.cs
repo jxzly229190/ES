@@ -982,6 +982,9 @@ namespace ES.Client
                     e.Cancel = true;
                 }
             }
+
+            if(!e.Cancel)
+                notifyIcon1.Visible = false; //托盘图标隐藏
         }
 
         private void repositoryItemCheckBox1_CheckedChanged(object sender, EventArgs e)
@@ -1035,6 +1038,7 @@ namespace ES.Client
             {
                 if (MessageBox.Show("您确定要退出吗？", "提示", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
+                    notifyIcon1.Visible = false; //托盘图标隐藏
                     this.Close();
                 }
             }
