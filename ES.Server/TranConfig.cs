@@ -63,7 +63,7 @@ namespace ES.Server
         [Display(Name = "重要程度")]
         public int Import { get; set; }
         [Display(Name = "时间戳")]
-        public byte[] Timestamp { get; set; }
+        public byte[] TMstamp { get; set; }
         [Display(Name = "创建时间")]
         public System.DateTime CreatedTime { get; set; }
         [Display(Name = "创建人")]

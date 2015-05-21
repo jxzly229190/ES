@@ -4,7 +4,7 @@
   <edmx:Runtime>
     <!-- SSDL content -->
     <edmx:StorageModels>
-    <Schema Namespace="ES.ServerModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+    <Schema Namespace="ES.ServerModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2008" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
         <EntityType Name="AspNetUsers">
           <Key>
             <PropertyRef Name="Id" />
@@ -33,7 +33,7 @@
           <Property Name="IsCurrent" Type="bit" />
           <Property Name="Type" Type="int" Nullable="false" />
           <Property Name="Address" Type="nvarchar" MaxLength="500" />
-          <Property Name="Timestamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="TMstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="Status" Type="int" Nullable="false" />
           <Property Name="CreatedBy" Type="varchar" MaxLength="50" />
           <Property Name="CreatedTime" Type="datetime" />
@@ -48,17 +48,17 @@
           <Property Name="Guid" Type="uniqueidentifier" />
           <Property Name="Name" Type="nvarchar" MaxLength="50" />
           <Property Name="Data" Type="varbinary(max)" />
-          <Property Name="Timestamp" Type="timestamp" StoreGeneratedPattern="Computed" />
+          <Property Name="TMstamp" Type="timestamp" StoreGeneratedPattern="Computed" />
         </EntityType>
         <EntityType Name="Meta_KeyValue">
-          <Key>
-            <PropertyRef Name="ID" />
+          <Key><PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
           <Property Name="TableName" Type="varchar" MaxLength="64" />
           <Property Name="ColName" Type="varchar" MaxLength="64" />
           <Property Name="Value" Type="nvarchar" MaxLength="256" />
           <Property Name="Text" Type="nvarchar" MaxLength="256" />
+          <Property Name="TMstamp" Type="timestamp" StoreGeneratedPattern="Computed" />
         </EntityType>
         <EntityType Name="TranBlobConfig">
           <Key>
@@ -73,7 +73,7 @@
           <Property Name="MaxCount" Type="int" />
           <Property Name="Cstamp" Type="bigint" />
           <Property Name="Sstamp" Type="bigint" />
-          <Property Name="Timestamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="TMstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="CreatedBy" Type="nvarchar" MaxLength="128" />
           <Property Name="CreatedTime" Type="datetime" />
         </EntityType>
@@ -87,10 +87,9 @@
           <Property Name="Code" Type="nvarchar" MaxLength="50" />
           <Property Name="Sort" Type="int" Nullable="false" />
           <Property Name="MaxCount" Type="int" Nullable="false" />
-          <Property Name="Cstamp" Type="bigint" />
           <Property Name="Sstamp" Type="bigint" />
+          <Property Name="Cstamp" Type="bigint" />
           <Property Name="Direct" Type="int" Nullable="false" />
-          <Property Name="Import" Type="int" />
           <Property Name="SourceTableName" Type="nvarchar" MaxLength="128" />
           <Property Name="TargetTableName" Type="nvarchar" MaxLength="128" />
           <Property Name="BlobColumn" Type="nvarchar" MaxLength="128" />
@@ -99,14 +98,14 @@
           <Property Name="FooterSql" Type="nvarchar" MaxLength="4000" />
           <Property Name="Remark" Type="nvarchar" MaxLength="4000" />
           <Property Name="Status" Type="int" Nullable="false" />
-          <Property Name="Timestamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
+          <Property Name="Import" Type="int" />
+          <Property Name="TMstamp" Type="timestamp" StoreGeneratedPattern="Computed" Nullable="false" />
           <Property Name="CreatedTime" Type="datetime" Nullable="false" />
           <Property Name="CreatedBy" Type="varchar" MaxLength="64" />
           <Property Name="ModifiedTime" Type="datetime" />
           <Property Name="ModifiedBy" Type="varchar" MaxLength="64" />
         </EntityType>
-        <EntityType Name="TranLog">
-          <Key>
+        <EntityType Name="TranLog"><Key>
             <PropertyRef Name="ID" />
           </Key>
           <Property Name="ID" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
@@ -115,17 +114,18 @@
           <Property Name="Sort" Type="int" />
           <Property Name="ConfigCode" Type="nvarchar" MaxLength="50" />
           <Property Name="ConfigName" Type="nvarchar" MaxLength="100" />
-          <Property Name="TransferNo" Type="nvarchar" MaxLength="50" />
-          <Property Name="IsSuccess" Type="bit" />
           <Property Name="Direct" Type="int" />
+          <Property Name="TransferNo" Type="varchar" MaxLength="50" />
+          <Property Name="IsSuccess" Type="bit" />
           <Property Name="Header" Type="nvarchar" MaxLength="4000" />
-          <Property Name="Detail" Type="text" />
+          <Property Name="Detail" Type="nvarchar" MaxLength="4000" />
           <Property Name="Footer" Type="nvarchar" MaxLength="4000" />
           <Property Name="Count" Type="int" />
           <Property Name="Stamp" Type="bigint" />
           <Property Name="Result" Type="nvarchar" MaxLength="500" />
           <Property Name="Remark" Type="nvarchar" MaxLength="2000" />
           <Property Name="TranTime" Type="datetime" Nullable="false" />
+          <Property Name="TMstamp" Type="timestamp" StoreGeneratedPattern="Computed" />
         </EntityType>
         <EntityContainer Name="ESServerModelStoreContainer">
           <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" Schema="dbo" store:Type="Tables" />
@@ -168,12 +168,12 @@
           <Property Name="IsCurrent" Type="Boolean" />
           <Property Name="Type" Type="Int32" Nullable="false" />
           <Property Name="Address" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
-          <Property Name="Timestamp" Type="Binary" MaxLength="8" FixedLength="true" Nullable="false" annotation:StoreGeneratedPattern="Computed" />
           <Property Name="Status" Type="Int32" Nullable="false" />
           <Property Name="CreatedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="CreatedTime" Type="DateTime" Precision="3" />
           <Property Name="ModifiedBy" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="ModifiedTime" Type="DateTime" Precision="3" />
+          <Property Name="TMstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
         </EntityType>
         <EntityType Name="TranConfig">
           <Key>
@@ -192,7 +192,6 @@
           <Property Name="Remark" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
           <Property Name="Status" Type="Int32" Nullable="false" />
           <Property Name="Import" Type="Int32" />
-          <Property Name="Timestamp" Type="Binary" MaxLength="8" FixedLength="true" Nullable="false" annotation:StoreGeneratedPattern="Computed" />
           <Property Name="CreatedTime" Type="DateTime" Nullable="false" Precision="3" />
           <Property Name="CreatedBy" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
           <Property Name="ModifiedTime" Type="DateTime" Precision="3" />
@@ -202,6 +201,7 @@
           <Property Name="BlobColumn" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
           <Property Name="SourceTableName" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
           <Property Name="TargetTableName" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
+          <Property Name="TMstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
         </EntityType>
         <EntityType Name="TranLog">
           <Key>
@@ -215,15 +215,16 @@
           <Property Name="ConfigName" Type="String" MaxLength="100" FixedLength="false" Unicode="true" />
           <Property Name="Direct" Type="Int32" />
           <Property Name="Header" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
-          <Property Name="Detail" Type="String" MaxLength="Max" FixedLength="false" Unicode="false" />
+          <Property Name="Detail" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
           <Property Name="Footer" Type="String" MaxLength="4000" FixedLength="false" Unicode="true" />
           <Property Name="Count" Type="Int32" />
           <Property Name="Stamp" Type="Int64" />
           <Property Name="Result" Type="String" MaxLength="500" FixedLength="false" Unicode="true" />
           <Property Name="Remark" Type="String" MaxLength="2000" FixedLength="false" Unicode="true" />
           <Property Name="TranTime" Type="DateTime" Nullable="false" Precision="3" />
-          <Property Name="TransferNo" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
+          <Property Name="TransferNo" Type="String" MaxLength="50" FixedLength="false" Unicode="false" />
           <Property Name="IsSuccess" Type="Boolean" />
+          <Property Name="TMstamp" Type="Binary" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
         </EntityType>
         <EntityContainer Name="Entities" annotation:LazyLoadingEnabled="true">
           <EntitySet Name="AspNetUsers" EntityType="Self.AspNetUsers" />
@@ -243,6 +244,7 @@
           <Property Name="ColName" Type="String" MaxLength="64" FixedLength="false" Unicode="false" />
           <Property Name="Value" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
           <Property Name="Text" Type="String" MaxLength="256" FixedLength="false" Unicode="true" />
+          <Property Name="TMstamp" Type="Binary" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
         </EntityType>
         <EntityType Name="TranBlobConfig">
           <Key>
@@ -257,9 +259,9 @@
           <Property Name="MaxCount" Type="Int32" />
           <Property Name="Cstamp" Type="Int64" />
           <Property Name="Sstamp" Type="Int64" />
-          <Property Name="Timestamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
           <Property Name="CreatedBy" Type="String" MaxLength="128" FixedLength="false" Unicode="true" />
           <Property Name="CreatedTime" Type="DateTime" Precision="3" />
+          <Property Name="TMstamp" Type="Binary" Nullable="false" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
         </EntityType>
         <EntityType Name="DataTest">
           <Key>
@@ -269,7 +271,7 @@
           <Property Name="Guid" Type="Guid" />
           <Property Name="Name" Type="String" MaxLength="50" FixedLength="false" Unicode="true" />
           <Property Name="Data" Type="Binary" MaxLength="Max" FixedLength="false" />
-          <Property Name="Timestamp" Type="Binary" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="TMstamp" Type="Binary" MaxLength="8" FixedLength="true" annotation:StoreGeneratedPattern="Computed" />
         </EntityType>
       </Schema>
     </edmx:ConceptualModels>
@@ -298,6 +300,7 @@
           <EntitySetMapping Name="Client">
             <EntityTypeMapping TypeName="ES.ServerModel.Client">
               <MappingFragment StoreEntitySet="Client">
+                <ScalarProperty Name="TMstamp" ColumnName="TMstamp" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
                 <ScalarProperty Name="GUID" ColumnName="GUID" />
                 <ScalarProperty Name="Code" ColumnName="Code" />
@@ -305,7 +308,6 @@
                 <ScalarProperty Name="IsCurrent" ColumnName="IsCurrent" />
                 <ScalarProperty Name="Type" ColumnName="Type" />
                 <ScalarProperty Name="Address" ColumnName="Address" />
-                <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
                 <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
                 <ScalarProperty Name="CreatedTime" ColumnName="CreatedTime" />
@@ -317,6 +319,7 @@
           <EntitySetMapping Name="TranConfig">
             <EntityTypeMapping TypeName="ES.ServerModel.TranConfig">
               <MappingFragment StoreEntitySet="TranConfig">
+                <ScalarProperty Name="TMstamp" ColumnName="TMstamp" />
                 <ScalarProperty Name="TargetTableName" ColumnName="TargetTableName" />
                 <ScalarProperty Name="SourceTableName" ColumnName="SourceTableName" />
                 <ScalarProperty Name="BlobColumn" ColumnName="BlobColumn" />
@@ -335,7 +338,6 @@
                 <ScalarProperty Name="FooterSql" ColumnName="FooterSql" />
                 <ScalarProperty Name="Remark" ColumnName="Remark" />
                 <ScalarProperty Name="Status" ColumnName="Status" />
-                <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
                 <ScalarProperty Name="CreatedTime" ColumnName="CreatedTime" />
                 <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
                 <ScalarProperty Name="ModifiedTime" ColumnName="ModifiedTime" />
@@ -346,6 +348,7 @@
           <EntitySetMapping Name="TranLog">
             <EntityTypeMapping TypeName="ES.ServerModel.TranLog">
               <MappingFragment StoreEntitySet="TranLog">
+                <ScalarProperty Name="TMstamp" ColumnName="TMstamp" />
                 <ScalarProperty Name="IsSuccess" ColumnName="IsSuccess" />
                 <ScalarProperty Name="TransferNo" ColumnName="TransferNo" />
                 <ScalarProperty Name="ID" ColumnName="ID" />
@@ -369,6 +372,7 @@
           <EntitySetMapping Name="Meta_KeyValue">
             <EntityTypeMapping TypeName="ES.ServerModel.Meta_KeyValue">
               <MappingFragment StoreEntitySet="Meta_KeyValue">
+                <ScalarProperty Name="TMstamp" ColumnName="TMstamp" />
                 <ScalarProperty Name="Text" ColumnName="Text" />
                 <ScalarProperty Name="Value" ColumnName="Value" />
                 <ScalarProperty Name="ColName" ColumnName="ColName" />
@@ -380,9 +384,9 @@
           <EntitySetMapping Name="TranBlobConfig">
             <EntityTypeMapping TypeName="ES.ServerModel.TranBlobConfig">
               <MappingFragment StoreEntitySet="TranBlobConfig">
+                <ScalarProperty Name="TMstamp" ColumnName="TMstamp" />
                 <ScalarProperty Name="CreatedTime" ColumnName="CreatedTime" />
                 <ScalarProperty Name="CreatedBy" ColumnName="CreatedBy" />
-                <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
                 <ScalarProperty Name="Sstamp" ColumnName="Sstamp" />
                 <ScalarProperty Name="Cstamp" ColumnName="Cstamp" />
                 <ScalarProperty Name="MaxCount" ColumnName="MaxCount" />
@@ -398,7 +402,7 @@
           <EntitySetMapping Name="DataTest">
             <EntityTypeMapping TypeName="ES.ServerModel.DataTest">
               <MappingFragment StoreEntitySet="DataTest">
-                <ScalarProperty Name="Timestamp" ColumnName="Timestamp" />
+                <ScalarProperty Name="TMstamp" ColumnName="TMstamp" />
                 <ScalarProperty Name="Data" ColumnName="Data" />
                 <ScalarProperty Name="Name" ColumnName="Name" />
                 <ScalarProperty Name="Guid" ColumnName="Guid" />

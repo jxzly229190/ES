@@ -35,13 +35,13 @@ namespace ES.Server
 		/// </summary>
 		/// <param name="clientCode">客户端代号</param>
 		/// <param name="varifyCode">验证码</param>
-		/// <param name="lastTimeStamp">上一次更新数据时间戳</param>
+		/// <param name="lastTMstamp">上一次更新数据时间戳</param>
 		/// <param name="rowCount">行数</param>
 		/// <param name="configGuid">配置标识</param>
 		/// <param name="paras">其他参数</param>
 		/// <returns></returns>
 		[WebMethod]
-        public ResponseData Get(string tranferNo, string clientCode, string varifyCode, long lastTimeStamp, int rowCount, string configGuid, params object[] paras)
+        public ResponseData Get(string tranferNo, string clientCode, string varifyCode, long lastTMstamp, int rowCount, string configGuid, params object[] paras)
 		{
             string detailSql = string.Empty;
 
@@ -64,7 +64,7 @@ namespace ES.Server
 				return new ResponseData() { State = 3, Message = "没有找到相应的配置" };
 			}
 
-			detailSql = config.DetailSql.Replace("$lastStamp$", lastTimeStamp.ToString()).Replace("$rowCount$", rowCount.ToString());
+			detailSql = config.DetailSql.Replace("$lastStamp$", lastTMstamp.ToString()).Replace("$rowCount$", rowCount.ToString());
             //todo:将这句配置到网页去生成
             //detailSql = detailSql.Replace("Where",
             //    "Where [Guid] not in (Select [guid] from tranferTempLog where TransferNo = '" + tranferNo +
@@ -99,7 +99,7 @@ namespace ES.Server
 			    }
 			    else
 			    {
-                    var maxStamp = db.Database.SqlQuery<long>("Select Cast(isnull(max([timestamp]),0) as bigint) [Timestamp] From [" + config.SourceTableName + "]").FirstOrDefault();
+                    var maxStamp = db.Database.SqlQuery<long>("Select Cast(isnull(max([TMstamp]),0) as bigint) [TMstamp] From [" + config.SourceTableName + "]").FirstOrDefault();
                     
                     return new ResponseData() { State = 0, Message = "没有数据了", MaxStamp = maxStamp };
 			    }
@@ -116,7 +116,7 @@ namespace ES.Server
 			                HeaderSql = config.HeaderSql,
 			                DetailSql = sql,
 			                FooterSql = config.FooterSql,
-			                MaxTimeStamp = maxItem == null ? 0 : maxItem.stamp,
+			                MaxTMstamp = maxItem == null ? 0 : maxItem.stamp,
 			                RowCount = result.Count(),
 			                ConfigGuid = config.Guid.ToString(),
 			                BlobDatas = blobData
@@ -248,7 +248,7 @@ namespace ES.Server
 		/// </summary>
 		/// <returns></returns>
 		[WebMethod]
-		public ResponseData GetTranConfigs(string tranferCode, string clientCode, string varifyCode, long timestamp)
+		public ResponseData GetTranConfigs(string tranferCode, string clientCode, string varifyCode, long TMstamp)
 		{
 			var client = db.Client.FirstOrDefault(c => c.Status == 0 && c.Code == clientCode);
 
@@ -269,7 +269,7 @@ namespace ES.Server
 				return new ResponseData() { State = 3, Message = "配置不存在" };
 			}
 
-            return this.Get(tranferCode, clientCode, varifyCode, timestamp, tranConfig.MaxCount, tranConfig.Guid.ToString());
+            return this.Get(tranferCode, clientCode, varifyCode, TMstamp, tranConfig.MaxCount, tranConfig.Guid.ToString());
 		}
 
 		private bool VarifyClient(string clientGuid, string varifyCode)

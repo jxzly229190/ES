@@ -23,8 +23,8 @@ namespace ES.Server
         public Nullable<int> MaxCount { get; set; }
         public Nullable<long> Cstamp { get; set; }
         public Nullable<long> Sstamp { get; set; }
-        public byte[] Timestamp { get; set; }
         public string CreatedBy { get; set; }
         public Nullable<System.DateTime> CreatedTime { get; set; }
+        public byte[] TMstamp { get; set; }
     }
 }

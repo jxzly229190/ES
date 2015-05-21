@@ -50,7 +50,7 @@ namespace ES.Server.Controllers
         // 详细信息，请参阅 http://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,Guid,Name,Code,Sort,MaxCount,Cstamp,Sstamp,SourceTableName,TargetTableName,ColumnList,BlobColumn,Direct,Import,HeaderSql,DetailSql,FooterSql,Remark,Status,Timestamp,CreatedTime,CreatedBy,ModifiedTime,ModifiedBy")] TranConfig tranConfig)
+        public ActionResult Create([Bind(Include = "ID,Guid,Name,Code,Sort,MaxCount,Cstamp,Sstamp,SourceTableName,TargetTableName,ColumnList,BlobColumn,Direct,Import,HeaderSql,DetailSql,FooterSql,Remark,Status,TMstamp,CreatedTime,CreatedBy,ModifiedTime,ModifiedBy")] TranConfig tranConfig)
         {
             if (ModelState.IsValid)
             {
@@ -84,7 +84,7 @@ namespace ES.Server.Controllers
             foreach (var col in cols)
             {
                 var fields = col.Split(',');
-                if (fields[0].ToUpper() != "ID" && fields[1] != "timestamp")
+                if (fields[0].ToUpper() != "ID" && fields[1] != "TMstamp")
                 {
                     if (fields[1].EndsWith("varbinary"))
                     {
@@ -120,7 +120,7 @@ namespace ES.Server.Controllers
         // 详细信息，请参阅 http://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,Guid,Name,Code,Sort,MaxCount,SourceTableName,TargetTableName,BlobColumn,,Direct,HeaderSql,DetailSql,FooterSql,Remark,Status,Timestamp,CreatedTime,CreatedBy,ModifiedTime,ModifiedBy")] TranConfig tranConfig)
+        public ActionResult Edit([Bind(Include = "ID,Guid,Name,Code,Sort,MaxCount,SourceTableName,TargetTableName,BlobColumn,,Direct,HeaderSql,DetailSql,FooterSql,Remark,Status,TMstamp,CreatedTime,CreatedBy,ModifiedTime,ModifiedBy")] TranConfig tranConfig)
         {
             if (ModelState.IsValid)
             {

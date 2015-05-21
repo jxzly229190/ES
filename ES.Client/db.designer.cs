@@ -71,7 +71,7 @@ namespace ES.Client
 			OnCreated();
 		}
 		
-		public System.Data.Linq.Table<Client> Client
+		public System.Data.Linq.Table<Client> Clients
 		{
 			get
 			{
@@ -87,7 +87,7 @@ namespace ES.Client
 			}
 		}
 		
-		public System.Data.Linq.Table<TranLog> TranLog
+		public System.Data.Linq.Table<TranLog> TranLogs
 		{
 			get
 			{
@@ -116,7 +116,7 @@ namespace ES.Client
 		
 		private string _Address;
 		
-		private System.Data.Linq.Binary _Timestamp;
+		private System.Data.Linq.Binary _TMstamp;
 		
 		private int _Status;
 		
@@ -146,8 +146,8 @@ namespace ES.Client
     partial void OnTypeChanged();
     partial void OnAddressChanging(string value);
     partial void OnAddressChanged();
-    partial void OnTimestampChanging(System.Data.Linq.Binary value);
-    partial void OnTimestampChanged();
+    partial void OnTMstampChanging(System.Data.Linq.Binary value);
+    partial void OnTMstampChanged();
     partial void OnStatusChanging(int value);
     partial void OnStatusChanged();
     partial void OnCreatedByChanging(string value);
@@ -305,22 +305,22 @@ namespace ES.Client
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Timestamp", AutoSync=AutoSync.Always, DbType="rowversion NOT NULL", CanBeNull=false, IsDbGenerated=true, IsVersion=true, UpdateCheck=UpdateCheck.Never)]
-		public System.Data.Linq.Binary Timestamp
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TMstamp", AutoSync=AutoSync.Always, DbType="rowversion NOT NULL", CanBeNull=false, IsDbGenerated=true, IsVersion=true, UpdateCheck=UpdateCheck.Never)]
+		public System.Data.Linq.Binary TMstamp
 		{
 			get
 			{
-				return this._Timestamp;
+				return this._TMstamp;
 			}
 			set
 			{
-				if ((this._Timestamp != value))
+				if ((this._TMstamp != value))
 				{
-					this.OnTimestampChanging(value);
+					this.OnTMstampChanging(value);
 					this.SendPropertyChanging();
-					this._Timestamp = value;
-					this.SendPropertyChanged("Timestamp");
-					this.OnTimestampChanged();
+					this._TMstamp = value;
+					this.SendPropertyChanged("TMstamp");
+					this.OnTMstampChanged();
 				}
 			}
 		}
@@ -488,7 +488,7 @@ namespace ES.Client
 		
 		private int _Status;
 		
-		private System.Data.Linq.Binary _Timestamp;
+		private System.Data.Linq.Binary _TMstamp;
 		
 		private System.DateTime _CreatedTime;
 		
@@ -538,8 +538,8 @@ namespace ES.Client
     partial void OnImportChanged();
     partial void OnStatusChanging(int value);
     partial void OnStatusChanged();
-    partial void OnTimestampChanging(System.Data.Linq.Binary value);
-    partial void OnTimestampChanged();
+    partial void OnTMstampChanging(System.Data.Linq.Binary value);
+    partial void OnTMstampChanged();
     partial void OnCreatedTimeChanging(System.DateTime value);
     partial void OnCreatedTimeChanged();
     partial void OnCreatedByChanging(string value);
@@ -915,22 +915,22 @@ namespace ES.Client
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Timestamp", AutoSync=AutoSync.Always, DbType="rowversion NOT NULL", CanBeNull=false, IsDbGenerated=true, IsVersion=true, UpdateCheck=UpdateCheck.Never)]
-		public System.Data.Linq.Binary Timestamp
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TMstamp", AutoSync=AutoSync.Always, DbType="rowversion NOT NULL", CanBeNull=false, IsDbGenerated=true, IsVersion=true, UpdateCheck=UpdateCheck.Never)]
+		public System.Data.Linq.Binary TMstamp
 		{
 			get
 			{
-				return this._Timestamp;
+				return this._TMstamp;
 			}
 			set
 			{
-				if ((this._Timestamp != value))
+				if ((this._TMstamp != value))
 				{
-					this.OnTimestampChanging(value);
+					this.OnTMstampChanging(value);
 					this.SendPropertyChanging();
-					this._Timestamp = value;
-					this.SendPropertyChanged("Timestamp");
-					this.OnTimestampChanged();
+					this._TMstamp = value;
+					this.SendPropertyChanged("TMstamp");
+					this.OnTMstampChanged();
 				}
 			}
 		}
@@ -1076,6 +1076,8 @@ namespace ES.Client
 		
 		private System.DateTime _TranTime;
 		
+		private System.Data.Linq.Binary _TMstamp;
+		
     #region 可扩展性方法定义
     partial void OnLoaded();
     partial void OnValidate(System.Data.Linq.ChangeAction action);
@@ -1114,6 +1116,8 @@ namespace ES.Client
     partial void OnRemarkChanged();
     partial void OnTranTimeChanging(System.DateTime value);
     partial void OnTranTimeChanged();
+    partial void OnTMstampChanging(System.Data.Linq.Binary value);
+    partial void OnTMstampChanged();
     #endregion
 		
 		public TranLog()
@@ -1121,7 +1125,7 @@ namespace ES.Client
 			OnCreated();
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true)]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ID", AutoSync=AutoSync.OnInsert, DbType="Int NOT NULL IDENTITY", IsPrimaryKey=true, IsDbGenerated=true, UpdateCheck=UpdateCheck.Never)]
 		public int ID
 		{
 			get
@@ -1141,7 +1145,7 @@ namespace ES.Client
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Client", DbType="VarChar(32)")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Client", DbType="VarChar(32)", UpdateCheck=UpdateCheck.Never)]
 		public string Client
 		{
 			get
@@ -1161,7 +1165,7 @@ namespace ES.Client
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Target", DbType="VarChar(32)")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Target", DbType="VarChar(32)", UpdateCheck=UpdateCheck.Never)]
 		public string Target
 		{
 			get
@@ -1181,7 +1185,7 @@ namespace ES.Client
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Sort", DbType="Int")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Sort", DbType="Int", UpdateCheck=UpdateCheck.Never)]
 		public System.Nullable<int> Sort
 		{
 			get
@@ -1201,7 +1205,7 @@ namespace ES.Client
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ConfigCode", DbType="NVarChar(50)")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ConfigCode", DbType="NVarChar(50)", UpdateCheck=UpdateCheck.Never)]
 		public string ConfigCode
 		{
 			get
@@ -1221,7 +1225,7 @@ namespace ES.Client
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ConfigName", DbType="NVarChar(100)")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_ConfigName", DbType="NVarChar(100)", UpdateCheck=UpdateCheck.Never)]
 		public string ConfigName
 		{
 			get
@@ -1241,7 +1245,7 @@ namespace ES.Client
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Direct", DbType="Int")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Direct", DbType="Int", UpdateCheck=UpdateCheck.Never)]
 		public System.Nullable<int> Direct
 		{
 			get
@@ -1261,7 +1265,7 @@ namespace ES.Client
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TransferNo", DbType="VarChar(50)")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TransferNo", DbType="VarChar(50)", UpdateCheck=UpdateCheck.Never)]
 		public string TransferNo
 		{
 			get
@@ -1281,7 +1285,7 @@ namespace ES.Client
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IsSuccess", DbType="Bit")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_IsSuccess", DbType="Bit", UpdateCheck=UpdateCheck.Never)]
 		public System.Nullable<bool> IsSuccess
 		{
 			get
@@ -1301,7 +1305,7 @@ namespace ES.Client
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Header", DbType="NVarChar(4000)")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Header", DbType="NVarChar(4000)", UpdateCheck=UpdateCheck.Never)]
 		public string Header
 		{
 			get
@@ -1321,7 +1325,7 @@ namespace ES.Client
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Detail", DbType="NVarChar(4000)")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Detail", DbType="NVarChar(4000)", UpdateCheck=UpdateCheck.Never)]
 		public string Detail
 		{
 			get
@@ -1341,7 +1345,7 @@ namespace ES.Client
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Footer", DbType="NVarChar(4000)")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Footer", DbType="NVarChar(4000)", UpdateCheck=UpdateCheck.Never)]
 		public string Footer
 		{
 			get
@@ -1361,7 +1365,7 @@ namespace ES.Client
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Count", DbType="Int")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Count", DbType="Int", UpdateCheck=UpdateCheck.Never)]
 		public System.Nullable<int> Count
 		{
 			get
@@ -1381,7 +1385,7 @@ namespace ES.Client
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Stamp", DbType="BigInt")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Stamp", DbType="BigInt", UpdateCheck=UpdateCheck.Never)]
 		public System.Nullable<long> Stamp
 		{
 			get
@@ -1401,7 +1405,7 @@ namespace ES.Client
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Result", DbType="NVarChar(500)")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Result", DbType="NVarChar(500)", UpdateCheck=UpdateCheck.Never)]
 		public string Result
 		{
 			get
@@ -1421,7 +1425,7 @@ namespace ES.Client
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Remark", DbType="NVarChar(2000)")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Remark", DbType="NVarChar(2000)", UpdateCheck=UpdateCheck.Never)]
 		public string Remark
 		{
 			get
@@ -1441,7 +1445,7 @@ namespace ES.Client
 			}
 		}
 		
-		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TranTime", DbType="DateTime NOT NULL")]
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TranTime", DbType="DateTime NOT NULL", UpdateCheck=UpdateCheck.Never)]
 		public System.DateTime TranTime
 		{
 			get
@@ -1457,6 +1461,26 @@ namespace ES.Client
 					this._TranTime = value;
 					this.SendPropertyChanged("TranTime");
 					this.OnTranTimeChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_TMstamp", AutoSync=AutoSync.Always, DbType="rowversion", IsDbGenerated=true, IsVersion=true, UpdateCheck=UpdateCheck.Never)]
+		public System.Data.Linq.Binary TMstamp
+		{
+			get
+			{
+				return this._TMstamp;
+			}
+			set
+			{
+				if ((this._TMstamp != value))
+				{
+					this.OnTMstampChanging(value);
+					this.SendPropertyChanging();
+					this._TMstamp = value;
+					this.SendPropertyChanged("TMstamp");
+					this.OnTMstampChanged();
 				}
 			}
 		}

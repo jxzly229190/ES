@@ -31,7 +31,7 @@ namespace ES.Repository.Model
 
 		public int RowCount { get; set; }
 
-		public long MaxTimeStamp { get; set; }
+		public long MaxTMstamp { get; set; }
 
         public List<BlobData> BlobDatas { get; set; }
 	}

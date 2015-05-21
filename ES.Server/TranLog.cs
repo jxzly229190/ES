@@ -31,5 +31,6 @@ namespace ES.Server
         public System.DateTime TranTime { get; set; }
         public string TransferNo { get; set; }
         public Nullable<bool> IsSuccess { get; set; }
+        public byte[] TMstamp { get; set; }
     }
 }

@@ -21,11 +21,11 @@ namespace ES.Server
         public Nullable<bool> IsCurrent { get; set; }
         public int Type { get; set; }
         public string Address { get; set; }
-        public byte[] Timestamp { get; set; }
         public int Status { get; set; }
         public string CreatedBy { get; set; }
         public Nullable<System.DateTime> CreatedTime { get; set; }
         public string ModifiedBy { get; set; }
         public Nullable<System.DateTime> ModifiedTime { get; set; }
+        public byte[] TMstamp { get; set; }
     }
 }

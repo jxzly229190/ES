@@ -44,7 +44,7 @@ namespace ES.Server.Controllers
         // 详细信息，请参阅 http://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Create([Bind(Include = "ID,GUID,Code,Name,IsCurrent,Type,Address,Timestamp,Status,CreatedBy,CreatedTime,ModifiedBy,ModifiedTime")] Client client)
+        public ActionResult Create([Bind(Include = "ID,GUID,Code,Name,IsCurrent,Type,Address,TMstamp,Status,CreatedBy,CreatedTime,ModifiedBy,ModifiedTime")] Client client)
         {
             if (db.Client.Count(c => c.Code == client.Code) > 0)
             {
@@ -87,7 +87,7 @@ namespace ES.Server.Controllers
         // 详细信息，请参阅 http://go.microsoft.com/fwlink/?LinkId=317598。
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public ActionResult Edit([Bind(Include = "ID,GUID,Code,Name,IsCurrent,Type,Address,Timestamp,Status,CreatedBy,CreatedTime,ModifiedBy,ModifiedTime")] Client client)
+        public ActionResult Edit([Bind(Include = "ID,GUID,Code,Name,IsCurrent,Type,Address,TMstamp,Status,CreatedBy,CreatedTime,ModifiedBy,ModifiedTime")] Client client)
         {
             if (ModelState.IsValid)
             {

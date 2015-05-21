@@ -119,7 +119,7 @@ namespace ES.Client
                     if (formObj != null)
                     {
                         formObj.ShowTranferName("数据更新完成");
-                        _syncContext.Post(formObj.ReloadLog, _db.TranLog.OrderByDescending(p => p.ID).Take(200).ToList());
+                        _syncContext.Post(formObj.ReloadLog, _db.TranLogs.OrderByDescending(p => p.ID).Take(200).ToList());
                     }
                 }
                 catch (Exception ex)
@@ -149,7 +149,7 @@ namespace ES.Client
 
             Post(md5Pulickey, clientCode, clientGuid, config);
             if (formObj != null)
-                _syncContext.Post(formObj.ReloadLog, _db.TranLog.OrderByDescending(p => p.ID).Take(200).ToList());
+                _syncContext.Post(formObj.ReloadLog, _db.TranLogs.OrderByDescending(p => p.ID).Take(200).ToList());
         }
 
         private void GetDataFromServer(Main formObj, TranConfig config, string md5Pulickey, string clientCode, string clientGuid)
@@ -158,7 +158,7 @@ namespace ES.Client
             {
                 _syncContext.Post(formObj.ShowTranferName, "下载 " + config.Name);
                 Get(md5Pulickey, clientCode, clientGuid, config);
-                _syncContext.Post(formObj.ReloadLog, _db.TranLog.OrderByDescending(p => p.ID).Take(200).ToList());
+                _syncContext.Post(formObj.ReloadLog, _db.TranLogs.OrderByDescending(p => p.ID).Take(200).ToList());
             }
         }
 
@@ -245,7 +245,7 @@ namespace ES.Client
                 {
                     this.UpdateDbByResponse(sqlData, config.Guid.ToString(), config.TargetTableName, config.BlobColumn,
                         out sql);
-                    config.Sstamp = sqlData.MaxTimeStamp;
+                    config.Sstamp = sqlData.MaxTMstamp;
                     //_db.SubmitChanges();
                 }
                 catch (Exception ex)
@@ -290,7 +290,7 @@ namespace ES.Client
                         TranTime = DateTime.Now
                     };
                 }
-                _db.TranLog.InsertOnSubmit(log);
+                _db.TranLogs.InsertOnSubmit(log);
                 _db.SubmitChanges();
             }
             catch (System.Data.Linq.ChangeConflictException conflictEx)
@@ -359,7 +359,7 @@ namespace ES.Client
                     {
                         ConfigGuid = config.Guid.ToString(),
                         RowCount = results.Count(),
-                        MaxTimeStamp = results.Count(),
+                        MaxTMstamp = results.Count(),
                         HeaderSql = config.HeaderSql,
                         DetailSql = sql.ToString(),
                         FooterSql = config.FooterSql,
@@ -419,7 +419,7 @@ namespace ES.Client
                     };
                 }
 
-                _db.TranLog.InsertOnSubmit(log);
+                _db.TranLogs.InsertOnSubmit(log);
                 _db.SubmitChanges();
             }
             catch (System.Data.Linq.ChangeConflictException ex)
@@ -456,7 +456,7 @@ namespace ES.Client
                     TranTime = DateTime.Now
                 };
 
-                _db.TranLog.InsertOnSubmit(log);
+                _db.TranLogs.InsertOnSubmit(log);
                 _db.SubmitChanges();
 
                 throw new Exception("返回数据出错");
@@ -477,7 +477,7 @@ namespace ES.Client
                     TranTime = DateTime.Now
                 };
 
-                _db.TranLog.InsertOnSubmit(log);
+                _db.TranLogs.InsertOnSubmit(log);
                 _db.SubmitChanges();
 
                 throw new Exception("返回值异常,错误信息：" + result.Message);
@@ -499,7 +499,7 @@ namespace ES.Client
                     TranTime = DateTime.Now
                 };
 
-                _db.TranLog.InsertOnSubmit(log);
+                _db.TranLogs.InsertOnSubmit(log);
                 _db.SubmitChanges();
 
                 //没有获取到数据,直接返回
@@ -537,13 +537,13 @@ namespace ES.Client
                 Count = sqlData.RowCount,
                 Result = errorMsg == null ? "更新数据成功" : "更新出错，详情见备注。",
                 Sort = -1,
-                Stamp = sqlData.MaxTimeStamp,
+                Stamp = sqlData.MaxTMstamp,
                 Detail = sql,
                 TranTime = DateTime.Now,
                 Remark = errorMsg
             };
 
-            _db.TranLog.InsertOnSubmit(log);
+            _db.TranLogs.InsertOnSubmit(log);
             _db.SubmitChanges();
 
             if (!string.IsNullOrWhiteSpace(errorMsg))
@@ -582,8 +582,8 @@ namespace ES.Client
                 .Append(";")
                 .Append(
                     string.Format(
-                        "Update tranconfig Set Sstamp={0},Cstamp=(Select CAST(max(timestamp) as bigint) From [{1}]) Where Guid='{2}'",
-                        sqlData.MaxTimeStamp, table, configGuid));
+                        "Update tranconfig Set Sstamp={0},Cstamp=(Select CAST(max(TMStamp) as bigint) From [{1}]) Where Guid='{2}'",
+                        sqlData.MaxTMstamp, table, configGuid));
 
             execSql = sql.ToString();
 
@@ -598,7 +598,7 @@ namespace ES.Client
 
         private string QueryCurrentClientGuid(out string clientCode)
         {
-            var client = _db.Client.FirstOrDefault(c => c.Status == 0 && c.IsCurrent == true);
+            var client = _db.Clients.FirstOrDefault(c => c.Status == 0 && c.IsCurrent == true);
 
             if (client == null)
             {

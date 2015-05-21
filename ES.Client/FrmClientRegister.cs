@@ -21,7 +21,7 @@ namespace ES.Client
         }
 
         private void InitData() {
-            client = db.Client.FirstOrDefault(c => c.IsCurrent == true && c.Type == 1);
+            client = db.Clients.FirstOrDefault(c => c.IsCurrent == true && c.Type == 1);
             if (client != null) {
                 txtGuid.Text = client.GUID.ToString();
             }
@@ -47,7 +47,7 @@ namespace ES.Client
                 client.GUID = guid;
                 client.Type = 1;
                 client.IsCurrent = true;
-                db.Client.InsertOnSubmit(client);
+                db.Clients.InsertOnSubmit(client);
             }
             else {
                 client.GUID = guid;

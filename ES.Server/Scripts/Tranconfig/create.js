@@ -19,7 +19,7 @@
                 dd += ',[' + col + '] as Blob';
                 $("#BlobColumn").val(col);
             } else {
-                vd += "'+dbo.bims_f_var_to_string(" + col + ")+',";
+                vd += "'+dbo.ES_f_CastAsString(" + col + ")+',";
             }
             
             vf += "b."+col+" = a."+col+",";
@@ -42,9 +42,9 @@
 
         var detail = "select top $rowCount$ 'insert #temp_" + table + "(" +
             columns + ") select " + vd +
-            " as sql,cast(timestamp as bigint) as stamp,[Guid] as Guid" + dd + " from [" + table + "]" +
-            " where [timestamp] > cast(cast($lastStamp$ as bigint) as timestamp) " +
-            "{templog: And [Guid] not in (Select [guid] from tranferTempLog where TransferNo = '$tranferNo$' and ConfigCode = '$configCode$') :templog} Order by [TimeStamp];";
+            " as sql,cast(TMstamp as bigint) as stamp,[Guid] as Guid" + dd + " from [" + table + "]" +
+            " where [TMstamp] > cast(cast($lastStamp$ as bigint) as TMstamp) " +
+            "{templog: And [Guid] not in (Select [guid] from tranferTempLog where TransferNo = '$tranferNo$' and ConfigCode = '$configCode$') :templog} Order by [TMstamp];";
 
         var footer = "Update b set "+vf+" from #temp_" + table + " a,[" + table + "] b  where a.Guid = b.Guid;" +
             "if @@error <> 0 begin raiserror 20001 '更新配置出错';  rollback return end;" +
