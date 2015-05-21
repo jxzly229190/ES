@@ -1044,6 +1044,8 @@ namespace ES.Client
 		
 		private int _ID;
 		
+		private System.Nullable<System.Guid> _Guid;
+		
 		private string _Client;
 		
 		private string _Target;
@@ -1084,6 +1086,8 @@ namespace ES.Client
     partial void OnCreated();
     partial void OnIDChanging(int value);
     partial void OnIDChanged();
+    partial void OnGuidChanging(System.Nullable<System.Guid> value);
+    partial void OnGuidChanged();
     partial void OnClientChanging(string value);
     partial void OnClientChanged();
     partial void OnTargetChanging(string value);
@@ -1141,6 +1145,26 @@ namespace ES.Client
 					this._ID = value;
 					this.SendPropertyChanged("ID");
 					this.OnIDChanged();
+				}
+			}
+		}
+		
+		[global::System.Data.Linq.Mapping.ColumnAttribute(Storage="_Guid", DbType="UniqueIdentifier", UpdateCheck=UpdateCheck.Never)]
+		public System.Nullable<System.Guid> Guid
+		{
+			get
+			{
+				return this._Guid;
+			}
+			set
+			{
+				if ((this._Guid != value))
+				{
+					this.OnGuidChanging(value);
+					this.SendPropertyChanging();
+					this._Guid = value;
+					this.SendPropertyChanged("Guid");
+					this.OnGuidChanged();
 				}
 			}
 		}

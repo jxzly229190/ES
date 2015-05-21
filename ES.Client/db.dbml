@@ -47,6 +47,7 @@
   <Table Name="dbo.TranLog" Member="TranLogs">
     <Type Name="TranLog">
       <Column Name="ID" Type="System.Int32" DbType="Int NOT NULL IDENTITY" IsPrimaryKey="true" IsDbGenerated="true" CanBeNull="false" />
+      <Column Name="Guid" Type="System.Guid" DbType="UniqueIdentifier" CanBeNull="true" />
       <Column Name="Client" Type="System.String" DbType="VarChar(32)" CanBeNull="true" />
       <Column Name="Target" Type="System.String" DbType="VarChar(32)" CanBeNull="true" />
       <Column Name="Sort" Type="System.Int32" DbType="Int" CanBeNull="true" />

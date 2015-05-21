@@ -32,5 +32,6 @@ namespace ES.Server
         public string TransferNo { get; set; }
         public Nullable<bool> IsSuccess { get; set; }
         public byte[] TMstamp { get; set; }
+        public Nullable<System.Guid> Guid { get; set; }
     }
 }
