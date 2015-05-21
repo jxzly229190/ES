@@ -43,7 +43,7 @@
         var detail = "select top $rowCount$ 'insert #temp_" + table + "(" +
             columns + ") select " + vd +
             " as sql,cast(TMstamp as bigint) as stamp,[Guid] as Guid" + dd + " from [" + table + "]" +
-            " where [TMstamp] > cast(cast($lastStamp$ as bigint) as TMstamp) " +
+            " where [TMstamp] > cast(cast($lastStamp$ as bigint) as Timestamp) " +
             "{templog: And [Guid] not in (Select [guid] from tranferTempLog where TransferNo = '$tranferNo$' and ConfigCode = '$configCode$') :templog} Order by [TMstamp];";
 
         var footer = "Update b set "+vf+" from #temp_" + table + " a,[" + table + "] b  where a.Guid = b.Guid;" +
