@@ -42,7 +42,7 @@ namespace ES.Client
             _timer = new System.Windows.Forms.Timer();
             _lastTransferTime = DateTime.Now;
             _timer.Interval = 1000;
-            _timer.Tick += timer_Tick;
+            _timer.Tick += TimerTick;
 
             SkinHelper.InitSkinGallery(ribbonGalleryBarItem1, true);
 
@@ -85,7 +85,7 @@ namespace ES.Client
             }
         }
 
-        void timer_Tick(object sender, EventArgs e)
+        void TimerTick(object sender, EventArgs e)
         {
             var mins = Convert.ToInt32(barEditItemTimeSpan.EditValue);
             var minSpan = mins*60 - (DateTime.Now - _lastTransferTime).TotalSeconds;
@@ -110,6 +110,7 @@ namespace ES.Client
             gridLog.DataSource = logs;
         }
 
+/*
         private bool LoadServiceAddress()
         {
             var url = util.GetSetting("serviceUrl");
@@ -121,6 +122,7 @@ namespace ES.Client
             _server.Endpoint.Address = new EndpointAddress(util.GetSetting("serviceUrl"));
             return true;
         }
+*/
 
         public void ShowTranferName(object name)
         {
