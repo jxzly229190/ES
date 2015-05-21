@@ -18,15 +18,15 @@ namespace ES.Client
 {
     public partial class XtraFrmMain : DevExpress.XtraEditors.XtraForm
     {
-        private bool isStart = false;
-        private DateTime lastTransferTime;
+        private bool _isStart = false;
+        private DateTime _lastTransferTime;
         private readonly object _lockFlag = new object();
         readonly SynchronizationContext _syncContext = null;
-        ServiceReference.TransferSoapClient _server = new ServiceReference.TransferSoapClient();
+        readonly ServiceReference.TransferSoapClient _server = new ServiceReference.TransferSoapClient();
         dbDataContext _db = new dbDataContext();
-        private string tranferNo = string.Empty;
-        Thread t = null;
-        private System.Windows.Forms.Timer timer = null;
+        private string _tranferNo = string.Empty;
+        Thread _t = null;
+        private System.Windows.Forms.Timer _timer = null;
 
         public XtraFrmMain()
         {
@@ -39,10 +39,10 @@ namespace ES.Client
 
         private void InitComponents()
         {
-            timer = new System.Windows.Forms.Timer();
-            lastTransferTime = DateTime.Now;
-            timer.Interval = 1000;
-            timer.Tick += timer_Tick;
+            _timer = new System.Windows.Forms.Timer();
+            _lastTransferTime = DateTime.Now;
+            _timer.Interval = 1000;
+            _timer.Tick += timer_Tick;
 
             SkinHelper.InitSkinGallery(ribbonGalleryBarItem1, true);
 
@@ -55,20 +55,20 @@ namespace ES.Client
         /// <summary>         
         /// 开机启动项        
         /// </summary>       
-        /// <param name="Started">是否启动</param>         
+        /// <param name="started">是否启动</param>         
         /// <param name="name">启动值的名称</param>          
         /// <param name="path">启动程序的路径</param>         
-        public void RunWhenStart(bool Started, string name, string path)
+        public void RunWhenStart(bool started, string name, string path)
         {
-            RegistryKey HKLM = Registry.LocalMachine;
-            RegistryKey Run = HKLM.CreateSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run",
+            RegistryKey hklm = Registry.LocalMachine;
+            RegistryKey run = hklm.CreateSubKey("SOFTWARE\\Microsoft\\Windows\\CurrentVersion\\Run",
                 RegistryKeyPermissionCheck.ReadWriteSubTree);
-            if (Started == true)
+            if (started == true)
             {
                 try
                 {
-                    Run.SetValue(name, path);
-                    HKLM.Close();
+                    run.SetValue(name, path);
+                    hklm.Close();
                 }
                 catch//没有权限会异常            
                 { }
@@ -77,8 +77,8 @@ namespace ES.Client
             {
                 try
                 {
-                    Run.DeleteValue(name);
-                    HKLM.Close();
+                    run.DeleteValue(name);
+                    hklm.Close();
                 }
                 catch//没有权限会异常 
                 { }
@@ -88,7 +88,7 @@ namespace ES.Client
         void timer_Tick(object sender, EventArgs e)
         {
             var mins = Convert.ToInt32(barEditItemTimeSpan.EditValue);
-            var minSpan = mins*60 - (DateTime.Now - lastTransferTime).TotalSeconds;
+            var minSpan = mins*60 - (DateTime.Now - _lastTransferTime).TotalSeconds;
             barStaticItemStatus.Caption = string.Format("距离下次传输还有 {0}分{1}秒", (int) minSpan/60, (int) minSpan%60);
 
             if (minSpan<=0){
@@ -279,13 +279,13 @@ namespace ES.Client
             int times = -1;
             do
             {
-                var result = _server.Get(tranferNo, clientCode, Common.MD5(md5Pulickey + clientGuid), Convert.ToInt64(config.Sstamp), config.MaxCount, config.Guid.ToString(), null);
+                var result = _server.Get(_tranferNo, clientCode, Common.MD5(md5Pulickey + clientGuid), Convert.ToInt64(config.Sstamp), config.MaxCount, config.Guid.ToString(), null);
 
                 if (result.State != 0)
                 {
                     log = new TranLog(){
                         Client = clientCode,
-                        TransferNo = tranferNo,
+                        TransferNo = _tranferNo,
                         ConfigCode = config.Code,
                         ConfigName = config.Name,
                         Count = 0,
@@ -306,7 +306,7 @@ namespace ES.Client
                     log = new TranLog()
                     {
                         Client = clientCode,
-                        TransferNo = tranferNo,
+                        TransferNo = _tranferNo,
                         ConfigCode = config.Code,
                         ConfigName = config.Name,
                         Count = 0,
@@ -332,7 +332,7 @@ namespace ES.Client
                     {
                         Client = clientCode,
                         ConfigCode = config.Code,
-                        TransferNo = tranferNo,
+                        TransferNo = _tranferNo,
                         ConfigName = config.Name,
                         Count = 0,
                         Direct = 0,
@@ -363,7 +363,7 @@ namespace ES.Client
                     {
                         Client = clientCode,
                         ConfigCode = config.Code,
-                        TransferNo = tranferNo,
+                        TransferNo = _tranferNo,
                         ConfigName = config.Name,
                         Count = 0,
                         Direct = 0,
@@ -392,7 +392,7 @@ namespace ES.Client
                         Client = clientCode,
                         ConfigCode = config.Code,
                         ConfigName = config.Name,
-                        TransferNo = tranferNo,
+                        TransferNo = _tranferNo,
                         Count = (times * config.MaxCount) + sqlData.RowCount,
                         Direct = 0,
                         IsSuccess = true,
@@ -445,7 +445,7 @@ namespace ES.Client
                             Client = clientCode,
                             ConfigCode = config.Code,
                             ConfigName = config.Name,
-                            TransferNo = tranferNo,
+                            TransferNo = _tranferNo,
                             Count = 0,
                             Direct = 0,
                             IsSuccess = false,
@@ -487,7 +487,7 @@ namespace ES.Client
                         BlobDatas = blobData.ToArray()
                     };
 
-                    var response = _server.Post(tranferNo, clientCode, Common.MD5(md5Pulickey + clientGuid), sqlData);
+                    var response = _server.Post(_tranferNo, clientCode, Common.MD5(md5Pulickey + clientGuid), sqlData);
 
                     if (response.State == 0)
                     {
@@ -503,7 +503,7 @@ namespace ES.Client
                             Client = clientCode,
                             ConfigCode = config.Code,
                             ConfigName = config.Name,
-                            TransferNo = tranferNo,
+                            TransferNo = _tranferNo,
                             Count = 0,
                             Direct = 0,
                             IsSuccess = false,
@@ -534,7 +534,7 @@ namespace ES.Client
                         Client = clientCode,
                         ConfigCode = config.Code,
                         ConfigName = config.Name,
-                        TransferNo = tranferNo,
+                        TransferNo = _tranferNo,
                         Count = times*config.MaxCount + results.Count(),
                         Direct = 1,
                         IsSuccess = true,
@@ -574,7 +574,7 @@ namespace ES.Client
             {
                 var config = _db.TranConfigs.FirstOrDefault(c => c.Code == "PZSJ" && c.Status == 0);
 
-                var result = _server.GetTranConfigs(tranferNo, clientCode, Common.MD5(md5Pulickey + clientGuid), config == null ? 0 : Convert.ToInt64(config.Sstamp));
+                var result = _server.GetTranConfigs(_tranferNo, clientCode, Common.MD5(md5Pulickey + clientGuid), config == null ? 0 : Convert.ToInt64(config.Sstamp));
 
                 if (result == null)
                 {
@@ -583,7 +583,7 @@ namespace ES.Client
                         Client = clientCode,
                         ConfigCode = "PZSJ",
                         ConfigName = "传输配置数据",
-                        TransferNo = tranferNo,
+                        TransferNo = _tranferNo,
                         Direct = 0,
                         Count = 0,
                         Result = "返回数据出错",
@@ -604,7 +604,7 @@ namespace ES.Client
                     log = new TranLog()
                     {
                         Client = clientCode,
-                        TransferNo = tranferNo,
+                        TransferNo = _tranferNo,
                         ConfigCode = "PZSJ",
                         ConfigName = "传输配置数据",
                         Direct = 0,
@@ -629,7 +629,7 @@ namespace ES.Client
                     log = new TranLog()
                     {
                         Client = clientCode,
-                        TransferNo = tranferNo,
+                        TransferNo = _tranferNo,
                         ConfigCode = "PZSJ",
                         ConfigName = "传输配置数据",
                         Direct = 0,
@@ -674,7 +674,7 @@ namespace ES.Client
                 log = new TranLog()
                 {
                     Client = clientCode,
-                    TransferNo = tranferNo,
+                    TransferNo = _tranferNo,
                     ConfigCode = "PZSJ",
                     ConfigName = "传输配置数据",
                     Direct = 0,
@@ -764,23 +764,23 @@ namespace ES.Client
 
         private void FinishTransfer(object o)
         {
-            if (t != null && t.IsAlive)
+            if (_t != null && _t.IsAlive)
             {
-                t.Abort();
+                _t.Abort();
             }
 
             barStaticItemStatus.Caption = "传输结束";
             barEditItemProgress.Visibility = BarItemVisibility.Never;
 
-            this.timer.Start();
-            lastTransferTime = DateTime.Now;
+            this._timer.Start();
+            _lastTransferTime = DateTime.Now;
 
             SetActions();
         }
 
         private void SetActions()
         {
-            if (isStart)
+            if (_isStart)
             {
                 barBtnStart.Enabled = false;
                 barBtnStop.Enabled = true;
@@ -800,18 +800,18 @@ namespace ES.Client
 
         private void StartTransfer()
         {
-            this.timer.Stop();
+            this._timer.Stop();
 
-            tranferNo = Guid.NewGuid().ToString();
+            _tranferNo = Guid.NewGuid().ToString();
 
-            if (t != null && t.IsAlive)
+            if (_t != null && _t.IsAlive)
             {
-                t.Abort();
+                _t.Abort();
             }
 
-            t = new Thread(new ParameterizedThreadStart(SyncData), 0) {IsBackground = true};
+            _t = new Thread(new ParameterizedThreadStart(SyncData), 0) {IsBackground = true};
 
-            t.Start(this);
+            _t.Start(this);
 
             barStaticItemStatus.Caption = "开始传输";
             barEditItemProgress.Visibility = BarItemVisibility.Always;
@@ -833,7 +833,7 @@ namespace ES.Client
 
         private void barBtnStart_ItemClick(object sender, ItemClickEventArgs e)
         {
-            isStart = true;
+            _isStart = true;
             StartTransfer();
         }
 
@@ -851,8 +851,8 @@ namespace ES.Client
         {
             FinishTransfer(null);
 
-            this.timer.Stop();
-            isStart = false;
+            this._timer.Stop();
+            _isStart = false;
             barStaticItemStatus.Caption = "传输结束";
             SetActions();
         }
@@ -1000,7 +1000,7 @@ namespace ES.Client
 
         private void repositoryItemSpinEdit1_EditValueChanged(object sender, EventArgs e)
         {
-            lastTransferTime = DateTime.Now;
+            _lastTransferTime = DateTime.Now;
         }
 
         private void barBtnAddClient_ItemClick(object sender, ItemClickEventArgs e)
@@ -1017,7 +1017,7 @@ namespace ES.Client
 
         private void XtraFrmMain_FormClosing(object sender, FormClosingEventArgs e)
         {
-            if (isStart)
+            if (_isStart)
             {
                 if (MessageBox.Show("程序正在运行，您确定要退出吗？", "提示", MessageBoxButtons.YesNo) == DialogResult.No)
                 {
@@ -1058,7 +1058,7 @@ namespace ES.Client
 
         private void 开始ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            isStart = true;
+            _isStart = true;
             StartTransfer();
         }
 
@@ -1069,7 +1069,7 @@ namespace ES.Client
 
         private void 退出ToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (isStart)
+            if (_isStart)
             {
                 if (MessageBox.Show("程序正在运行，您确定要退出吗？", "提示", MessageBoxButtons.YesNo) == DialogResult.Yes)
                 {
