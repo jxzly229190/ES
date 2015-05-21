@@ -84,7 +84,7 @@ namespace ES.Server.Controllers
             foreach (var col in cols)
             {
                 var fields = col.Split(',');
-                if (fields[0].ToUpper() != "ID" && fields[1] != "TMstamp")
+                if (fields[0].ToUpper() != "ID" && fields[1].ToLower() != "timestamp")
                 {
                     if (fields[1].EndsWith("varbinary"))
                     {
