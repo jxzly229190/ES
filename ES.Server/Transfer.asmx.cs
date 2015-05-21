@@ -99,7 +99,7 @@ namespace ES.Server
 			    }
 			    else
 			    {
-                    var maxStamp = db.Database.SqlQuery<long>("Select Cast(isnull(max([Timestamp]),0) as bigint) [Timestamp] From [" + config.SourceTableName+"]").FirstOrDefault();
+                    var maxStamp = db.Database.SqlQuery<long>("Select Cast(isnull(max([timestamp]),0) as bigint) [Timestamp] From [" + config.SourceTableName + "]").FirstOrDefault();
                     
                     return new ResponseData() { State = 0, Message = "没有数据了", MaxStamp = maxStamp };
 			    }

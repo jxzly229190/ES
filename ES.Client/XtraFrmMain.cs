@@ -181,6 +181,38 @@ namespace ES.Client
                         }
                         catch (Exception ex)
                         {
+                            var log = new TranLog()
+                            {
+                                ConfigName = config.Name,
+                                ConfigCode = config.Code,
+                                Count = 0,
+                                Direct=config.Direct,
+                                Sort=config.Sort,
+                                IsSuccess = false,
+                                TranTime = DateTime.Now,
+                                Header=config.HeaderSql,
+                                Detail=config.DetailSql,
+                                Footer=config.FooterSql,
+                                Result = "程序执行时发生异常",
+                                Remark = ex.Message
+                            };
+
+                            if (formObj != null)
+                            {
+                                _syncContext.Post(formObj.InsertLogToGrid, log);
+                            }
+
+                            try
+                            {
+                                _db.TranLog.InsertOnSubmit(log);
+                                _db.SubmitChanges();
+                            }
+                            catch (System.Data.Linq.ChangeConflictException conflictEx)
+                            {
+                                _db.ChangeConflicts.ResolveAll(RefreshMode.OverwriteCurrentValues);//保持原来的更新,放弃了当前的值.
+                                _db.SubmitChanges();
+                            }
+
                             //只有重要传输才终断程序运行，否则继续。
                             if (config.Import == 2)
                             {
@@ -369,11 +401,15 @@ namespace ES.Client
                         TranTime = DateTime.Now
                     };
                 }
-                _db.TranLog.InsertOnSubmit(log);
-                _db.SubmitChanges();
+                if (!isError)
+                    log.Count = ((times == -1 ? 0 : times) * config.MaxCount) + (sqlData == null ? 0 : sqlData.RowCount); ;
 
                 if (formObj != null)
                     _syncContext.Post(formObj.InsertLogToGrid, log);
+
+                _db.TranLog.InsertOnSubmit(log);
+                _db.SubmitChanges();
+
             }
             catch (System.Data.Linq.ChangeConflictException conflictEx)
             {
@@ -509,11 +545,14 @@ namespace ES.Client
                     };
                 }
 
-                _db.TranLog.InsertOnSubmit(log);
-                _db.SubmitChanges();
+                if (!isError)
+                    log.Count = ((times == -1 ? 0 : times) * config.MaxCount) + (results == null ? 0 : results.Count());
 
                 if (formObj != null)
                     _syncContext.Post(formObj.InsertLogToGrid, log);
+
+                _db.TranLog.InsertOnSubmit(log);
+                _db.SubmitChanges();
             }
             catch (System.Data.Linq.ChangeConflictException ex)
             {
@@ -694,7 +733,7 @@ namespace ES.Client
                 .Append(";")
                 .Append(
                     string.Format(
-                        "Update tranconfig Set Sstamp={0},Cstamp=(Select CAST(max(timestamp) as bigint) From [{1}]) Where Guid='{2}'",
+                        "Update tranconfig Set Sstamp={0},Cstamp=(Select CAST(max(Timestamp) as bigint) From [{1}]) Where Guid='{2}'",
                         sqlData.MaxTimeStamp, table, configGuid));
 
             execSql = sql.ToString();
@@ -883,15 +922,18 @@ namespace ES.Client
 
         private void gridView1_CustomDrawCell(object sender, DevExpress.XtraGrid.Views.Base.RowCellCustomDrawEventArgs e)
         {
-            if (e.Column.FieldName == "Direct")
+            if (e.Column.FieldName == "Direct" && e.CellValue!=null)
             {
                 if (e.CellValue.Equals(0))
                 {
                     e.DisplayText = "下载";
                 }
-                else
+                else if (e.CellValue.Equals(1))
                 {
                     e.DisplayText = "上传";
+                }
+                else {
+                    e.DisplayText = "未知";
                 }
             }
         }
