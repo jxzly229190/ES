@@ -213,12 +213,15 @@ namespace ES.Server
                 StringBuilder tempSql = new StringBuilder();
                 foreach (var item in sqlData.BlobDatas)
                 {
-                    tempSql.Append("Insert into tranferTempLog([TransferNo],[ConfigCode],[Guid]) select '")
+                    tempSql.Append("Insert into tranferTempLog([TransferNo],[ConfigCode],[Guid],[ClientGuid]) select '")
                         .Append(tranferNo)
                         .Append("','")
                         .Append(config.Code)
                         .Append("','")
-                        .Append(item.Guid).Append("';");
+                        .Append(item.Guid)
+                        .Append("','")
+                        .Append(client.GUID)
+                        .Append("';");
                 }
                 //db.Database.ExecuteSqlCommand(tempSql.ToString());
                 sql.Append(tempSql.ToString());
@@ -263,7 +266,8 @@ namespace ES.Server
 				return new ResponseData() { State = 2, Message = "非法请求" };
 			}
 
-			var tranConfig = db.TranConfig.FirstOrDefault(t => t.Code == "PZSJ" && t.Status == 0);
+	        this.ClearOldTempLog(client.GUID.ToString(), tranferCode);
+            var tranConfig = db.TranConfig.FirstOrDefault(t => t.Code == "PZSJ" && t.Status == 0);
 
 			if (tranConfig == null)
 			{
@@ -273,7 +277,14 @@ namespace ES.Server
             return this.Get(tranferCode, clientCode, varifyCode, TMstamp, tranConfig.MaxCount, tranConfig.Guid.ToString());
 		}
 
-		private bool VarifyClient(string clientGuid, string varifyCode)
+	    private void ClearOldTempLog(string clientGuid, string transferNo)
+	    {
+	        db.Database.ExecuteSqlCommand(
+	            string.Format("Delete [tranferTempLog] Where ClientGuid ='{0}' And TransferNo <>'{1}'", clientGuid,
+	                transferNo));
+	    }
+
+	    private bool VarifyClient(string clientGuid, string varifyCode)
 		{
 			var md5Pulickey = Common.MD5(Common.PublicKey);
 
