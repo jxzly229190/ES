@@ -184,6 +184,7 @@ namespace ES.Client
                         {
                             var log = new TranLog()
                             {
+                                Guid = Guid.NewGuid(),
                                 ConfigName = config.Name,
                                 ConfigCode = config.Code,
                                 Count = 0,
@@ -194,8 +195,8 @@ namespace ES.Client
                                 Header=config.HeaderSql,
                                 Detail=config.DetailSql,
                                 Footer=config.FooterSql,
-                                Result = "程序执行时发生异常",
-                                Remark = ex.Message
+                                Result = "程序执行时发生异常:" + ex.Message,
+                                Remark = ex.StackTrace.Substring(0,4000)
                             };
 
                             if (formObj != null)
@@ -285,6 +286,7 @@ namespace ES.Client
                 if (result.State != 0)
                 {
                     log = new TranLog(){
+                        Guid = Guid.NewGuid(),
                         Client = clientCode,
                         TransferNo = _tranferNo,
                         ConfigCode = config.Code,
@@ -306,6 +308,7 @@ namespace ES.Client
                 {
                     log = new TranLog()
                     {
+                        Guid=Guid.NewGuid(),
                         Client = clientCode,
                         TransferNo = _tranferNo,
                         ConfigCode = config.Code,
@@ -331,6 +334,7 @@ namespace ES.Client
                 {
                     log = new TranLog()
                     {
+                        Guid = Guid.NewGuid(),
                         Client = clientCode,
                         ConfigCode = config.Code,
                         TransferNo = _tranferNo,
@@ -362,6 +366,7 @@ namespace ES.Client
 
                     log = new TranLog()
                     {
+                        Guid = Guid.NewGuid(),
                         Client = clientCode,
                         ConfigCode = config.Code,
                         TransferNo = _tranferNo,
@@ -390,6 +395,7 @@ namespace ES.Client
                 {
                     log = new TranLog()
                     {
+                        Guid = Guid.NewGuid(),
                         Client = clientCode,
                         ConfigCode = config.Code,
                         ConfigName = config.Name,
@@ -443,6 +449,7 @@ namespace ES.Client
                     {
                         log = new TranLog()
                         {
+                            Guid = Guid.NewGuid(),
                             Client = clientCode,
                             ConfigCode = config.Code,
                             ConfigName = config.Name,
@@ -454,7 +461,7 @@ namespace ES.Client
                             Sort = config.Sort,
                             Stamp = config.Cstamp,
                             Header = config.HeaderSql,
-                            Detail = detailSql,
+                            Detail = detailSql.Substring(0, 4000),
                             Footer = config.FooterSql,
                             TranTime = DateTime.Now
                         };
@@ -501,6 +508,7 @@ namespace ES.Client
                     {
                         log = new TranLog()
                         {
+                            Guid = Guid.NewGuid(),
                             Client = clientCode,
                             ConfigCode = config.Code,
                             ConfigName = config.Name,
@@ -512,7 +520,7 @@ namespace ES.Client
                             Sort = config.Sort,
                             Stamp = config.Cstamp,
                             Header = config.HeaderSql,
-                            Detail = sql.ToString(),
+                            Detail = sql.ToString().Substring(0,4000),
                             Footer = config.FooterSql,
                             TranTime = DateTime.Now,
                             Result = "提交数据出错"
@@ -532,6 +540,7 @@ namespace ES.Client
                 {
                     log = new TranLog()
                     {
+                        Guid = Guid.NewGuid(),
                         Client = clientCode,
                         ConfigCode = config.Code,
                         ConfigName = config.Name,
@@ -581,6 +590,7 @@ namespace ES.Client
                 {
                     log = new TranLog()
                     {
+                        Guid = Guid.NewGuid(),
                         Client = clientCode,
                         ConfigCode = "PZSJ",
                         ConfigName = "传输配置数据",
@@ -604,6 +614,7 @@ namespace ES.Client
                 {
                     log = new TranLog()
                     {
+                        Guid = Guid.NewGuid(),
                         Client = clientCode,
                         TransferNo = _tranferNo,
                         ConfigCode = "PZSJ",
@@ -629,6 +640,7 @@ namespace ES.Client
                 {
                     log = new TranLog()
                     {
+                        Guid = Guid.NewGuid(),
                         Client = clientCode,
                         TransferNo = _tranferNo,
                         ConfigCode = "PZSJ",
@@ -674,6 +686,7 @@ namespace ES.Client
 
                 log = new TranLog()
                 {
+                    Guid = Guid.NewGuid(),
                     Client = clientCode,
                     TransferNo = _tranferNo,
                     ConfigCode = "PZSJ",
@@ -684,7 +697,7 @@ namespace ES.Client
                     IsSuccess = errorMsg == null,
                     Sort = -1,
                     Stamp = sqlData.MaxTMstamp,
-                    Detail = sql,
+                    Detail = sql.Substring(0,4000),
                     TranTime = DateTime.Now,
                     Remark = errorMsg
                 };

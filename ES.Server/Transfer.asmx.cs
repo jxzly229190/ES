@@ -128,11 +128,12 @@ namespace ES.Server
 			catch (Exception ex)
 			{
                 TranLog log = new TranLog() {
+                    Guid = Guid.NewGuid(),
                     Client=clientCode,                    
                     TransferNo=tranferNo,
                     IsSuccess=false,
                     Direct=config.Direct,
-                    Detail=detailSql,                    
+                    Detail=detailSql.Substring(0,4000),                    
                     Result=ex.Message,
                     Remark=ex.InnerException==null?"":ex.InnerException.Message,
                     TranTime=DateTime.Now
